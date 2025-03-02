@@ -492,3 +492,662 @@ hourlyScrollRightButton.addEventListener('click', () => {
         behavior: 'smooth'
     });
 });
+
+// Time Container
+
+// Function to get local time based on each timezone
+
+/**
+ * Calculates the local time for a specific timezone offset.
+ * @param {Object} timezone - The timezone object with an offset property.
+ * @returns {string} - The formatted local time string.
+ */
+
+function calcTime(timezone) {
+    const d = new Date();
+    const utc = d.getTime() + (d.getTimezoneOffset() * 60000);
+    const nd = new Date(utc + (3600000 * timezone.offset));
+    return nd.toLocaleString();
+}
+
+// Function to synchronize and display the time for digital clocks
+
+/**
+ * Synchronizes and displays the local time for all digital clocks.
+ */
+
+function searchClocks() {
+    document.querySelectorAll('#time-container h3').forEach(item => {
+        const timezone = {
+            locale: item.getAttribute('data-locale'),
+            offset: parseInt(item.getAttribute('data-offset')) // Offset from UTC
+        };
+
+        setInterval(() => {
+            item.querySelector('p').innerHTML = calcTime(timezone);
+        }, 1000);
+    });
+}
+
+// Function to set time for analog clocks
+
+/**
+ * Sets the time for an analog clock based on the timezone offset.
+ * @param {HTMLElement} clockElement - The analog clock element.
+ */
+
+function setTimeForClock(clockElement) {
+    const locale = clockElement.getAttribute('data-locale');
+    const offset = parseInt(clockElement.getAttribute('data-offset')); // Offset for that region
+
+    // Get the hands for the clock
+    const hourHand = clockElement.querySelector('.hour-hand');
+    const minuteHand = clockElement.querySelector('.minute-hand');
+    const secondHand = clockElement.querySelector('.second-hand');
+
+    // Set the date based on the locale offset
+    function setDate() {
+        const d = new Date();
+        d.setHours(d.getHours() + offset); // Adjust time by offset
+
+        const seconds = d.getSeconds();
+        const secondsDegrees = ((seconds / 60) * 360) + 90;
+        secondHand.style.transform = `rotate(${secondsDegrees}deg)`;
+
+        const minutes = d.getMinutes();
+        const minutesDegrees = ((minutes / 60) * 360) + ((seconds / 60) * 6) + 90;
+        minuteHand.style.transform = `rotate(${minutesDegrees}deg)`;
+
+        const hours = d.getHours();
+        const hoursDegrees = ((hours % 12) / 12) * 360 + ((minutes / 60) * 30) + 90;
+        hourHand.style.transform = `rotate(${hoursDegrees}deg)`;
+    }
+
+    setInterval(setDate, 1000);
+    setDate(); // Initial call to set the correct time immediately
+}
+
+
+/**
+ * Initializes both digital and analog clocks on the page.
+ */
+
+// Initialize both digital and analog clocks
+function initializeClocks() {
+    // Set up digital clocks
+    searchClocks();
+
+    // Set up analog clocks
+    const clocks = document.querySelectorAll('#time-container #clock');
+    clocks.forEach(clockElement => {
+        setTimeForClock(clockElement);
+    });
+}
+
+// Initialize all clocks when the page loads
+initializeClocks();
+
+
+// Country Information Container 
+
+/**
+ * Fetches and displays country-specific data, such as the flag, capital, and currency.
+ * @param {string} countryName - The name of the country to fetch data for.
+ */
+
+async function getCountryData(countryName) {
+    const result = document.getElementById("result");
+    result.innerHTML = "<p>Loading country data...</p>";
+    const currencyElement = document.getElementById("currency");
+
+    if (!currencyElement) {
+        console.error("Currency element not found in the DOM!");
+        return;
+    }
+
+    try {
+        const api_url = `https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=true`;
+        const response = await fetch(api_url);
+
+        if (!response.ok) {
+            throw new Error(`Failed to fetch data for ${countryName}`);
+        }
+
+        const data = await response.json();
+        const country = data[0];
+
+        // Log the entire country object for debugging
+        console.log("Country Data:", country);
+
+        // Default currency values
+        let currencyCode = "N/A";
+        let currencyName = "Not available";
+        let currencySymbol = "";
+
+        // Safely extract currency data
+        if (country.currencies) {
+            console.log("API Response for Currencies:", country.currencies);
+            const currencyKey = Object.keys(country.currencies)[0];
+            if (currencyKey && country.currencies[currencyKey]) {
+                currencyCode = currencyKey;
+                currencyName = country.currencies[currencyKey].name || "Unknown currency";
+                currencySymbol = country.currencies[currencyKey].symbol || "";
+            }
+        } else {
+            console.warn("Currencies not found in API response.");
+        }
+
+        // Log extracted values
+        console.log("Extracted Currency Code:", currencyCode);
+        console.log("Extracted Currency Name:", currencyName);
+        console.log("Extracted Currency Symbol:", currencySymbol);
+
+        // Update currency element
+        currencyElement.textContent = `${currencyName} (${currencyCode}) ${currencySymbol}`;
+
+        // Update other country details
+        result.innerHTML = `
+            <img src="${country.flags.svg}" class="flag-img">
+            <h2>${country.name.common}</h2>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4><u>Capital</u></h4>
+                    <span><b>${country.capital ? country.capital[0] : "Not available"}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4><u>Dialing Code</u></h4>
+                    <span><b>${country.idd?.root || ""}${country.idd?.suffixes ? country.idd.suffixes[0] : ""}</b></span>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        console.error("Error fetching or processing data:", error.message);
+        result.innerHTML = "<p>Error fetching country data.</p>";
+        currencyElement.textContent = "Currency data unavailable.";
+    }
+}
+
+// Map Click & Country Information Functions Joined Together
+
+// Comprehensive country-to-code mapping for News API
+const countryMapping = {
+    "Afghanistan": "af",
+    "Albania": "al",
+    "Algeria": "dz",
+    "Andorra": "ad",
+    "Angola": "ao",
+    "Antigua and Barbuda": "ag",
+    "Argentina": "ar",
+    "Armenia": "am",
+    "Australia": "au",
+    "Austria": "at",
+    "Azerbaijan": "az",
+    "Bahamas": "bs",
+    "Bahrain": "bh",
+    "Bangladesh": "bd",
+    "Barbados": "bb",
+    "Belarus": "by",
+    "Belgium": "be",
+    "Belize": "bz",
+    "Benin": "bj",
+    "Bhutan": "bt",
+    "Bolivia": "bo",
+    "Bosnia and Herzegovina": "ba",
+    "Botswana": "bw",
+    "Brazil": "br",
+    "Brunei": "bn",
+    "Bulgaria": "bg",
+    "Burkina Faso": "bf",
+    "Burundi": "bi",
+    "Cabo Verde": "cv",
+    "Cambodia": "kh",
+    "Cameroon": "cm",
+    "Canada": "ca",
+    "Central African Republic": "cf",
+    "Chad": "td",
+    "Chile": "cl",
+    "China": "cn",
+    "Colombia": "co",
+    "Comoros": "km",
+    "Congo (Congo-Brazzaville)": "cg",
+    "Costa Rica": "cr",
+    "Croatia": "hr",
+    "Cuba": "cu",
+    "Cyprus": "cy",
+    "Czechia (Czech Republic)": "cz",
+    "Denmark": "dk",
+    "Djibouti": "dj",
+    "Dominica": "dm",
+    "Dominican Republic": "do",
+    "Ecuador": "ec",
+    "Egypt": "eg",
+    "El Salvador": "sv",
+    "Equatorial Guinea": "gq",
+    "Eritrea": "er",
+    "Estonia": "ee",
+    "Eswatini (fmr. Swaziland)": "sz",
+    "Ethiopia": "et",
+    "Fiji": "fj",
+    "Finland": "fi",
+    "France": "fr",
+    "Gabon": "ga",
+    "Gambia": "gm",
+    "Georgia": "ge",
+    "Germany": "de",
+    "Ghana": "gh",
+    "Greece": "gr",
+    "Grenada": "gd",
+    "Guatemala": "gt",
+    "Guinea": "gn",
+    "Guinea-Bissau": "gw",
+    "Guyana": "gy",
+    "Haiti": "ht",
+    "Holy See": "va",
+    "Honduras": "hn",
+    "Hungary": "hu",
+    "Iceland": "is",
+    "India": "in",
+    "Indonesia": "id",
+    "Iran": "ir",
+    "Iraq": "iq",
+    "Ireland": "ie",
+    "Israel": "il",
+    "Italy": "it",
+    "Jamaica": "jm",
+    "Japan": "jp",
+    "Jordan": "jo",
+    "Kazakhstan": "kz",
+    "Kenya": "ke",
+    "Kiribati": "ki",
+    "Korea (North)": "kp",
+    "Korea (South)": "kr",
+    "Kosovo": "xk",
+    "Kuwait": "kw",
+    "Kyrgyzstan": "kg",
+    "Laos": "la",
+    "Latvia": "lv",
+    "Lebanon": "lb",
+    "Lesotho": "ls",
+    "Liberia": "lr",
+    "Libya": "ly",
+    "Liechtenstein": "li",
+    "Lithuania": "lt",
+    "Luxembourg": "lu",
+    "Madagascar": "mg",
+    "Malawi": "mw",
+    "Malaysia": "my",
+    "Maldives": "mv",
+    "Mali": "ml",
+    "Malta": "mt",
+    "Marshall Islands": "mh",
+    "Mauritania": "mr",
+    "Mauritius": "mu",
+    "Mexico": "mx",
+    "Micronesia": "fm",
+    "Moldova": "md",
+    "Monaco": "mc",
+    "Mongolia": "mn",
+    "Montenegro": "me",
+    "Morocco": "ma",
+    "Mozambique": "mz",
+    "Myanmar (Burma)": "mm",
+    "Namibia": "na",
+    "Nauru": "nr",
+    "Nepal": "np",
+    "Netherlands": "nl",
+    "New Zealand": "nz",
+    "Nicaragua": "ni",
+    "Niger": "ne",
+    "Nigeria": "ng",
+    "North Macedonia": "mk",
+    "Norway": "no",
+    "Oman": "om",
+    "Pakistan": "pk",
+    "Palau": "pw",
+    "Palestine State": "ps",
+    "Panama": "pa",
+    "Papua New Guinea": "pg",
+    "Paraguay": "py",
+    "Peru": "pe",
+    "Philippines": "ph",
+    "Poland": "pl",
+    "Portugal": "pt",
+    "Qatar": "qa",
+    "Romania": "ro",
+    "Russia": "ru",
+    "Rwanda": "rw",
+    "Saint Kitts and Nevis": "kn",
+    "Saint Lucia": "lc",
+    "Saint Vincent and the Grenadines": "vc",
+    "Samoa": "ws",
+    "San Marino": "sm",
+    "Sao Tome and Principe": "st",
+    "Saudi Arabia": "sa",
+    "Senegal": "sn",
+    "Serbia": "rs",
+    "Seychelles": "sc",
+    "Sierra Leone": "sl",
+    "Singapore": "sg",
+    "Slovakia": "sk",
+    "Slovenia": "si",
+    "Solomon Islands": "sb",
+    "Somalia": "so",
+    "South Africa": "za",
+    "South Sudan": "ss",
+    "Spain": "es",
+    "Sri Lanka": "lk",
+    "Sudan": "sd",
+    "Suriname": "sr",
+    "Sweden": "se",
+    "Switzerland": "ch",
+    "Syria": "sy",
+    "Tajikistan": "tj",
+    "Tanzania": "tz",
+    "Thailand": "th",
+    "Timor-Leste": "tl",
+    "Togo": "tg",
+    "Tonga": "to",
+    "Trinidad and Tobago": "tt",
+    "Tunisia": "tn",
+    "Turkey": "tr",
+    "Turkmenistan": "tm",
+    "Tuvalu": "tv",
+    "Uganda": "ug",
+    "Ukraine": "ua",
+    "United Arab Emirates": "ae",
+    "United Kingdom": "gb",
+    "United States": "us",
+    "Uruguay": "uy",
+    "Uzbekistan": "uz",
+    "Vanuatu": "vu",
+    "Venezuela": "ve",
+    "Vietnam": "vn",
+    "Yemen": "ye",
+    "Zambia": "zm",
+    "Zimbabwe": "zw"
+        // Add more mappings as needed
+};
+
+// Keywords for filtering articles by category
+const categoryKeywords = {
+    general: [],
+    politics: ["politics", "election", "government", "policy"],
+    science: ["science", "research", "discovery", "technology", "health"],
+    technology: ["technology", "tech", "AI", "innovation", "startups"],
+    entertainment: ["entertainment", "movies", "music", "celebrity", "culture"],
+    health: ["health", "medicine", "wellness", "disease", "treatment", "fitness"], // New health category
+    sports: ["sports", "football", "soccer", "basketball", "tennis", "athletics"], // New sports category
+    business: ["business", "finance", "economy", "startup", "stock", "investment", "market"] // New business category
+};
+
+// Function to fetch and display country data
+
+/**
+ * Fetches and displays data about a country.
+ * @param {string} countryName - The name of the country to fetch data for.
+ */
+
+async function getCountryData(countryName) {
+    const result = document.getElementById("result");
+    result.innerHTML = "<p>Loading country data...</p>";
+
+    try {
+        const api_url = `https://restcountries.com/v3.1/name/${countryName}`;
+        const response = await fetch(api_url);
+
+        if (!response.ok) throw new Error("Country data not available");
+
+        const data = await response.json();
+        const country = data[0];
+
+        const currencyCode = Object.keys(country.currencies)[0];
+        const currencyName = country.currencies[currencyCode].name;
+        const currencySymbol = country.currencies[currencyCode].symbol;
+
+        document.getElementById("currency").textContent = `${currencyName.replace(/^.*\s/, '')} (${currencyCode}) ${currencySymbol}`;
+
+        result.innerHTML = `
+            <img src="${country.flags.svg}" class="flag-img">
+            <h2>${country.name.common}</h2>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Capital</h4>
+                    <span><b>${country.capital[0]}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Continent</h4>
+                    <span><b>${country.continents[0]}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Population</h4>
+                    <span><b>${country.population.toLocaleString()}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Dialing Code</h4>
+                    <span><b>${country.idd.root}${country.idd.suffixes[0]}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Languages</h4>
+                    <span><b>${Object.values(country.languages).join(", ")}</b></span>
+                </div>
+            </div>
+        `;
+    } catch (error) {
+        result.innerHTML = "<p>Country data not available</p>";
+        document.getElementById("currency").textContent = "N/A";
+    }
+}
+
+
+// Function to fetch and display country data
+async function getCountryData(countryName) {
+    const result = document.getElementById("result");
+    const currencyContainer = document.getElementById("currency");
+    result.innerHTML = "<p>Loading country data...</p>";
+
+    try {
+        const api_url = `https://restcountries.com/v3.1/name/${countryName}`;
+        const response = await fetch(api_url);
+
+        if (!response.ok) throw new Error("Country data not available");
+
+        const data = await response.json();
+        const country = data[0];
+
+        // Check and set the currency data
+        const currencyCode = country.currencies ? Object.keys(country.currencies)[0] : 'N/A';
+        const currencyName = country.currencies ? country.currencies[currencyCode].name : 'N/A';
+        const currencySymbol = country.currencies ? country.currencies[currencyCode].symbol : 'N/A';
+
+        // Set currency container text
+        currencyContainer.textContent = `${currencyName.replace(/^.*\s/, '')} (${currencyCode}) ${currencySymbol}`;
+
+        result.innerHTML = `
+            <img src="${country.flags.svg}" class="flag-img">
+            <h2>${country.name.common}</h2>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Capital</h4>
+                    <span><b>${country.capital ? country.capital[0] : 'N/A'}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Continent</h4>
+                    <span><b>${country.continents ? country.continents[0] : 'N/A'}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Population</h4>
+                    <span><b>${country.population ? country.population.toLocaleString() : 'N/A'}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Dialing Code</h4>
+                    <span><b>${country.idd ? `${country.idd.root}${country.idd.suffixes[0]}` : 'N/A'}</b></span>
+                </div>
+            </div>
+            <div class="wrapper">
+                <div class="data-wrapper">
+                    <h4>Languages</h4>
+                    <span><b>${country.languages ? Object.values(country.languages).join(", ") : 'N/A'}</b></span>
+                </div>
+            </div>
+        `;
+		} catch (error) {
+			result.innerHTML = "<p>Country data not available</p>";
+			currencyContainer.textContent = "N/A";
+		}
+	}
+
+	// Map click event integration for handling country info and headlines
+	document.querySelectorAll(".allPaths").forEach(e => {
+		e.addEventListener("click", function () {
+			const countryName = e.id;
+
+			// Fetch and display country data and news
+			fetchTopHeadlinesByCountry(countryName);
+			getCountryData(countryName);
+
+			// Open the modal for displaying country information and headlines
+			openHeadlinesModal();
+		});
+	});
+
+	// Function to fetch and display news headlines by country
+
+	/**
+ * Fetches and displays news headlines for a given country.
+ * @param {string} countryName - The name of the country to fetch news headlines for.
+ */
+
+	async function fetchTopHeadlinesByCountry(countryName) {
+		const headlinesContainer = document.getElementById("headlines");
+		const nameqContainer = document.getElementById("nameq");
+
+		// Update the country name in the location box
+		if (nameqContainer) {
+			nameqContainer.innerText = countryName;
+		}
+
+		headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
+
+		// API keys and base URLs
+		const gNewsApiKey = "f760069439c7443a00e06790756587d2";
+		const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
+
+		const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
+		const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
+
+		const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee"; // Replace with your NewsAPI key
+		const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
+
+		try {
+			// Fetch data from all three APIs in parallel
+			const [gNewsResponse, newsDataResponse, newsApiResponse] = await Promise.all([
+				fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
+				fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
+				fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`)
+			]);
+
+			const gNewsData = await gNewsResponse.json();
+			const newsDataData = await newsDataResponse.json();
+			const newsApiData = await newsApiResponse.json();
+
+			// Combine articles from all APIs
+			let articles = [];
+
+			if (gNewsData.articles) {
+				articles = articles.concat(
+					gNewsData.articles.map(article => ({
+						title: article.title,
+						description: article.description,
+						url: article.url,
+						source: "GNews",
+						content: article.content || ''
+					}))
+				);
+			}
+
+			if (newsDataData.results) {
+				articles = articles.concat(
+					newsDataData.results.map(article => ({
+						title: article.title,
+						description: article.description,
+						url: article.link,
+						source: "NewsData",
+						content: article.content || ''
+					}))
+				);
+			}
+
+			if (newsApiData.articles) {
+				articles = articles.concat(
+					newsApiData.articles.map(article => ({
+						title: article.title,
+						description: article.description,
+						url: article.url,
+						source: "NewsAPI",
+						content: article.content || ''
+					}))
+				);
+			}
+
+			if (articles.length === 0) {
+				headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
+				return;
+			}
+
+			// Prioritize articles with the country name in the title, description, or content
+			articles = articles.sort((a, b) => {
+				const countryRegex = new RegExp(countryName, 'i');
+				const aMatch = countryRegex.test(a.title + a.description + a.content) ? 1 : 0;
+				const bMatch = countryRegex.test(b.title + b.description + b.content) ? 1 : 0;
+				return bMatch - aMatch; // Higher priority for matches
+			});
+
+
+			// Render articles with attribution
+
+			headlinesContainer.innerHTML = `
+    ${articles
+					.map(article => `
+            <div class="headline">
+                <h4>${article.title}</h4>
+                <p class="description">${article.description || "No description available"}</p>
+                <a href="${article.url}" target="_blank">Read more</a>
+            </div>
+        `).join('')}
+    <div id="attribution">
+        <p>Powered by GNews, NewsData, and NewsAPI</p>
+    </div>
+`;
+
+			// Move attribution above the buttons
+			const attributionDiv = document.getElementById("attribution");
+			const scrollButtonsContainer = document.getElementById("scroll-buttons");
+			if (attributionDiv && scrollButtonsContainer) {
+				scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+			}
+
+
+			// Reinitialize scroll functionality for navigation buttons
+			setupScrollButtons();
+
+		} catch (error) {
+			console.error("Error fetching news:", error);
+			headlinesContainer.innerHTML = `<p>Error loading news for ${countryName}.</p>`;
+		}
+	}
