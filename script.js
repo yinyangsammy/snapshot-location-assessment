@@ -1151,3 +1151,4 @@ async function getCountryData(countryName) {
 			headlinesContainer.innerHTML = `<p>Error loading news for ${countryName}.</p>`;
 		}
 	}
+    
