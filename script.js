@@ -1,3 +1,459 @@
+if (!document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
+    const script = document.createElement("script");
+    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap";
+    script.async = true;
+    script.defer = true;
+    document.body.appendChild(script);
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    const countryNameToCode = {
+        "Afghanistan": "af",
+        "Albania": "al",
+        "Algeria": "dz",
+        "Andorra": "ad",
+        "Angola": "ao",
+        "Antigua and Barbuda": "ag",
+        "Argentina": "ar",
+        "Armenia": "am",
+        "Australia": "au",
+        "Austria": "at",
+        "Azerbaijan": "az",
+        "Bahamas": "bs",
+        "Bahrain": "bh",
+        "Bangladesh": "bd",
+        "Barbados": "bb",
+        "Belarus": "by",
+        "Belgium": "be",
+        "Belize": "bz",
+        "Benin": "bj",
+        "Bhutan": "bt",
+        "Bolivia": "bo",
+        "Bosnia and Herzegovina": "ba",
+        "Botswana": "bw",
+        "Brazil": "br",
+        "Brunei": "bn",
+        "Bulgaria": "bg",
+        "Burkina Faso": "bf",
+        "Burundi": "bi",
+        "Cabo Verde": "cv",
+        "Cambodia": "kh",
+        "Cameroon": "cm",
+        "Canada": "ca",
+        "Central African Republic": "cf",
+        "Chad": "td",
+        "Chile": "cl",
+        "China": "cn",
+        "Colombia": "co",
+        "Comoros": "km",
+        "Congo (Congo-Brazzaville)": "cg",
+        "Costa Rica": "cr",
+        "Croatia": "hr",
+        "Cuba": "cu",
+        "Cyprus": "cy",
+        "Czechia (Czech Republic)": "cz",
+        "Denmark": "dk",
+        "Djibouti": "dj",
+        "Dominica": "dm",
+        "Dominican Republic": "do",
+        "Ecuador": "ec",
+        "Egypt": "eg",
+        "El Salvador": "sv",
+        "Equatorial Guinea": "gq",
+        "Eritrea": "er",
+        "Estonia": "ee",
+        "Eswatini (fmr. Swaziland)": "sz",
+        "Ethiopia": "et",
+        "Fiji": "fj",
+        "Finland": "fi",
+        "France": "fr",
+        "Gabon": "ga",
+        "Gambia": "gm",
+        "Georgia": "ge",
+        "Germany": "de",
+        "Ghana": "gh",
+        "Greece": "gr",
+        "Grenada": "gd",
+        "Guatemala": "gt",
+        "Guinea": "gn",
+        "Guinea-Bissau": "gw",
+        "Guyana": "gy",
+        "Haiti": "ht",
+        "Holy See": "va",
+        "Honduras": "hn",
+        "Hungary": "hu",
+        "Iceland": "is",
+        "India": "in",
+        "Indonesia": "id",
+        "Iran": "ir",
+        "Iraq": "iq",
+        "Ireland": "ie",
+        "Israel": "il",
+        "Italy": "it",
+        "Jamaica": "jm",
+        "Japan": "jp",
+        "Jordan": "jo",
+        "Kazakhstan": "kz",
+        "Kenya": "ke",
+        "Kiribati": "ki",
+        "Korea (North)": "kp",
+        "Korea (South)": "kr",
+        "Kosovo": "xk",
+        "Kuwait": "kw",
+        "Kyrgyzstan": "kg",
+        "Laos": "la",
+        "Latvia": "lv",
+        "Lebanon": "lb",
+        "Lesotho": "ls",
+        "Liberia": "lr",
+        "Libya": "ly",
+        "Liechtenstein": "li",
+        "Lithuania": "lt",
+        "Luxembourg": "lu",
+        "Madagascar": "mg",
+        "Malawi": "mw",
+        "Malaysia": "my",
+        "Maldives": "mv",
+        "Mali": "ml",
+        "Malta": "mt",
+        "Marshall Islands": "mh",
+        "Mauritania": "mr",
+        "Mauritius": "mu",
+        "Mexico": "mx",
+        "Micronesia": "fm",
+        "Moldova": "md",
+        "Monaco": "mc",
+        "Mongolia": "mn",
+        "Montenegro": "me",
+        "Morocco": "ma",
+        "Mozambique": "mz",
+        "Myanmar (Burma)": "mm",
+        "Namibia": "na",
+        "Nauru": "nr",
+        "Nepal": "np",
+        "Netherlands": "nl",
+        "New Zealand": "nz",
+        "Nicaragua": "ni",
+        "Niger": "ne",
+        "Nigeria": "ng",
+        "North Macedonia": "mk",
+        "Norway": "no",
+        "Oman": "om",
+        "Pakistan": "pk",
+        "Palau": "pw",
+        "Palestine State": "ps",
+        "Panama": "pa",
+        "Papua New Guinea": "pg",
+        "Paraguay": "py",
+        "Peru": "pe",
+        "Philippines": "ph",
+        "Poland": "pl",
+        "Portugal": "pt",
+        "Qatar": "qa",
+        "Romania": "ro",
+        "Russia": "ru",
+        "Rwanda": "rw",
+        "Saint Kitts and Nevis": "kn",
+        "Saint Lucia": "lc",
+        "Saint Vincent and the Grenadines": "vc",
+        "Samoa": "ws",
+        "San Marino": "sm",
+        "Sao Tome and Principe": "st",
+        "Saudi Arabia": "sa",
+        "Senegal": "sn",
+        "Serbia": "rs",
+        "Seychelles": "sc",
+        "Sierra Leone": "sl",
+        "Singapore": "sg",
+        "Slovakia": "sk",
+        "Slovenia": "si",
+        "Solomon Islands": "sb",
+        "Somalia": "so",
+        "South Africa": "za",
+        "South Sudan": "ss",
+        "Spain": "es",
+        "Sri Lanka": "lk",
+        "Sudan": "sd",
+        "Suriname": "sr",
+        "Sweden": "se",
+        "Switzerland": "ch",
+        "Syria": "sy",
+        "Taiwan": "tw",
+        "Tajikistan": "tj",
+        "Tanzania": "tz",
+        "Thailand": "th",
+        "Timor-Leste": "tl",
+        "Togo": "tg",
+        "Tonga": "to",
+        "Trinidad and Tobago": "tt",
+        "Tunisia": "tn",
+        "Turkey": "tr",
+        "Turkmenistan": "tm",
+        "Tuvalu": "tv",
+        "Uganda": "ug",
+        "Ukraine": "ua",
+        "United Arab Emirates": "ae",
+        "United Kingdom": "gb",
+        "United States": "us",
+        "Uruguay": "uy",
+        "Uzbekistan": "uz",
+        "Vanuatu": "vu",
+        "Venezuela": "ve",
+        "Vietnam": "vn",
+        "Yemen": "ye",
+        "Zambia": "zm",
+        "Zimbabwe": "zw"
+        // Add the remaining mappings here...
+    };
+
+    // Select all paths with the class 'allPaths'
+    const paths = document.querySelectorAll("path.allPaths");
+
+    paths.forEach((path) => {
+        const countryName = path.id.trim(); // Get the current country name (id)
+        const countryCode = countryMapping[countryName]; // Find the matching ISO code
+
+        if (countryCode) {
+            // Add the ISO code as a data attribute
+            path.setAttribute("data-iso", countryCode);
+        } else {
+            console.warn(`No ISO code found for country: ${countryName}`);
+        }
+    });
+});
+
+
+	// Full mapping of countries to IANA time zones
+const countryTimeZones = {
+    "Afghanistan": "Asia/Kabul",
+    "Albania": "Europe/Tirane",
+    "Algeria": "Africa/Algiers",
+    "Andorra": "Europe/Andorra",
+    "Angola": "Africa/Luanda",
+    "Antarctica": "Antarctica/Palmer",
+    "Antigua and Barbuda": "America/Antigua",
+    "Argentina": "America/Argentina/Buenos_Aires",
+    "Armenia": "Asia/Yerevan",
+    "Australia": "Australia/Sydney",
+    "Austria": "Europe/Vienna",
+    "Azerbaijan": "Asia/Baku",
+    "Bahamas": "America/Nassau",
+    "Bahrain": "Asia/Bahrain",
+    "Bangladesh": "Asia/Dhaka",
+    "Barbados": "America/Barbados",
+    "Belarus": "Europe/Minsk",
+    "Belgium": "Europe/Brussels",
+    "Belize": "America/Belize",
+    "Benin": "Africa/Porto-Novo",
+    "Bhutan": "Asia/Thimphu",
+    "Bolivia": "America/La_Paz",
+    "Bosnia and Herzegovina": "Europe/Sarajevo",
+    "Botswana": "Africa/Gaborone",
+    "Brazil": "America/Sao_Paulo",
+    "Brunei": "Asia/Brunei",
+    "Bulgaria": "Europe/Sofia",
+    "Burkina Faso": "Africa/Ouagadougou",
+    "Burundi": "Africa/Bujumbura",
+    "Cambodia": "Asia/Phnom_Penh",
+    "Cameroon": "Africa/Douala",
+    "Canada": "America/Toronto",
+    "Cape Verde": "Atlantic/Cape_Verde",
+    "Central African Republic": "Africa/Bangui",
+    "Chad": "Africa/Ndjamena",
+    "Chile": "America/Santiago",
+    "China": "Asia/Shanghai",
+    "Colombia": "America/Bogota",
+    "Comoros": "Indian/Comoro",
+    "Congo (Kinshasa)": "Africa/Kinshasa",
+    "Congo (Brazzaville)": "Africa/Brazzaville",
+    "Costa Rica": "America/Costa_Rica",
+    "Croatia": "Europe/Zagreb",
+    "Cuba": "America/Havana",
+    "Cyprus": "Asia/Nicosia",
+    "Czech Republic": "Europe/Prague",
+    "Denmark": "Europe/Copenhagen",
+    "Djibouti": "Africa/Djibouti",
+    "Dominica": "America/Dominica",
+    "Dominican Republic": "America/Santo_Domingo",
+    "Ecuador": "America/Guayaquil",
+    "Egypt": "Africa/Cairo",
+    "El Salvador": "America/El_Salvador",
+    "Equatorial Guinea": "Africa/Malabo",
+    "Eritrea": "Africa/Asmara",
+    "Estonia": "Europe/Tallinn",
+    "Eswatini": "Africa/Mbabane",
+    "Ethiopia": "Africa/Addis_Ababa",
+    "Fiji": "Pacific/Fiji",
+    "Finland": "Europe/Helsinki",
+    "France": "Europe/Paris",
+    "Gabon": "Africa/Libreville",
+    "Gambia": "Africa/Banjul",
+    "Georgia": "Asia/Tbilisi",
+    "Germany": "Europe/Berlin",
+    "Ghana": "Africa/Accra",
+    "Greece": "Europe/Athens",
+    "Greenland": "America/Nuuk",
+    "Grenada": "America/Grenada",
+    "Guatemala": "America/Guatemala",
+    "Guinea": "Africa/Conakry",
+    "Guinea-Bissau": "Africa/Bissau",
+    "Guyana": "America/Guyana",
+    "Haiti": "America/Port-au-Prince",
+    "Honduras": "America/Tegucigalpa",
+    "Hungary": "Europe/Budapest",
+    "Iceland": "Atlantic/Reykjavik",
+    "India": "Asia/Kolkata",
+    "Indonesia": "Asia/Jakarta",
+    "Iran": "Asia/Tehran",
+    "Iraq": "Asia/Baghdad",
+    "Ireland": "Europe/Dublin",
+    "Israel": "Asia/Jerusalem",
+    "Italy": "Europe/Rome",
+    "Ivory Coast": "Africa/Abidjan",
+    "Jamaica": "America/Jamaica",
+    "Japan": "Asia/Tokyo",
+    "Jordan": "Asia/Amman",
+    "Kazakhstan": "Asia/Almaty",
+    "Kenya": "Africa/Nairobi",
+    "Kiribati": "Pacific/Tarawa",
+    "Korea, North": "Asia/Pyongyang",
+    "Korea, South": "Asia/Seoul",
+    "Kuwait": "Asia/Kuwait",
+    "Kyrgyzstan": "Asia/Bishkek",
+    "Laos": "Asia/Vientiane",
+    "Latvia": "Europe/Riga",
+    "Lebanon": "Asia/Beirut",
+    "Lesotho": "Africa/Maseru",
+    "Liberia": "Africa/Monrovia",
+    "Libya": "Africa/Tripoli",
+    "Liechtenstein": "Europe/Vaduz",
+    "Lithuania": "Europe/Vilnius",
+    "Luxembourg": "Europe/Luxembourg",
+    "Macau": "Asia/Macau",
+    "Madagascar": "Indian/Antananarivo",
+    "Malawi": "Africa/Blantyre",
+    "Malaysia": "Asia/Kuala_Lumpur",
+    "Maldives": "Indian/Maldives",
+    "Mali": "Africa/Bamako",
+    "Malta": "Europe/Malta",
+    "Marshall Islands": "Pacific/Majuro",
+    "Mauritania": "Africa/Nouakchott",
+    "Mauritius": "Indian/Mauritius",
+    "Mexico": "America/Mexico_City",
+    "Micronesia": "Pacific/Chuuk",
+    "Moldova": "Europe/Chisinau",
+    "Monaco": "Europe/Monaco",
+    "Mongolia": "Asia/Ulaanbaatar",
+    "Montenegro": "Europe/Podgorica",
+    "Morocco": "Africa/Casablanca",
+    "Mozambique": "Africa/Maputo",
+    "Myanmar": "Asia/Yangon",
+    "Namibia": "Africa/Windhoek",
+    "Nauru": "Pacific/Nauru",
+    "Nepal": "Asia/Kathmandu",
+    "Netherlands": "Europe/Amsterdam",
+    "New Zealand": "Pacific/Auckland",
+    "Nicaragua": "America/Managua",
+    "Niger": "Africa/Niamey",
+    "Nigeria": "Africa/Lagos",
+    "Norway": "Europe/Oslo",
+    "Oman": "Asia/Muscat",
+    "Pakistan": "Asia/Karachi",
+    "Palau": "Pacific/Palau",
+    "Panama": "America/Panama",
+    "Papua New Guinea": "Pacific/Port_Moresby",
+    "Paraguay": "America/Asuncion",
+    "Peru": "America/Lima",
+    "Philippines": "Asia/Manila",
+    "Poland": "Europe/Warsaw",
+    "Portugal": "Europe/Lisbon",
+    "Qatar": "Asia/Qatar",
+    "Romania": "Europe/Bucharest",
+    "Russia": "Europe/Moscow",
+    "Rwanda": "Africa/Kigali",
+    "Saint Kitts and Nevis": "America/St_Kitts",
+    "Saint Lucia": "America/St_Lucia",
+    "Saint Vincent and the Grenadines": "America/St_Vincent",
+    "Samoa": "Pacific/Apia",
+    "San Marino": "Europe/San_Marino",
+    "Sao Tome and Principe": "Africa/Sao_Tome",
+    "Saudi Arabia": "Asia/Riyadh",
+    "Senegal": "Africa/Dakar",
+    "Serbia": "Europe/Belgrade",
+    "Seychelles": "Indian/Mahe",
+    "Sierra Leone": "Africa/Freetown",
+    "Singapore": "Asia/Singapore",
+    "Slovakia": "Europe/Bratislava",
+    "Slovenia": "Europe/Ljubljana",
+    "Solomon Islands": "Pacific/Guadalcanal",
+    "Somalia": "Africa/Mogadishu",
+    "South Africa": "Africa/Johannesburg",
+    "South Sudan": "Africa/Juba",
+    "Spain": "Europe/Madrid",
+    "Sri Lanka": "Asia/Colombo",
+    "Sudan": "Africa/Khartoum",
+    "Suriname": "America/Paramaribo",
+    "Swaziland": "Africa/Mbabane",
+    "Sweden": "Europe/Stockholm",
+    "Switzerland": "Europe/Zurich",
+    "Syria": "Asia/Damascus",
+    "Taiwan": "Asia/Taipei",
+    "Tajikistan": "Asia/Dushanbe",
+    "Tanzania": "Africa/Dar_es_Salaam",
+    "Thailand": "Asia/Bangkok",
+    "Turkey": "Asia/Istanbul",
+    "Turkmenistan": "Asia/Ashgabat",
+    "United Kingdom": "Europe/London",
+    "United States": "America/New_York",
+    "Uzbekistan": "Asia/Tashkent",
+    "Venezuela": "America/Caracas",
+    "Vietnam": "Asia/Ho_Chi_Minh",
+    "Yemen": "Asia/Sana'a",
+
+    "Anguilla": "America/Anguilla",
+    "Aruba": "America/Aruba",
+    "Bermuda": "Atlantic/Bermuda",
+    "Bouvet Island": "Atlantic/Bouvet",
+    "British Indian Ocean Territory": "Indian/Chagos",
+    "Cayman Islands": "America/Cayman",
+    "Christmas Island": "Indian/Christmas",
+    "Cocos (Keeling) Islands": "Indian/Cocos",
+    "Cook Islands": "Pacific/Rarotonga",
+    "Falkland Islands": "Atlantic/Stanley",
+    "Faroe Islands": "Atlantic/Faroe",
+    "French Guiana": "America/Cayenne",
+    "French Polynesia": "Pacific/Tahiti",
+    "French Southern Territories": "Indian/Kerguelen",
+    "Gibraltar": "Europe/Gibraltar",
+    "Greenland": "America/Godthab",
+    "Guadeloupe": "America/Guadeloupe",
+    "Guam": "Pacific/Guam",
+    "Guernsey": "Europe/Guernsey",
+    "Holy See (Vatican City)": "Europe/Vatican",
+    "Isle of Man": "Europe/Isle_of_Man",
+    "Jersey": "Europe/Jersey",
+    "Mayotte": "Indian/Mayotte",
+    "Montserrat": "America/Montserrat",
+    "Montserrat": "America/Montserrat",
+    "New Caledonia": "Pacific/Noumea",
+    "Niue": "Pacific/Niue",
+    "Norfolk Island": "Pacific/Norfolk",
+    "Pitcairn Islands": "Pacific/Pitcairn",
+    "Reunion": "Indian/Reunion",
+    "Saint Barthelemy": "America/St_Barthelemy",
+    "Saint Helena, Ascension and Tristan da Cunha": "Atlantic/St_Helena",
+    "Saint Martin (French part)": "America/Marigot",
+    "Saint Pierre and Miquelon": "America/Miquelon",
+    "Svalbard and Jan Mayen": "Arctic/Longyearbyen",
+    "Tokelau": "Pacific/Fakaofo",
+    "Tonga": "Pacific/Tongatapu",
+    "Tuvalu": "Pacific/Funafuti",
+    "Vanuatu": "Pacific/Efate",
+    "Wallis and Futuna": "Pacific/Wallis",
+    "Western Sahara": "Africa/El_Aaiun"
+    
+};
+
 // Global variables
 let liveClockInterval; // For managing time updates
 let timezoneCache = {}; // Cache for timezone abbreviations
@@ -82,7 +538,6 @@ async function getUser(place) {
         document.getElementById("time").innerText = "Error fetching time data.";
     }
 }
-
 
 // Function to manage fading in and resetting elements
 function manageVisibility(placeName) {
@@ -669,6 +1124,8 @@ async function getCountryData(countryName) {
     }
 }
 
+
+
 // Map Click & Country Information Functions Joined Together
 
 // Comprehensive country-to-code mapping for News API
@@ -1151,4 +1608,1443 @@ async function getCountryData(countryName) {
 			headlinesContainer.innerHTML = `<p>Error loading news for ${countryName}.</p>`;
 		}
 	}
+// Scroll functionality
+
+// Scroll functionality: Adds smooth scrolling to headlines
+
+/**
+ * Initializes scroll functionality for navigation buttons.
+ */
+
+function setupScrollButtons() {
+    const scrollableContent = document.getElementById("headlines");
+    const scrollUpButton = document.getElementById("scroll-up");
+    const scrollDownButton = document.getElementById("scroll-down");
+    const backToTopButton = document.getElementById("back-to-top");
+
+    if (!scrollableContent) return; // Exit if no scrollable content found
+
+    // Scrolls up by 100px when the scroll-up button is clicked
+    if (scrollUpButton) {
+        scrollUpButton.addEventListener("click", () => {
+            scrollableContent.scrollBy({ top: -100, behavior: "smooth" });
+        });
+    }
+
+    // Scrolls down by 100px when the scroll-down button is clicked
+    if (scrollDownButton) {
+        scrollDownButton.addEventListener("click", () => {
+            scrollableContent.scrollBy({ top: 100, behavior: "smooth" });
+        });
+    }
+
+    // Scrolls to the top when the back-to-top button is clicked
+    if (backToTopButton) {
+        backToTopButton.addEventListener("click", () => {
+            scrollableContent.scrollTo({ top: 0, behavior: "smooth" });
+        });
+    }
+}
+
+// Clone and maximize functionality: Creates a pop-out clone of the snapshot-box
+
+
+/**
+ * Clones a container and maximizes it for a pop-out view.
+ * @param {HTMLElement} button - The button that triggers the clone and maximize action.
+ */
+function cloneAndMaximize(button) {
+    const parentBox = button.closest('.snapshot-box'); // Find parent container
+    const firstRow = document.querySelector('#first-row');
+
+    if (!parentBox) return; // Exit if no parent box found
+
+    // Check if any container is already maximized
+    const existingMaximized = document.querySelector('.maximized');
+    if (existingMaximized) {
+        console.log("A container is already maximized. Removing the existing one.");
+        existingMaximized.remove(); // Remove existing maximized container
+    }
+
+    // Clone the container and apply styles for pop-out view
+    const clonedBox = parentBox.cloneNode(true);
+    clonedBox.classList.add('maximized');
+    clonedBox.style.position = 'fixed';
+    clonedBox.style.top = '2%';
+    clonedBox.style.left = '2%';
+    clonedBox.style.right = '2%';
+    clonedBox.style.bottom = '2%';
+    clonedBox.style.width = '95vw'; /* Pop-out width: 95% of viewport */
+    clonedBox.style.height = '95vh'; /* Pop-out height: 95% of viewport */
+    clonedBox.style.zIndex = '1000';
+    clonedBox.style.boxSizing = 'border-box';
+    clonedBox.style.padding = '15px';
+    clonedBox.style.overflow = 'auto';
+    clonedBox.style.backdropFilter = 'blur(10px)'; // Frosted glass effect
+    clonedBox.style.background = 'rgba(255, 255, 255, 0.5)';
+    clonedBox.style.borderRadius = '10px';
+
+    // Temporarily hide first-row scaling effect
+    firstRow.classList.add('scaled');
+
+    // Append cloned box to the body
+    document.body.appendChild(clonedBox);
+
+    // Add draggable functionality to the cloned box
+    makeDraggable(clonedBox);
+
+    // Add close button functionality to remove the cloned box
+    const closeButton = clonedBox.querySelector('.close-btn');
+    if (closeButton) {
+        closeButton.addEventListener('click', () => {
+            clonedBox.remove(); // Remove cloned box
+            firstRow.classList.remove('scaled'); // Restore first-row scaling
+        });
+    }
+
+    // Initialize scroll buttons inside the maximized container
+    initializeMaximizedButtons();
+
+    // 🟢 Ensure holidays scroll buttons work inside the maximized container
+    initializeHolidaysScrollButtonsForContainer(clonedBox);
+}
+
+/**
+ * Initializes holidays scroll buttons inside a specific container.
+ * @param {HTMLElement} container - The container where the buttons should work.
+ */
+function initializeHolidaysScrollButtonsForContainer(container) {
+    const holidaysList = container.querySelector("#holidays-list");
+    const scrollUpBtn = container.querySelector("#holidays-scroll-up");
+    const scrollDownBtn = container.querySelector("#holidays-scroll-down");
+    const backToTopBtn = container.querySelector("#holidays-back-to-top");
+
+    if (!holidaysList) {
+        console.error("Holidays list not found inside maximized container!");
+        return;
+    }
+
+    function scrollUpHandler() {
+        holidaysList.scrollBy({ top: -100, behavior: "smooth" });
+    }
+
+    function scrollDownHandler() {
+        holidaysList.scrollBy({ top: 100, behavior: "smooth" });
+    }
+
+    function backToTopHandler() {
+        holidaysList.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    if (scrollUpBtn) {
+        scrollUpBtn.addEventListener("click", scrollUpHandler);
+    }
+
+    if (scrollDownBtn) {
+        scrollDownBtn.addEventListener("click", scrollDownHandler);
+    }
+
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", backToTopHandler);
+    }
+
+    console.log("🔥 Holidays scroll buttons initialized inside maximized container! ✅");
+}
+
+
+// Draggable functionality: Enables dragging of the pop-out container
+
+/**
+ * Enables dragging functionality for a pop-out container.
+ * @param {HTMLElement} popup - The container element to be made draggable.
+ */
+
+function makeDraggable(popup) {
+    let offsetX = 0, offsetY = 0, isDragging = false;
+
+    popup.addEventListener("mousedown", (e) => {
+        isDragging = true;
+        offsetX = e.clientX - popup.offsetLeft;
+        offsetY = e.clientY - popup.offsetTop;
+        popup.style.cursor = "pointer";
+    });
+
+    window.addEventListener("mousemove", (e) => {
+        if (isDragging) {
+            popup.style.left = `${e.clientX - offsetX}px`;
+            popup.style.top = `${e.clientY - offsetY}px`;
+            popup.style.position = "absolute";
+        }
+    });
+
+    window.addEventListener("mouseup", () => {
+        isDragging = false;
+        popup.style.cursor = "default";
+    });
+}
+
+// Fixes button functionality inside cloned/maximized containers
+function fixButtonFunctionality(container) {
+    // Fix return to top buttons
+    container.querySelectorAll('.return-top-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const listContainer = button.closest('.snapshot-box')?.querySelector('.list-container');
+            if (listContainer) {
+                listContainer.scrollTop = 0; // Scroll to top
+            }
+        });
+    });
+
+    // Fix scroll buttons for holidays-list
+    container.querySelectorAll('.scroll-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            const listContainer = container.querySelector('.holidays-list');
+            if (listContainer) {
+                const direction = button.classList.contains('scroll-down') ? 1 : -1;
+                listContainer.scrollBy({ top: direction * 100, behavior: 'smooth' });
+            }
+        });
+    });
+}
+
+// Function to initialize all button events after cloning/maximizing
+function initializeMaximizedButtons() {
+    // Ensure the buttons inside the maximized container work
+    document.querySelectorAll('.maximize-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            cloneAndMaximize(e.target); // Call the function to clone and maximize
+        });
+    });
+
+    document.querySelectorAll('.close-btn').forEach(button => {
+        button.addEventListener('click', (e) => {
+            // Close the cloned container
+            const clonedContainer = e.target.closest('.snapshot-box');
+            clonedContainer.remove(); 
+        });
+    });
+
+    // Initialize scroll buttons for each maximized container
+    document.querySelectorAll('.navigation-buttons-holidays button').forEach(button => {
+        button.addEventListener('click', handleScrollButtons); 
+    });
+
+    // Initialize scroll buttons for all other containers (e.g. headlines, etc.)
+    document.querySelectorAll('.navigation-buttons-black button').forEach(button => {
+        button.addEventListener('click', handleScrollButtons); 
+    });
+}
+
+// Handling scroll buttons for any container
+function handleScrollButtons(e) {
+    const parentContainer = e.target.closest('.snapshot-box');
+    const list = parentContainer.querySelector('.scrollable-content');
     
+    if (!list) return; // Exit if no scrollable content found
+
+    const scrollAmount = e.target.id.includes('up') ? -100 : (e.target.id.includes('down') ? 100 : 0);
+
+    if (scrollAmount !== 0) {
+        list.scrollBy({ top: scrollAmount, behavior: "smooth" });
+    } else if (e.target.id === 'back-to-top') {
+        list.scrollTo({ top: 0, behavior: "smooth" });
+    }
+}
+
+// Initialize all the buttons on page load
+document.addEventListener('DOMContentLoaded', () => {
+    initializeMaximizedButtons();
+});
+
+// Attach maximize functionality to buttons
+document.querySelectorAll('.maximize-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        cloneAndMaximize(button);
+    });
+});
+
+// Change background color of header and buttons
+const header = document.querySelector("#headlines-header");
+if (header) {
+    header.style.backgroundColor = "black";
+    header.style.color = "white";
+}
+
+document.querySelectorAll(".window-controls button").forEach(button => {
+    button.style.backgroundColor = "rgb(181, 165, 155, 0)";
+    button.style.color = "black";
+});
+
+// Function to fetch and display public holidays
+// Function to fetch and display public holidays
+async function fetchPublicHolidays(countryName) {
+    try {
+      // Step 1: Get ISO country code using REST Countries API
+      const countryResponse = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+      const countryData = await countryResponse.json();
+      const countryCode = countryData[0].cca2; // Extract ISO alpha-2 code (e.g., "GB" for UK)
+  
+      if (!countryCode) {
+        console.error(`Could not find ISO code for ${countryName}`);
+        return;
+      }
+  
+      // Step 2: Fetch public holidays from API Ninjas using the country code
+      const currentYear = new Date().getFullYear();
+      const holidaysResponse = await fetch(`https://api.api-ninjas.com/v1/holidays?country=${countryCode}&year=${currentYear}`, {
+        headers: { 'X-Api-Key': 'oynQZsr3dpVh2dKnjXNvLg==GgPfFc4Od4Sycuuy' }
+      });
+  
+      const holidays = await holidaysResponse.json();
+  
+      // Step 3: Filter and sort holidays from today onward
+      const today = new Date();
+      const upcomingHolidays = holidays
+        .map(holiday => ({
+          ...holiday,
+          date: new Date(holiday.date)
+        }))
+        .filter(holiday => holiday.date >= today)
+        .sort((a, b) => a.date - b.date);
+  
+      // Step 4: Display holidays in the UI
+      const holidaysList = document.getElementById("holidays-list");
+      holidaysList.innerHTML = ""; // Clear previous results
+  
+      if (upcomingHolidays.length === 0) {
+        holidaysList.innerHTML = "<li>No upcoming public holidays found.</li>";
+        return;
+      }
+      initializeHolidaysScrollButtons(); // Run it after rendering holidays
+      upcomingHolidays.forEach(holiday => {
+        const listItem = document.createElement("li");
+        listItem.textContent = `${holiday.date.toLocaleDateString()}: ${holiday.name}`;
+        holidaysList.appendChild(listItem);
+      });
+    } catch (error) {
+      console.error("Error fetching public holidays:", error);
+    }
+  }
+  
+  // Attach this to your map click event!
+  document.querySelectorAll(".allPaths").forEach((path) => {
+    path.addEventListener("click", () => {
+      const countryName = path.id; // Country name from map click
+      fetchPublicHolidays(countryName); // Fetch holidays!
+    });
+  });
+  
+  function initializeHolidaysScrollButtons() {
+      const holidaysList = document.getElementById("holidays-list");
+      const scrollUpBtn = document.getElementById("holidays-scroll-up");
+      const scrollDownBtn = document.getElementById("holidays-scroll-down");
+      const backToTopBtn = document.getElementById("holidays-back-to-top");
+  
+      if (!holidaysList) {
+          console.error("Holidays list not found!");
+          return;
+      }
+  
+      // Ensure we remove previous event listeners before adding new ones
+      scrollUpBtn?.removeEventListener("click", scrollUpHandler);
+      scrollDownBtn?.removeEventListener("click", scrollDownHandler);
+      backToTopBtn?.removeEventListener("click", backToTopHandler);
+  
+      function scrollUpHandler() {
+          holidaysList.scrollBy({ top: -100, behavior: "smooth" });
+      }
+  
+      function scrollDownHandler() {
+          holidaysList.scrollBy({ top: 100, behavior: "smooth" });
+      }
+  
+      function backToTopHandler() {
+          holidaysList.scrollTo({ top: 0, behavior: "smooth" });
+      }
+  
+      if (scrollUpBtn) {
+          scrollUpBtn.addEventListener("click", scrollUpHandler);
+      }
+  
+      if (scrollDownBtn) {
+          scrollDownBtn.addEventListener("click", scrollDownHandler);
+      }
+  
+      if (backToTopBtn) {
+          backToTopBtn.addEventListener("click", backToTopHandler);
+      }
+  
+      console.log("🔥 Holidays scroll buttons initialized! ✅");
+  
+      
+  }
+
+  async function fetchPublicHolidays(countryName) {
+    try {
+        console.log(`Fetching ISO code for: ${countryName}`);
+
+        const countryResponse = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+        const countryData = await countryResponse.json();
+
+        console.log("Full REST Countries Response:", countryData);
+
+        if (!Array.isArray(countryData) || countryData.length === 0) {
+            console.error(`❌ No country data found for "${countryName}"`);
+            return;
+        }
+
+        const countryCode = countryData[0]?.cca2; 
+        console.log(`✅ Found ISO Code: ${countryCode}`);
+
+        if (!countryCode) {
+            console.error(`❌ Could not extract ISO code for "${countryName}"`);
+            return;
+        }
+
+        // Fetch public holidays without specifying the year
+        const holidaysResponse = await fetch(`https://api.api-ninjas.com/v1/holidays?country=${countryCode}`, {
+            headers: { 'X-Api-Key': 'oynQZsr3dpVh2dKnjXNvLg==GgPfFc4Od4Sycuuy' }
+        });
+
+        const holidays = await holidaysResponse.json();
+        console.log("🗓️ Public Holidays Data:", holidays);
+
+        if (!Array.isArray(holidays) || holidays.length === 0) {
+            console.warn(`⚠️ No upcoming holidays found for ${countryName}`);
+        }
+
+        // Filter and sort holidays for the current year
+        const today = new Date();
+        const upcomingHolidays = holidays
+            .map(holiday => ({
+                ...holiday,
+                date: new Date(holiday.date)
+            }))
+            .filter(holiday => holiday.date >= today)  // Only keep upcoming holidays
+            .sort((a, b) => a.date - b.date);  // Sort holidays by date
+
+        // Display holidays
+        const holidaysList = document.getElementById("holidays-list");
+        holidaysList.innerHTML = ""; 
+
+        if (upcomingHolidays.length === 0) {
+            holidaysList.innerHTML = "<li>No upcoming public holidays found.</li>";
+            return;
+        }
+
+        initializeHolidaysScrollButtons();
+
+        upcomingHolidays.forEach(holiday => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${holiday.date.toLocaleDateString()}: ${holiday.name}`;
+            holidaysList.appendChild(listItem);
+        });
+
+    } catch (error) {
+        console.error("❌ Error fetching public holidays:", error);
+    }
+}
+
+  
+
+	// Weather Container
+
+	/**
+ * Fetches and displays current weather and forecast data for a given city.
+ * 
+ * @param {string} city - The name of the city to fetch weather data for.
+ */
+
+	function getWeather(city) {
+		const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
+
+		if (!city) {
+			alert('Please enter a city');
+			return;
+		}
+
+		const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+		const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+
+		fetch(currentWeatherUrl)
+			.then(response => response.json())
+			.then(data => {
+				displayWeather(data);
+			})
+			.catch(error => {
+				console.error('Error fetching current weather data:', error);
+				alert('Error fetching current weather data. Please try again.');
+			});
+
+		fetch(forecastUrl)
+			.then(response => response.json())
+			.then(data => {
+				displayHourlyForecast(data.list);
+				displayFiveDayForecast(data.list);
+			})
+			.catch(error => {
+				console.error('Error fetching forecast data:', error);
+				alert('Error fetching forecast data. Please try again.');
+			});
+	}
+
+	/**
+ * Displays the current weather information in the UI.
+ * 
+ * @param {Object} data - The weather data returned from the API.
+ */
+
+	function displayWeather(data) {
+		const tempDivInfo = document.getElementById('temp-div');
+		const weatherInfoDiv = document.getElementById('weather-info');
+		const weatherIcon = document.getElementById('weather-icon');
+		const hourlyForecastDiv = document.getElementById('hourly-forecast');
+
+		// Clear previous content
+		weatherInfoDiv.innerHTML = '';
+		hourlyForecastDiv.innerHTML = '';
+		tempDivInfo.innerHTML = '';
+
+		if (data.cod === '404') {
+			weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
+		} else {
+			const cityName = data.name;
+			const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
+			const description = data.weather[0].description;
+			const iconCode = data.weather[0].icon;
+			const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+
+			const temperatureHTML = `<p>${temperature}°C</p>`;
+			const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
+
+			tempDivInfo.innerHTML = temperatureHTML;
+			weatherInfoDiv.innerHTML = weatherHtml;
+			weatherIcon.src = iconUrl;
+			weatherIcon.alt = description;
+
+			showImage();
+		}
+	}
+
+	/**
+ * Displays the hourly weather forecast for the next 24 hours in the UI.
+ * 
+ * @param {Array} hourlyData - An array of weather forecast data points.
+ */
+
+	function displayHourlyForecast(hourlyData) {
+		const hourlyForecastDiv = document.getElementById('hourly-forecast');
+		const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
+
+		hourlyForecastDiv.innerHTML = ''; // Clear previous content
+
+		next24Hours.forEach(item => {
+			const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
+			const hour = dateTime.getHours();
+			const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
+			const iconCode = item.weather[0].icon;
+			const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+			const hourlyItemHtml = `
+            <div class="hourly-item">
+                <span>${hour}:00</span>
+                <img src="${iconUrl}" alt="Hourly Weather Icon">
+                <span>${temperature}°C</span>
+            </div>
+        `;
+
+			hourlyForecastDiv.innerHTML += hourlyItemHtml;
+		});
+	}
+
+	/**
+ * Displays the 5-day weather forecast in the UI, selecting one forecast per day at noon.
+ * 
+ * @param {Array} hourlyData - An array of weather forecast data points.
+ */
+
+	function displayFiveDayForecast(hourlyData) {
+		const forecastCards = document.getElementById('forecast-cards');
+		forecastCards.innerHTML = ''; // Clear previous forecasts
+
+		// Group forecasts by day (select one forecast per day, e.g., at noon)
+		const dailyForecasts = hourlyData.filter(item => {
+			const dateTime = new Date(item.dt * 1000);
+			return dateTime.getHours() === 12; // Pick the forecast for 12:00 PM
+		}).slice(0, 5); // Limit to the next 5 days
+
+		dailyForecasts.forEach(item => {
+			const dateTime = new Date(item.dt * 1000); // Convert timestamp to date
+			const day = dateTime.toLocaleDateString('en-US', { weekday: 'short' }); // Get day of the week
+			const temperature = Math.round(item.main.temp - 273.15); // Convert Kelvin to Celsius
+			const description = item.weather[0].description;
+			const iconCode = item.weather[0].icon;
+			const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+			const cardHtml = `
+            <div class="forecast-card">
+                <p><strong>${day}</strong></p>
+                <img src="${iconUrl}" alt="${description}">
+                <p>${temperature}°C</p>
+                <p>${description}</p>
+            </div>
+        `;
+
+			forecastCards.innerHTML += cardHtml;
+		});
+	}
+
+	// Add scrolling functionality for the 5-day forecast
+/**
+ * Scrolls the 5-day forecast cards to the left when the left arrow is clicked.
+ */
+
+	document.getElementById("scroll-left").addEventListener("click", () => {
+		const forecastCards = document.getElementById("forecast-cards");
+		forecastCards.scrollBy({ left: -150, behavior: "smooth" });
+	});
+
+	/**
+ * Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
+ */
+
+	document.getElementById("scroll-right").addEventListener("click", () => {
+		const forecastCards = document.getElementById("forecast-cards");
+		forecastCards.scrollBy({ left: 150, behavior: "smooth" });
+	});
+
+	/**
+ * Displays the weather icon by making the image element visible once it's loaded.
+ */
+
+	function showImage() {
+		const weatherIcon = document.getElementById('weather-icon');
+		weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
+	}
+
+// GOOGLE MAPS LOAD FUNCTION //
+
+function loadGoogleMaps() {
+    if (!window.google || !window.google.maps) {
+        let script = document.createElement('script');
+        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap";
+        script.async = true;
+        script.defer = true;
+        document.head.appendChild(script);
+    }
+}
+loadGoogleMaps();
+
+
+
+	// Google Map with Search Bar //
+
+	// Google Map with Search Bar //
+let map, autocomplete, infowindow, marker;
+
+/**
+ * Initializes the Google Map, sets up autocomplete search functionality, and manages events like place selection.
+ */
+function initMap() {
+    // Initialize map with global view
+    map = new google.maps.Map(document.getElementById("map"), {
+        center: { lat: 0, lng: 0 }, // Center of the world
+        zoom: 2, // World view
+    });
+
+    // Clear the input field to reset the search bar to the placeholder text
+    document.getElementById("autocomplete").value = "";
+
+    // Create a marker that will be placed on the map
+    marker = new google.maps.Marker({
+        map: map,
+        draggable: true, // Allow the user to drag the marker
+    });
+
+    // Create an infowindow to display location info
+    infowindow = new google.maps.InfoWindow();
+
+    // Set up the autocomplete input field
+    autocomplete = new google.maps.places.Autocomplete(document.getElementById("autocomplete"), {
+        types: ["geocode"], // Restrict to geographic locations
+    });
+
+    // When a place is selected from the autocomplete dropdown
+    autocomplete.addListener("place_changed", function () {
+        let place = autocomplete.getPlace();
+
+        // Check if the place has geometry (location)
+        if (place.geometry) {
+            // Set the map to the selected location
+            map.setCenter(place.geometry.location);
+            map.setZoom(15); // Zoom in after selection
+
+            // Move the marker to the selected location
+            marker.setPosition(place.geometry.location);
+
+            // Display the location name in the infowindow
+            infowindow.setContent(
+                "<strong>" + place.name + "</strong><br>" + place.formatted_address
+            );
+            infowindow.open(map, marker);
+
+            // Fetch weather for the selected location
+            const cityName = place.name || place.formatted_address.split(",")[0];
+            getWeather(cityName);
+
+            // Search for nearby hotels and amenities
+            searchHotels();
+            searchNearbyAmenities();
+
+            // Trigger fade-in for the containers
+            fadeInContainers();
+        }
+    });
+
+    // Add a drag event listener to the marker to update the location when it's dragged
+    google.maps.event.addListener(marker, "dragend", function () {
+        let latLng = marker.getPosition();
+        let geocoder = new google.maps.Geocoder();
+        geocoder.geocode({ location: latLng }, function (results, status) {
+            if (status === "OK" && results[0]) {
+                infowindow.setContent("<strong>" + results[0].formatted_address + "</strong>");
+                infowindow.open(map, marker);
+
+                // Fetch weather for the dragged location
+                const cityName = results[0].address_components[0].long_name;
+                getWeather(cityName);
+
+                // Update hotels and amenities based on new location
+                searchHotels();
+                searchNearbyAmenities();
+
+                // Trigger fade-in for the containers
+                fadeInContainers();
+            }
+        });
+    });
+
+    // Add bounds_changed listener to dynamically search hotels and amenities as the user scrolls or zooms the map
+    google.maps.event.addListener(map, "bounds_changed", function () {
+        searchHotels();
+        searchNearbyAmenities();
+    });
+
+    // Initialize with containers hidden
+    const allContainers = document.querySelectorAll(
+        "#hotel-container, #place-container, #weather-container"
+    );
+    allContainers.forEach((container) => (container.style.display = "none"));
+
+    /**
+     * Function to fade in containers when a valid place is selected.
+     */
+    function fadeInContainers() {
+        allContainers.forEach((container) => {
+            if (container) {
+                container.classList.add("fade-in"); // Ensure fade-in is applied
+                container.style.display = "block"; // Make the container visible
+            }
+        });
+    }
+}
+
+
+
+
+
+
+// Functionality for searching hotels, nearby amenities, weather, and other related tasks should follow below.
+
+
+
+	// Hotel Search Integration
+
+	/**
+ * Searches for hotels within the current map bounds and displays them on the map and in a results table.
+ */
+
+	function searchHotels() {
+		const MARKER_PATH = "https://maps.google.com/mapfiles/ms/icons/";  // Path to Google Map marker icons
+		let places = new google.maps.places.PlacesService(map);
+		let infoWindow = new google.maps.InfoWindow();
+		let markers = [];
+
+		const search = {
+			bounds: map.getBounds(),
+			types: ["lodging"]
+		};
+
+		places.nearbySearch(search, (results, status) => {
+			if (status === google.maps.places.PlacesServiceStatus.OK) {
+				clearMarkers(); // Clear existing markers
+				clearResults(); // Clear existing results
+
+				results.forEach((result, i) => {
+					// Use the same marker icon as for other places (used for place-container)
+					const markerIcon = `${MARKER_PATH}blue-dot.png`;  // Adjust icon if necessary
+
+					const marker = new google.maps.Marker({
+						position: result.geometry.location,
+						map: map,
+						icon: markerIcon // Using the blue icon here
+					});
+
+					// Fetch detailed place information for the hotel
+					places.getDetails({ placeId: result.place_id }, (place, status) => {
+						if (status === google.maps.places.PlacesServiceStatus.OK) {
+							const content = `
+                            <div>
+                                <strong>${place.name}</strong><br>
+                                ${place.formatted_address || "No address available"}<br>
+                                ${place.website ? `<a href="${place.website}" target="_blank">Website</a>` : "No website available"}<br>
+                                ${place.international_phone_number || "No phone number available"}<br>
+                                ${place.rating ? `Rating: ${place.rating} ★` : "No rating available"}
+                            </div>
+                        `;
+
+							// Show hotel details on marker click
+							marker.addListener("click", () => {
+								infoWindow.setContent(content);
+								infoWindow.open(map, marker);
+							});
+
+							addResult(place, i); // Add result to the table
+						}
+					});
+
+					markers.push(marker); // Keep track of markers
+				});
+			}
+		});
+
+		
+	/**
+	 * Clears all markers from the map.
+	 */
+
+		function clearMarkers() {
+			markers.forEach(marker => marker.setMap(null));
+			markers = [];
+		}
+
+		/**
+	 * Clears all the results from the results table.
+	 */
+
+		function clearResults() {
+			const results = document.getElementById("results");
+			while (results.firstChild) {
+				results.removeChild(results.firstChild);
+			}
+		}
+
+		/**
+	 * Adds a hotel result to the results table.
+	 * @param {object} place - The hotel place object to be added.
+	 * @param {number} i - The index of the result.
+	 */
+
+		function addResult(place, i) {
+			const results = document.getElementById("results");
+			const markerIcon = `${MARKER_PATH}blue-dot.png`;  // Ensure we're using the same icon
+
+			const tr = document.createElement("tr");
+			tr.style.backgroundColor = i % 2 === 0 ? "#F0F0F0" : "#FFFFFF";
+			tr.onclick = () => google.maps.event.trigger(markers[i], "click");
+
+			const iconTd = document.createElement("td");
+			const nameTd = document.createElement("td");
+			const detailsTd = document.createElement("td");
+			const icon = document.createElement("img");
+
+			icon.src = markerIcon;
+			icon.className = "placeIcon";
+			iconTd.appendChild(icon);
+
+			nameTd.textContent = place.name;
+
+			detailsTd.innerHTML = `
+            ${place.formatted_address || "No address available"}<br>
+            ${place.website ? `<a href="${place.website}" target="_blank">Website</a>` : "No website available"}<br>
+            ${place.international_phone_number || "No phone number available"}
+        `;
+
+			tr.appendChild(iconTd);
+			tr.appendChild(nameTd);
+			tr.appendChild(detailsTd);
+			results.appendChild(tr);
+
+			// Create the stars for the rating and add it under the hotel name
+			let starsHtml = '';
+			if (place.rating) {
+				const stars = Math.round(place.rating);  // Round the rating to the nearest whole number
+				for (let i = 0; i < 5; i++) {
+					starsHtml += i < stars ? '★' : '☆'; // Filled and empty stars
+				}
+				nameTd.innerHTML += `<br><span>${starsHtml}</span>`; // Display stars below the name
+			} else {
+				nameTd.innerHTML += `<br><span>No rating</span>`; // If no rating available
+			}
+
+			detailsTd.innerHTML = `
+            ${place.formatted_address || "No address available"}<br>
+            ${place.website ? `<a href="${place.website}" target="_blank">Website</a>` : "No website available"}<br>
+            ${place.international_phone_number || "No phone number available"}
+        `;
+
+			tr.appendChild(iconTd);
+			tr.appendChild(nameTd); // Append name and stars to the middle column
+			tr.appendChild(detailsTd); // Append other details to the right column
+			results.appendChild(tr);
+		}
+	}
+
+
+	// Amenity Search Integration
+
+/**
+ * Searches for nearby amenities within the current map bounds and displays them on the map and in a results table.
+ */
+
+	function searchNearbyAmenities() {
+		const placesTableBody = document.querySelector("#places-results tbody"); // Table body for amenities
+		const placesService = new google.maps.places.PlacesService(map);
+		let amenitiesMarkers = []; // Array to store markers for amenities
+
+		// Define the search categories
+		const categories = [
+			"museum", "park", "cinema", "point_of_interest", "restaurant", "cafe",
+			"shopping_mall", "movie_theater", "bar", "tourist_attraction"
+		];
+
+		// To store results across all categories
+		let allResults = [];
+
+		/**
+	 * Performs a search for a given category of amenities.
+	 * @param {string} category - The category of amenities to search for (e.g., museum, restaurant).
+	 */
+
+		// Function to perform search for each category
+		function performSearch(category) {
+			const search = {
+				bounds: map.getBounds(),
+				types: [category], // Search for one category at a time
+			};
+
+			placesService.nearbySearch(search, (results, status) => {
+				if (status === google.maps.places.PlacesServiceStatus.OK) {
+					allResults = allResults.concat(results); // Add results to the overall collection
+					processResults(); // Process the results as soon as new results are added
+				}
+			});
+		}
+
+		// Perform search for all categories
+		categories.forEach(category => performSearch(category));
+
+		// Function to process all accumulated results and populate the table
+
+		/**
+	 * Processes and displays all accumulated results in the table.
+	 */
+
+		function processResults() {
+			clearTableBody(placesTableBody); // Clear existing table rows
+			allResults.forEach((result) => {
+				// Skip hotels (we've already removed them)
+				if (result.types.includes("lodging")) {
+					return;
+				}
+
+				// Add basic result info to the table
+				const row = document.createElement("tr");
+
+				const iconTd = document.createElement("td");
+				const nameTd = document.createElement("td");
+				const detailsTd = document.createElement("td");
+
+				const icon = document.createElement("img");
+				icon.src = result.icon || "https://maps.google.com/mapfiles/ms/icons/blue-dot.png";
+				icon.alt = "Icon";
+				icon.width = 30;
+				iconTd.appendChild(icon);
+
+				nameTd.textContent = result.name;
+				detailsTd.textContent = "Loading..."; // Placeholder text until details are fetched
+
+				row.appendChild(iconTd);
+				row.appendChild(nameTd);
+				row.appendChild(detailsTd);
+				placesTableBody.appendChild(row);
+
+				// Add a marker for each amenity
+				const marker = new google.maps.Marker({
+					position: result.geometry.location,
+					map: map,
+					icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
+				});
+
+				amenitiesMarkers.push(marker);
+
+				// Prepare content for the infowindow
+				let content = `
+                <div>
+                    <strong>${result.name}</strong><br>
+                    ${result.vicinity || "No address available"}<br>
+                    ${result.types ? result.types.join(", ") : "No category available"}
+                </div>
+            `;
+
+				// Add a click listener to display details in an infowindow
+				marker.addListener("click", () => {
+					infowindow.setContent(content);
+					infowindow.open(map, marker);
+				});
+
+				// Highlight the marker when the table row is clicked
+				row.addEventListener("click", () => {
+					map.setCenter(result.geometry.location);
+					infowindow.setContent(content);
+					infowindow.open(map, marker);
+				});
+
+				// Fetch and update detailed information (address, phone number, website)
+				placesService.getDetails({ placeId: result.place_id }, (placeDetails, status) => {
+					if (status === google.maps.places.PlacesServiceStatus.OK) {
+						detailsTd.innerHTML = `
+                        ${placeDetails.formatted_address || "No address available"}<br>
+                        ${placeDetails.formatted_phone_number || "No phone number available"}<br>
+                        ${placeDetails.website ? `<a href="${placeDetails.website}" target="_blank">Website</a>` : "No website available"}<br>
+                        ${placeDetails.rating ? `Rating: ${placeDetails.rating} / 5` : "No rating available"}
+                    `;
+
+						// Update content for infowindow with more details
+						content = `
+                        <div>
+                            <strong>${placeDetails.name}</strong><br>
+                            ${placeDetails.formatted_address || "No address available"}<br>
+                            ${placeDetails.formatted_phone_number || "No phone number available"}<br>
+                            ${placeDetails.website ? `<a href="${placeDetails.website}" target="_blank">Website</a>` : "No website available"}<br>
+                            ${placeDetails.rating ? `Rating: ${placeDetails.rating} / 5` : "No rating available"}
+                        </div>
+                    `;
+					}
+				});
+			});
+		}
+
+		// Utility function to clear the table body
+
+	/**
+	 * Clears the content of the places results table.
+	 * @param {HTMLElement} tableBody - The table body element to be cleared.
+	 */
+
+		function clearTableBody(container) {
+			while (container.firstChild) {
+				container.removeChild(container.firstChild);
+			}
+		}
+	}
+
+    
+
+	// Scrolling for hotels and places modals
+	$(document).ready(function () {
+		
+		// Hotel scrolling
+/**
+     * Adds scrolling functionality to the hotel list in the modal.
+     * - Scrolls up when the "scroll-up-hotel" button is clicked.
+     * - Scrolls down when the "scroll-down-hotel" button is clicked.
+     * - Scrolls to the top when the "back-to-top-hotel" button is clicked.
+     */
+
+		const hotelScrollable = $("#hotels");
+		$("#scroll-up-hotel").on("click", () => hotelScrollable.scrollTop(hotelScrollable.scrollTop() - 100));
+		$("#scroll-down-hotel").on("click", () => hotelScrollable.scrollTop(hotelScrollable.scrollTop() + 100));
+		$("#back-to-top-hotel").on("click", () => hotelScrollable.scrollTop(0));
+
+		// Places scrolling
+
+		  /**
+     * Adds scrolling functionality to the places list in the modal.
+     * - Scrolls up when the "scroll-up-places" button is clicked.
+     * - Scrolls down when the "scroll-down-places" button is clicked.
+     * - Scrolls to the top when the "back-to-top-places" button is clicked.
+     */
+		const placesScrollable = $("#places");
+		$("#scroll-up-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() - 100));
+		$("#scroll-down-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() + 100));
+		$("#back-to-top-places").on("click", () => placesScrollable.scrollTop(0));
+	});
+
+    
+// Function to enable scrolling for maximized containers
+function enableScrollingForMaximizedContainers(container) {
+    if (container.id === "weather-container") {
+        // Horizontal scrolling for weather
+        container.style.overflowX = "auto";
+        container.style.overflowY = "hidden";
+        container.style.whiteSpace = "nowrap";
+    } else {
+        // Vertical scrolling for hotels and places
+        container.style.overflowY = "auto";
+        container.style.overflowX = "hidden";
+    }
+}
+
+// Scroll buttons for hotels & places
+function addScrollButtons(container, upBtn, downBtn) {
+    upBtn.addEventListener("click", () => {
+        container.scrollBy({ top: -200, behavior: "smooth" });
+    });
+
+    downBtn.addEventListener("click", () => {
+        container.scrollBy({ top: 200, behavior: "smooth" });
+    });
+}
+
+// Scroll buttons for weather (horizontal)
+function addHorizontalScrollButtons(container, leftBtn, rightBtn) {
+    leftBtn.addEventListener("click", () => {
+        container.scrollBy({ left: -150, behavior: "smooth" });
+    });
+
+    rightBtn.addEventListener("click", () => {
+        container.scrollBy({ left: 150, behavior: "smooth" });
+    });
+}
+
+// Function to maximize or minimize the container
+function toggleMaximize(containerId) {
+    const container = document.getElementById(containerId);
+    if (container.classList.contains("maximized")) {
+        container.classList.remove("maximized");
+    } else {
+        container.classList.add("maximized");
+        enableScrollingForMaximizedContainers(container);
+    }
+}
+
+// Function to close the container
+function closeContainer(containerId) {
+    const container = document.getElementById(containerId);
+    container.style.display = "none";
+}
+
+// Attach maximize/minimize and close functionality to each container's buttons
+document.addEventListener("DOMContentLoaded", () => {
+    const containers = ["hotel-container", "places-container", "weather-container"];
+
+    containers.forEach(containerId => {
+        const maximizeButton = document.querySelector(`#${containerId} .maximize-btn`);
+        const closeButton = document.querySelector(`#${containerId} .close-btn`);
+
+        // Maximize/Minimize functionality
+        maximizeButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            toggleMaximize(containerId);
+        });
+
+        // Close functionality
+        closeButton.addEventListener("click", (event) => {
+            event.stopPropagation();
+            closeContainer(containerId);
+        });
+    });
+
+    // Attach scroll buttons to respective containers
+    addScrollButtons(document.getElementById("hotel-container"), document.getElementById("hotel-scroll-up"), document.getElementById("hotel-scroll-down"));
+    addScrollButtons(document.getElementById("places-container"), document.getElementById("places-scroll-up"), document.getElementById("places-scroll-down"));
+    addHorizontalScrollButtons(document.getElementById("weather-container"), document.getElementById("weather-scroll-left"), document.getElementById("weather-scroll-right"));
+});
+
+// Handling map modal
+document.getElementById("postcode-link").addEventListener("click", function (event) {
+    event.preventDefault();
+    const mapmodal = document.getElementById("map-modal");
+    const closeModal = document.getElementById("close-map-modal");
+
+    mapmodal.style.display = "block";
+
+    closeModal.addEventListener("click", function () {
+        mapmodal.style.display = "none";
+    });
+
+    window.addEventListener("click", function (event) {
+        if (event.target === mapmodal) {
+            mapmodal.style.display = "none";
+        }
+    });
+});
+
+// Click event listeners for ".allPaths" to show second-selection container
+document.querySelectorAll(".allPaths").forEach((path) => {
+    path.addEventListener("click", () => {
+        const secondSelection = document.getElementById("second-selection");
+        const snapshotBoxes = document.querySelectorAll(".snapshot-box");
+
+        if (!secondSelection.classList.contains("visible")) {
+            secondSelection.style.display = "flex";
+            setTimeout(() => {
+                secondSelection.classList.add("visible");
+            }, 50);
+        }
+
+        snapshotBoxes.forEach((box, index) => {
+            setTimeout(() => {
+                box.classList.add("show");
+            }, index * 300);
+        });
+
+        // Example content updates
+        document.getElementById("places-results").innerHTML = ` 
+            <tr>
+                <td><img src="path/to/icon.png" alt="Icon" style="width: 32px; height: 32px;"></td>
+                <td>Central Park</td>
+                <td>Beautiful scenery</td>
+            </tr>`;
+        document.getElementById("temp-div").innerHTML = `<h3>28°C</h3><p>Sunny</p>`;
+        document.getElementById("weather-info").innerText = "Perfect weather for outdoor activities!";
+    });
+});
+
+// Handling the search box
+const searchBox = document.getElementById("search-box");
+const secondSelection = document.getElementById("second-selection");
+
+searchBox.addEventListener("input", () => {
+    if (searchBox.value.trim() !== "") {
+        if (!secondSelection.classList.contains("visible")) {
+            secondSelection.style.display = "block";
+            setTimeout(() => {
+                secondSelection.classList.add("visible");
+            }, 50);
+        }
+    } else {
+        secondSelection.classList.remove("visible");
+        setTimeout(() => {
+            secondSelection.style.display = "none";
+        }, 800);
+    }
+});
+
+// Function to update scroll buttons dynamically
+function updateScrollButtons(containerId, leftBtnId, rightBtnId) {
+    const container = document.getElementById(containerId);
+    const leftButton = document.getElementById(leftBtnId);
+    const rightButton = document.getElementById(rightBtnId);
+
+    leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
+    rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
+}
+
+// Scroll buttons for hotels & places (horizontal)
+document.getElementById("hotels-scroll-left").addEventListener("click", () => {
+    document.getElementById("hotels-list").scrollBy({ left: -200, behavior: "smooth" });
+});
+document.getElementById("hotels-scroll-right").addEventListener("click", () => {
+    document.getElementById("hotels-list").scrollBy({ left: 200, behavior: "smooth" });
+});
+document.getElementById("places-scroll-left").addEventListener("click", () => {
+    document.getElementById("places-list").scrollBy({ left: -200, behavior: "smooth" });
+});
+document.getElementById("places-scroll-right").addEventListener("click", () => {
+    document.getElementById("places-list").scrollBy({ left: 200, behavior: "smooth" });
+});
+
+
+
+	/**
+ * Adds click event listeners to elements with the "allPaths" class.
+ * - Displays the second selection container with a fade-in effect.
+ * - Animates the visibility of snapshot boxes sequentially.
+ * - Updates the content of places and weather information sections.
+ */
+
+	document.querySelectorAll(".allPaths").forEach((path) => {
+		path.addEventListener("click", () => {
+			const secondSelection = document.getElementById("second-selection");
+			const snapshotBoxes = document.querySelectorAll(".snapshot-box");
+
+			// Show the container if not already visible
+			if (!secondSelection.classList.contains("visible")) {
+				secondSelection.style.display = "flex";
+				setTimeout(() => {
+					secondSelection.classList.add("visible");
+				}, 50);
+			}
+
+			// Animate each box
+			snapshotBoxes.forEach((box, index) => {
+				setTimeout(() => {
+					box.classList.add("show");
+				}, index * 300);
+			});
+
+			// Update Places and Weather content
+			document.getElementById("places-results").innerHTML = ` 
+            <tr>
+                <td><img src="path/to/icon.png" alt="Icon" style="width: 32px; height: 32px;"></td>
+                <td>Central Park</td>
+                <td>Beautiful scenery</td>
+            </tr>`;
+			document.getElementById("temp-div").innerHTML = `<h3>28°C</h3><p>Sunny</p>`;
+			document.getElementById("weather-info").innerText = "Perfect weather for outdoor activities!";
+		});
+	});
+
+
+
+	// Add event listener to the search box
+/**
+ * Adds an input event listener to the search box.
+ * - Displays the second-selection section with a fade-in effect when input has a value.
+ * - Hides the second-selection section with a fade-out effect when the input is cleared.
+ */
+
+	searchBox.addEventListener("input", () => {
+		// Check if the input has a value
+		if (searchBox.value.trim() !== "") {
+			// Show second-selection if not already visible
+			if (!secondSelection.classList.contains("visible")) {
+				secondSelection.style.display = "block"; // Make it visible
+				setTimeout(() => {
+					secondSelection.classList.add("visible"); // Trigger fade-in
+				}, 50); // Delay for smooth transition
+			}
+		} else {
+			// Hide second-selection if the input is cleared
+			secondSelection.classList.remove("visible");
+			setTimeout(() => {
+				secondSelection.style.display = "none";
+			}, 800); // Match the fade-out duration
+		}
+	});
+
+	document.getElementById("postcode-link").addEventListener("click", function (event) {
+    event.preventDefault(); // Stops default behavior, even if 'role="button"' is missing
+    const mapmodal = document.getElementById("map-modal");
+    const closeModal = document.getElementById("close-map-modal");
+
+    // Show the modal
+    mapmodal.style.display = "block";
+
+    // Close the modal when the close button is clicked
+    closeModal.addEventListener("click", function () {
+        mapmodal.style.display = "none";
+    });
+
+    // Close the modal when clicking outside of it
+    window.addEventListener("click", function (event) {
+        if (event.target === mapmodal) {
+            mapmodal.style.display = "none";
+        }
+    });
+});
+
+
+// Cloned Pop Out Scrolling Buttons
+
+document.addEventListener("DOMContentLoaded", () => {
+    // Attach maximize/minimize and close functionality to each container's buttons
+    const containers = ["hotel-container", "place-container", "weather-container"];
+    containers.forEach((containerId) => {
+        const maximizeButton = document.querySelector(`#${containerId} .maximize-btn`);
+        const closeButton = document.querySelector(`#${containerId} .close-btn`);
+
+        if (maximizeButton) {
+            maximizeButton.addEventListener("click", (event) => {
+                event.stopPropagation(); // Prevent map click interference
+                toggleMaximize(containerId);
+            });
+        }
+
+        if (closeButton) {
+            closeButton.addEventListener("click", (event) => {
+                event.stopPropagation(); // Prevent map click interference
+                closeContainer(containerId);
+            });
+        }
+
+        // If needed, you can add additional vertical scrolling setup per container here.
+    });
+
+    // ----- Horizontal Scrolling for Hotels & Places (if applicable) -----
+    // These assume the existence of horizontal scroll buttons and that the scrollable container is "#hotels" or "#places".
+    $("#hotels-scroll-left").on("click", () => {
+        $("#hotels").scrollLeft($("#hotels").scrollLeft() - 200);
+    });
+    $("#hotels-scroll-right").on("click", () => {
+        $("#hotels").scrollLeft($("#hotels").scrollLeft() + 200);
+    });
+    $("#places-scroll-left").on("click", () => {
+        $("#places").scrollLeft($("#places").scrollLeft() - 200);
+    });
+    $("#places-scroll-right").on("click", () => {
+        $("#places").scrollLeft($("#places").scrollLeft() + 200);
+    });
+
+    // ----- Vertical Scrolling for Hotels & Places -----
+    // For hotels pop-out: the scrollable container is "#hotels"
+    $("#scroll-up-hotel").on("click", () => {
+        $("#hotels").scrollTop($("#hotels").scrollTop() - 100);
+    });
+    $("#scroll-down-hotel").on("click", () => {
+        $("#hotels").scrollTop($("#hotels").scrollTop() + 100);
+    });
+    $("#back-to-top-hotel").on("click", () => {
+        $("#hotels").scrollTop(0);
+    });
+
+    // For places pop-out: the scrollable container is "#places"
+    $("#scroll-up-places").on("click", () => {
+        $("#places").scrollTop($("#places").scrollTop() - 100);
+    });
+    $("#scroll-down-places").on("click", () => {
+        $("#places").scrollTop($("#places").scrollTop() + 100);
+    });
+    $("#back-to-top-places").on("click", () => {
+        $("#places").scrollTop(0);
+    });
+
+    // Optionally, if you want dynamic button visibility (i.e., only show buttons when scrolling is possible)
+    function updateVerticalScrollButtons(scrollableSelector, upBtnSelector, downBtnSelector, topBtnSelector) {
+        const $scrollable = $(scrollableSelector);
+        const $upBtn = $(upBtnSelector);
+        const $downBtn = $(downBtnSelector);
+        const $topBtn = $(topBtnSelector);
+
+        if ($scrollable.length) {
+            // Update visibility based on scroll position
+            $upBtn.toggle($scrollable.scrollTop() > 0);
+            $downBtn.toggle($scrollable.scrollTop() + $scrollable.innerHeight() < $scrollable[0].scrollHeight);
+            $topBtn.toggle($scrollable.scrollTop() > 300);
+        }
+    }
+    // Example: update vertical scroll buttons every time the hotel scrollable div is scrolled
+    $("#hotels").on("scroll", function () {
+        updateVerticalScrollButtons("#hotels", "#scroll-up-hotel", "#scroll-down-hotel", "#back-to-top-hotel");
+    });
+    $("#places").on("scroll", function () {
+        updateVerticalScrollButtons("#places", "#scroll-up-places", "#scroll-down-places", "#back-to-top-places");
+    });
+    // Initial check:
+    updateVerticalScrollButtons("#hotels", "#scroll-up-hotel", "#scroll-down-hotel", "#back-to-top-hotel");
+    updateVerticalScrollButtons("#places", "#scroll-up-places", "#scroll-down-places", "#back-to-top-places");
+
+    // ----- Clone and maximize functionality (for pop-out containers) -----
+    document.querySelectorAll('.maximize-btn').forEach(button => {
+        button.addEventListener('click', () => {
+            cloneAndMaximize(button);
+        });
+    });
+
+    document.querySelectorAll(".window-controls button").forEach(button => {
+        button.style.backgroundColor = "rgb(181, 165, 155, 0)";
+        button.style.color = "black";
+    });
+});
