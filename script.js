@@ -1,10 +1,3 @@
-if (!document.querySelector('script[src*="maps.googleapis.com/maps/api/js"]')) {
-    const script = document.createElement("script");
-    script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap";
-    script.async = true;
-    script.defer = true;
-    document.body.appendChild(script);
-}
 
 document.addEventListener("DOMContentLoaded", () => {
     const countryNameToCode = {
@@ -661,7 +654,7 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 
         const hoverClass = path.className.baseVal.replace(/ /g, ".");
         document.querySelectorAll(`.${hoverClass}`).forEach((el) => {
-            el.style.fill = "rgb(226, 135, 101)";
+            el.style.fill = "#ef814e";
         });
         document.getElementById("name").style.opacity = 0.95;
         document.getElementById("namep").innerText = path.id;
@@ -1490,124 +1483,189 @@ async function getCountryData(countryName) {
  * @param {string} countryName - The name of the country to fetch news headlines for.
  */
 
-	async function fetchTopHeadlinesByCountry(countryName) {
-		const headlinesContainer = document.getElementById("headlines");
-		const nameqContainer = document.getElementById("nameq");
+    // Function to fetch and display news headlines by country
 
-		// Update the country name in the location box
-		if (nameqContainer) {
-			nameqContainer.innerText = countryName;
-		}
+/**
+ * Fetches and displays news headlines for a given country.
+ * @param {string} countryName - The name of the country to fetch news headlines for.
+ */
 
-		headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
+async function fetchTopHeadlinesByCountry(countryName) {
+    const headlinesContainer = document.getElementById("headlines");
+    const nameqContainer = document.getElementById("nameq");
 
-		// API keys and base URLs
-		const gNewsApiKey = "f760069439c7443a00e06790756587d2";
-		const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
+    // Update the country name in the location box
+    if (nameqContainer) {
+        nameqContainer.innerText = countryName;
+    }
 
-		const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
-		const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
+    headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
-		const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee"; // Replace with your NewsAPI key
-		const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
+    // API keys and base URLs
+    const gNewsApiKey = "f760069439c7443a00e06790756587d2";
+    const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
 
-		try {
-			// Fetch data from all three APIs in parallel
-			const [gNewsResponse, newsDataResponse, newsApiResponse] = await Promise.all([
-				fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
-				fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
-				fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`)
-			]);
+    const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
+    const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
 
-			const gNewsData = await gNewsResponse.json();
-			const newsDataData = await newsDataResponse.json();
-			const newsApiData = await newsApiResponse.json();
+    const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee";
+    const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
 
-			// Combine articles from all APIs
-			let articles = [];
+    const worldNewsApiKey = "6a12b24e61msh79a4ff4b1df50bep1d86b8jsn2f76f469d4e9";
+    const worldNewsUrl = `https://world-news-api.p.rapidapi.com/search-news?text=${encodeURIComponent(countryName)}&language=en`;
 
-			if (gNewsData.articles) {
-				articles = articles.concat(
-					gNewsData.articles.map(article => ({
-						title: article.title,
-						description: article.description,
-						url: article.url,
-						source: "GNews",
-						content: article.content || ''
-					}))
-				);
-			}
+    try {
+        // Fetch data from all APIs in parallel
+        const [gNewsResponse, newsDataResponse, newsApiResponse, worldNewsResponse] = await Promise.all([
+            fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
+            fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
+            fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`),
+            fetch(worldNewsUrl, {
+                headers: {
+                    "X-RapidAPI-Key": worldNewsApiKey,
+                    "X-RapidAPI-Host": "world-news-api.p.rapidapi.com"
+                }
+            })
+        ]);
 
-			if (newsDataData.results) {
-				articles = articles.concat(
-					newsDataData.results.map(article => ({
-						title: article.title,
-						description: article.description,
-						url: article.link,
-						source: "NewsData",
-						content: article.content || ''
-					}))
-				);
-			}
+        const gNewsData = await gNewsResponse.json();
+        const newsDataData = await newsDataResponse.json();
+        const newsApiData = await newsApiResponse.json();
+        const worldNewsData = await worldNewsResponse.json();
 
-			if (newsApiData.articles) {
-				articles = articles.concat(
-					newsApiData.articles.map(article => ({
-						title: article.title,
-						description: article.description,
-						url: article.url,
-						source: "NewsAPI",
-						content: article.content || ''
-					}))
-				);
-			}
+        // Combine articles from all APIs
+        let articles = [];
 
-			if (articles.length === 0) {
-				headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
-				return;
-			}
+        if (gNewsData.articles) {
+            articles = articles.concat(
+                gNewsData.articles.map(article => ({
+                    title: article.title,
+                    description: article.description,
+                    url: article.url,
+                    source: "GNews",
+                    content: article.content || ''
+                }))
+            );
+        }
 
-			// Prioritize articles with the country name in the title, description, or content
-			articles = articles.sort((a, b) => {
-				const countryRegex = new RegExp(countryName, 'i');
-				const aMatch = countryRegex.test(a.title + a.description + a.content) ? 1 : 0;
-				const bMatch = countryRegex.test(b.title + b.description + b.content) ? 1 : 0;
-				return bMatch - aMatch; // Higher priority for matches
-			});
+        if (newsDataData.results) {
+            articles = articles.concat(
+                newsDataData.results.map(article => ({
+                    title: article.title,
+                    description: article.description,
+                    url: article.link,
+                    source: "NewsData",
+                    content: article.content || ''
+                }))
+            );
+        }
 
+        if (newsApiData.articles) {
+            articles = articles.concat(
+                newsApiData.articles.map(article => ({
+                    title: article.title,
+                    description: article.description,
+                    url: article.url,
+                    source: "NewsAPI",
+                    content: article.content || ''
+                }))
+            );
+        }
 
-			// Render articles with attribution
+        if (worldNewsData.news) {
+            articles = articles.concat(
+                worldNewsData.news.map(article => ({
+                    title: article.title,
+                    description: article.summary,
+                    url: article.url,
+                    source: "WorldNewsAPI",
+                    content: article.content || ''
+                }))
+            );
+        }
 
-			headlinesContainer.innerHTML = `
-    ${articles
-					.map(article => `
-            <div class="headline">
-                <h4>${article.title}</h4>
-                <p class="description">${article.description || "No description available"}</p>
-                <a href="${article.url}" target="_blank">Read more</a>
+        if (articles.length === 0) {
+            headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
+            return;
+        }
+
+        // Remove duplicate articles by URL
+        const uniqueArticles = [];
+        const seenUrls = new Set();
+        articles.forEach(article => {
+            if (!seenUrls.has(article.url)) {
+                seenUrls.add(article.url);
+                uniqueArticles.push(article);
+            }
+        });
+
+        // Prioritize articles with the country name in the title, description, or content
+        uniqueArticles.sort((a, b) => {
+            const countryRegex = new RegExp(countryName, 'i');
+            const aMatch = countryRegex.test(a.title + a.description + a.content) ? 1 : 0;
+            const bMatch = countryRegex.test(b.title + b.description + b.content) ? 1 : 0;
+            return bMatch - aMatch; // Higher priority for matches
+        });
+
+        // Limit article descriptions to 5 lines max
+        function trimToFiveLines(text) {
+            if (!text) return "No description available";
+            const lines = text.split('. ').slice(0, 5).join('. ') + '.';
+            return lines.length < text.length ? lines + "..." : lines;
+        }
+
+        // Render articles with attribution
+        headlinesContainer.innerHTML = `
+            ${uniqueArticles.map(article => `
+                <div class="headline">
+                    <h4>${article.title}</h4>
+                    <p class="description">${trimToFiveLines(article.description)}</p>
+                    <a href="${article.url}" target="_blank">Read more</a>
+                </div>
+            `).join('')}
+            <div id="attribution">
+                <p>Powered by GNews, NewsData, NewsAPI, and WorldNewsAPI</p>
             </div>
-        `).join('')}
-    <div id="attribution">
-        <p>Powered by GNews, NewsData, and NewsAPI</p>
-    </div>
-`;
+        `;
+    } catch (error) {
+        console.error("Error fetching news headlines:", error);
+        headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
+    }
+}
 
-			// Move attribution above the buttons
-			const attributionDiv = document.getElementById("attribution");
-			const scrollButtonsContainer = document.getElementById("scroll-buttons");
-			if (attributionDiv && scrollButtonsContainer) {
-				scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-			}
+// Move attribution above the buttons
+const attributionDiv = document.getElementById("attribution");
+const scrollButtonsContainer = document.getElementById("scroll-buttons");
+if (attributionDiv && scrollButtonsContainer) {
+    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+}
+
+// Reinitialize scroll functionality for navigation buttons
+setupScrollButtons();
 
 
-			// Reinitialize scroll functionality for navigation buttons
-			setupScrollButtons();
+/**
+ * Truncates text to a maximum number of lines.
+ * @param {string} text - The text to truncate.
+ * @param {number} maxLines - The maximum number of lines allowed.
+ * @returns {string} - The truncated text.
+ */
+function truncateText(text, maxLines) {
+    if (!text) return "";
+    const words = text.split(" ");
+    let truncatedText = "";
+    let lines = 0;
 
-		} catch (error) {
-			console.error("Error fetching news:", error);
-			headlinesContainer.innerHTML = `<p>Error loading news for ${countryName}.</p>`;
-		}
-	}
+    for (let i = 0; i < words.length; i++) {
+        truncatedText += words[i] + " ";
+        if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
+        if (lines >= maxLines) break;
+    }
+
+    return truncatedText.trim() + "...";
+}
+
+
 // Scroll functionality
 
 // Scroll functionality: Adds smooth scrolling to headlines
@@ -2222,18 +2280,6 @@ async function fetchPublicHolidays(countryName) {
 		weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
 	}
 
-// GOOGLE MAPS LOAD FUNCTION //
-
-function loadGoogleMaps() {
-    if (!window.google || !window.google.maps) {
-        let script = document.createElement('script');
-        script.src = "https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap";
-        script.async = true;
-        script.defer = true;
-        document.head.appendChild(script);
-    }
-}
-loadGoogleMaps();
 
 
 
@@ -2348,10 +2394,6 @@ function initMap() {
         });
     }
 }
-
-
-
-
 
 
 // Functionality for searching hotels, nearby amenities, weather, and other related tasks should follow below.
@@ -2649,8 +2691,6 @@ function initMap() {
 		}
 	}
 
-    
-
 	// Scrolling for hotels and places modals
 	$(document).ready(function () {
 		
@@ -2680,183 +2720,6 @@ function initMap() {
 		$("#scroll-down-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() + 100));
 		$("#back-to-top-places").on("click", () => placesScrollable.scrollTop(0));
 	});
-
-    
-// Function to enable scrolling for maximized containers
-function enableScrollingForMaximizedContainers(container) {
-    if (container.id === "weather-container") {
-        // Horizontal scrolling for weather
-        container.style.overflowX = "auto";
-        container.style.overflowY = "hidden";
-        container.style.whiteSpace = "nowrap";
-    } else {
-        // Vertical scrolling for hotels and places
-        container.style.overflowY = "auto";
-        container.style.overflowX = "hidden";
-    }
-}
-
-// Scroll buttons for hotels & places
-function addScrollButtons(container, upBtn, downBtn) {
-    upBtn.addEventListener("click", () => {
-        container.scrollBy({ top: -200, behavior: "smooth" });
-    });
-
-    downBtn.addEventListener("click", () => {
-        container.scrollBy({ top: 200, behavior: "smooth" });
-    });
-}
-
-// Scroll buttons for weather (horizontal)
-function addHorizontalScrollButtons(container, leftBtn, rightBtn) {
-    leftBtn.addEventListener("click", () => {
-        container.scrollBy({ left: -150, behavior: "smooth" });
-    });
-
-    rightBtn.addEventListener("click", () => {
-        container.scrollBy({ left: 150, behavior: "smooth" });
-    });
-}
-
-// Function to maximize or minimize the container
-function toggleMaximize(containerId) {
-    const container = document.getElementById(containerId);
-    if (container.classList.contains("maximized")) {
-        container.classList.remove("maximized");
-    } else {
-        container.classList.add("maximized");
-        enableScrollingForMaximizedContainers(container);
-    }
-}
-
-// Function to close the container
-function closeContainer(containerId) {
-    const container = document.getElementById(containerId);
-    container.style.display = "none";
-}
-
-// Attach maximize/minimize and close functionality to each container's buttons
-document.addEventListener("DOMContentLoaded", () => {
-    const containers = ["hotel-container", "places-container", "weather-container"];
-
-    containers.forEach(containerId => {
-        const maximizeButton = document.querySelector(`#${containerId} .maximize-btn`);
-        const closeButton = document.querySelector(`#${containerId} .close-btn`);
-
-        // Maximize/Minimize functionality
-        maximizeButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            toggleMaximize(containerId);
-        });
-
-        // Close functionality
-        closeButton.addEventListener("click", (event) => {
-            event.stopPropagation();
-            closeContainer(containerId);
-        });
-    });
-
-    // Attach scroll buttons to respective containers
-    addScrollButtons(document.getElementById("hotel-container"), document.getElementById("hotel-scroll-up"), document.getElementById("hotel-scroll-down"));
-    addScrollButtons(document.getElementById("places-container"), document.getElementById("places-scroll-up"), document.getElementById("places-scroll-down"));
-    addHorizontalScrollButtons(document.getElementById("weather-container"), document.getElementById("weather-scroll-left"), document.getElementById("weather-scroll-right"));
-});
-
-// Handling map modal
-document.getElementById("postcode-link").addEventListener("click", function (event) {
-    event.preventDefault();
-    const mapmodal = document.getElementById("map-modal");
-    const closeModal = document.getElementById("close-map-modal");
-
-    mapmodal.style.display = "block";
-
-    closeModal.addEventListener("click", function () {
-        mapmodal.style.display = "none";
-    });
-
-    window.addEventListener("click", function (event) {
-        if (event.target === mapmodal) {
-            mapmodal.style.display = "none";
-        }
-    });
-});
-
-// Click event listeners for ".allPaths" to show second-selection container
-document.querySelectorAll(".allPaths").forEach((path) => {
-    path.addEventListener("click", () => {
-        const secondSelection = document.getElementById("second-selection");
-        const snapshotBoxes = document.querySelectorAll(".snapshot-box");
-
-        if (!secondSelection.classList.contains("visible")) {
-            secondSelection.style.display = "flex";
-            setTimeout(() => {
-                secondSelection.classList.add("visible");
-            }, 50);
-        }
-
-        snapshotBoxes.forEach((box, index) => {
-            setTimeout(() => {
-                box.classList.add("show");
-            }, index * 300);
-        });
-
-        // Example content updates
-        document.getElementById("places-results").innerHTML = ` 
-            <tr>
-                <td><img src="path/to/icon.png" alt="Icon" style="width: 32px; height: 32px;"></td>
-                <td>Central Park</td>
-                <td>Beautiful scenery</td>
-            </tr>`;
-        document.getElementById("temp-div").innerHTML = `<h3>28°C</h3><p>Sunny</p>`;
-        document.getElementById("weather-info").innerText = "Perfect weather for outdoor activities!";
-    });
-});
-
-// Handling the search box
-const searchBox = document.getElementById("search-box");
-const secondSelection = document.getElementById("second-selection");
-
-searchBox.addEventListener("input", () => {
-    if (searchBox.value.trim() !== "") {
-        if (!secondSelection.classList.contains("visible")) {
-            secondSelection.style.display = "block";
-            setTimeout(() => {
-                secondSelection.classList.add("visible");
-            }, 50);
-        }
-    } else {
-        secondSelection.classList.remove("visible");
-        setTimeout(() => {
-            secondSelection.style.display = "none";
-        }, 800);
-    }
-});
-
-// Function to update scroll buttons dynamically
-function updateScrollButtons(containerId, leftBtnId, rightBtnId) {
-    const container = document.getElementById(containerId);
-    const leftButton = document.getElementById(leftBtnId);
-    const rightButton = document.getElementById(rightBtnId);
-
-    leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
-    rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
-}
-
-// Scroll buttons for hotels & places (horizontal)
-document.getElementById("hotels-scroll-left").addEventListener("click", () => {
-    document.getElementById("hotels-list").scrollBy({ left: -200, behavior: "smooth" });
-});
-document.getElementById("hotels-scroll-right").addEventListener("click", () => {
-    document.getElementById("hotels-list").scrollBy({ left: 200, behavior: "smooth" });
-});
-document.getElementById("places-scroll-left").addEventListener("click", () => {
-    document.getElementById("places-list").scrollBy({ left: -200, behavior: "smooth" });
-});
-document.getElementById("places-scroll-right").addEventListener("click", () => {
-    document.getElementById("places-list").scrollBy({ left: 200, behavior: "smooth" });
-});
-
-
 
 	/**
  * Adds click event listeners to elements with the "allPaths" class.
@@ -2897,7 +2760,9 @@ document.getElementById("places-scroll-right").addEventListener("click", () => {
 		});
 	});
 
-
+	// Get the search box and second-selection section
+	const searchBox = document.getElementById("search-box"); // Replace with the correct ID for your search box
+	const secondSelection = document.getElementById("second-selection");
 
 	// Add event listener to the search box
 /**
@@ -2946,105 +2811,91 @@ document.getElementById("places-scroll-right").addEventListener("click", () => {
     });
 });
 
+// Function to maximize or minimize the container
+function toggleMaximize(containerId) {
+    const container = document.getElementById(containerId);
+    if (container.classList.contains('maximized')) {
+        container.classList.remove('maximized');
+    } else {
+        container.classList.add('maximized');
+    }
+}
 
-// Cloned Pop Out Scrolling Buttons
+// Function to close the container
+function closeContainer(containerId) {
+    const container = document.getElementById(containerId);
+    container.style.display = 'none';
+}
 
-document.addEventListener("DOMContentLoaded", () => {
-    // Attach maximize/minimize and close functionality to each container's buttons
-    const containers = ["hotel-container", "place-container", "weather-container"];
-    containers.forEach((containerId) => {
+// Attach maximize/minimize and close functionality to each container's buttons
+document.addEventListener('DOMContentLoaded', () => {
+    const containers = ['hotel-container', 'place-container', 'weather-container'];
+
+    containers.forEach(containerId => {
         const maximizeButton = document.querySelector(`#${containerId} .maximize-btn`);
         const closeButton = document.querySelector(`#${containerId} .close-btn`);
 
-        if (maximizeButton) {
-            maximizeButton.addEventListener("click", (event) => {
-                event.stopPropagation(); // Prevent map click interference
-                toggleMaximize(containerId);
-            });
-        }
-
-        if (closeButton) {
-            closeButton.addEventListener("click", (event) => {
-                event.stopPropagation(); // Prevent map click interference
-                closeContainer(containerId);
-            });
-        }
-
-        // If needed, you can add additional vertical scrolling setup per container here.
-    });
-
-    // ----- Horizontal Scrolling for Hotels & Places (if applicable) -----
-    // These assume the existence of horizontal scroll buttons and that the scrollable container is "#hotels" or "#places".
-    $("#hotels-scroll-left").on("click", () => {
-        $("#hotels").scrollLeft($("#hotels").scrollLeft() - 200);
-    });
-    $("#hotels-scroll-right").on("click", () => {
-        $("#hotels").scrollLeft($("#hotels").scrollLeft() + 200);
-    });
-    $("#places-scroll-left").on("click", () => {
-        $("#places").scrollLeft($("#places").scrollLeft() - 200);
-    });
-    $("#places-scroll-right").on("click", () => {
-        $("#places").scrollLeft($("#places").scrollLeft() + 200);
-    });
-
-    // ----- Vertical Scrolling for Hotels & Places -----
-    // For hotels pop-out: the scrollable container is "#hotels"
-    $("#scroll-up-hotel").on("click", () => {
-        $("#hotels").scrollTop($("#hotels").scrollTop() - 100);
-    });
-    $("#scroll-down-hotel").on("click", () => {
-        $("#hotels").scrollTop($("#hotels").scrollTop() + 100);
-    });
-    $("#back-to-top-hotel").on("click", () => {
-        $("#hotels").scrollTop(0);
-    });
-
-    // For places pop-out: the scrollable container is "#places"
-    $("#scroll-up-places").on("click", () => {
-        $("#places").scrollTop($("#places").scrollTop() - 100);
-    });
-    $("#scroll-down-places").on("click", () => {
-        $("#places").scrollTop($("#places").scrollTop() + 100);
-    });
-    $("#back-to-top-places").on("click", () => {
-        $("#places").scrollTop(0);
-    });
-
-    // Optionally, if you want dynamic button visibility (i.e., only show buttons when scrolling is possible)
-    function updateVerticalScrollButtons(scrollableSelector, upBtnSelector, downBtnSelector, topBtnSelector) {
-        const $scrollable = $(scrollableSelector);
-        const $upBtn = $(upBtnSelector);
-        const $downBtn = $(downBtnSelector);
-        const $topBtn = $(topBtnSelector);
-
-        if ($scrollable.length) {
-            // Update visibility based on scroll position
-            $upBtn.toggle($scrollable.scrollTop() > 0);
-            $downBtn.toggle($scrollable.scrollTop() + $scrollable.innerHeight() < $scrollable[0].scrollHeight);
-            $topBtn.toggle($scrollable.scrollTop() > 300);
-        }
-    }
-    // Example: update vertical scroll buttons every time the hotel scrollable div is scrolled
-    $("#hotels").on("scroll", function () {
-        updateVerticalScrollButtons("#hotels", "#scroll-up-hotel", "#scroll-down-hotel", "#back-to-top-hotel");
-    });
-    $("#places").on("scroll", function () {
-        updateVerticalScrollButtons("#places", "#scroll-up-places", "#scroll-down-places", "#back-to-top-places");
-    });
-    // Initial check:
-    updateVerticalScrollButtons("#hotels", "#scroll-up-hotel", "#scroll-down-hotel", "#back-to-top-hotel");
-    updateVerticalScrollButtons("#places", "#scroll-up-places", "#scroll-down-places", "#back-to-top-places");
-
-    // ----- Clone and maximize functionality (for pop-out containers) -----
-    document.querySelectorAll('.maximize-btn').forEach(button => {
-        button.addEventListener('click', () => {
-            cloneAndMaximize(button);
+        // Maximize/Minimize functionality
+        maximizeButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent map click interference
+            toggleMaximize(containerId);
+        });
+        
+        
+        // Close functionality
+        closeButton.addEventListener('click', (event) => {
+            event.stopPropagation(); // Prevent map click interference
+            closeContainer(containerId);
         });
     });
 
-    document.querySelectorAll(".window-controls button").forEach(button => {
-        button.style.backgroundColor = "rgb(181, 165, 155, 0)";
-        button.style.color = "black";
+    // Function to update scroll buttons for dynamic containers
+function updateScrollButtons(containerId, leftBtnId, rightBtnId) {
+    const container = document.getElementById(containerId);
+    const leftButton = document.getElementById(leftBtnId);
+    const rightButton = document.getElementById(rightBtnId);
+
+    leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
+    rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
+}
+
+// Event listeners for scroll buttons
+document.getElementById("hotels-scroll-left").addEventListener("click", () => {
+    document.getElementById("hotels-list").scrollBy({ left: -200, behavior: "smooth" });
+});
+document.getElementById("hotels-scroll-right").addEventListener("click", () => {
+    document.getElementById("hotels-list").scrollBy({ left: 200, behavior: "smooth" });
+});
+
+document.getElementById("places-scroll-left").addEventListener("click", () => {
+    document.getElementById("places-list").scrollBy({ left: -200, behavior: "smooth" });
+});
+document.getElementById("places-scroll-right").addEventListener("click", () => {
+    document.getElementById("places-list").scrollBy({ left: 200, behavior: "smooth" });
+});
+    
+// Initialize scroll buttons
+setupScrollButtons();
+
+// Attach maximize functionality to buttons
+document.querySelectorAll('.maximize-btn').forEach(button => {
+    button.addEventListener('click', () => {
+        cloneAndMaximize(button);
     });
 });
+
+// Change background color of header and buttons
+const header = document.querySelector("#headlines-header");
+if (header) {
+    header.style.backgroundColor = "black";
+    header.style.color = "white";
+}
+
+document.querySelectorAll(".window-controls button").forEach(button => {
+    button.style.backgroundColor = "rgb(181, 165, 155, 0)";
+    button.style.color = "black";
+});
+
+});
+
+
