@@ -5,17 +5,18 @@
 	<meta charset="UTF-8">
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Snapshot Location, a snapshot of life in locations worldwide">
-	<meta name="keywords" content="location, travel, travelling, holiday, weather, time, safety, population">
+	<meta name="keywords" content="location, destination, travel, traveling, holiday, weather, news, global news, headlines, time, safety, population, information">
 	<meta name="author" content="Snapshot">
 	<title>Snapshot</title>
 	<link rel="stylesheet" href="style.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500;700;900&display=swap" rel="stylesheet">
-
-	<!-- ✅ KEEP ONLY THIS Google Maps API SCRIPT -->
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap" async defer></script>
-
+	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
+		rel="stylesheet">
+		
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap" async
+		defer></script>
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places,geometry"></script>
 	<script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
 	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
@@ -25,25 +26,30 @@
 	<style>
 		#map {
 			height: 700px;
+			/* Set the size of the map */
 			width: 100%;
 		}
+
 		#search-container {
 			width: 45rem;
 			margin: 20px auto;
 			font-size: 2.5rem;
 		}
+
 		#autocomplete {
 			width: 100%;
 			padding: 10px;
 			font-size: 3rem;
 			text-transform: capitalize;
 		}
+
 		#info-content {
 			display: none;
+
 		}
 	</style>
-</head>
 
+</head>
 
 <body>
 
@@ -1861,7 +1867,10 @@
 	<section id="first-row">
 
     <div id="info-container" class="snapshot-box float-center">
-       
+        <div class="window-controls">
+            <button class="maximize-btn">❒</button>
+            <button class="close-btn">✕</button>
+        </div>
 		<h5>Main Information</h5>
         <div id="result"></div>
 		<div id="holidays-section">
@@ -1883,7 +1892,10 @@
     </div>
 
     <div id="headlines-container" class="snapshot-box float-left">
-       
+        <div class="window-controls">
+			<button class="maximize-btn">❒</button>
+            <button class="close-btn">✕</button>
+        </div>
         <br>
         <h2>News Headlines</h2>
         <div id="headlines-modal" class="modal">
@@ -1901,17 +1913,20 @@
     </div>
 
     <div id="currency-container" class="snapshot-box float-right">
-       
+        <div class="window-controls">
+            <button class="maximize-btn">❒</button>
+            <button class="close-btn">✕</button>
+        </div>
         <br>
         <h2>Exchange Rates</h2>
 		<iframe
-		title="fx"
-		src="https://wise.com/gb/currency-converter/fx-widget/table?sourceCurrency=USD&targetCurrencies=USD%2CEUR%2CGBP%2CAUD%2CCAD%2CJPY%2CCNY%2CCHF%2CHKD%2CSGD%2CKRW%2CILS%2CNZD%2CSEK%2CNOK%2CDKK%2CPLN%2CMXN%2CZAR%2CAED%2CBRL%2CTHB%2CCZK%2CRUB%2CTRY%2CIDR%2CHUF%2CSAR"
-		height=2000
-		width=450
-		frameBorder="0"
-		allowtransparency="true"
-	  ></iframe>
+  title="fx"
+  src="https://wise.com/gb/currency-converter/fx-widget/table?sourceCurrency=USD&targetCurrencies=USD%2CEUR%2CGBP%2CAUD%2CCAD%2CJPY%2CCNY%2CCHF%2CHKD%2CSGD%2CKRW%2CILS%2CNZD%2CSEK%2CNOK%2CDKK%2CPLN%2CMXN%2CZAR%2CAED%2CBRL%2CTHB%2CCZK%2CRUB%2CPHP%2CTRY%2CIDR%2CHUF%2CSAR"
+  height=2000
+  width=450
+  frameBorder="0"
+  allowtransparency="true"
+></iframe>
     </div>
 
 </section>
@@ -1921,10 +1936,14 @@
 	<hr id="page-break">
 
 	<section id="your-next-selection" class="text-center text-white">
-		
 		<h2>Choose A City In Your Location</h2>
 
+
+
+
+
 	</section>
+
 
 
 	<section id="map-wrapper">
@@ -1932,88 +1951,110 @@
 			<div id="search-container">
 				<input id="autocomplete" type="text" placeholder="Choose a City" autocomplete="on">
 			</div>
+
 			<!-- The map container -->
-			<div id="map"></div>
-		</div>
+			<div id="map"
+				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap">
+			</div>
 	</section>
 
 
+
+
+
+
+
 <section id="second-selection">
-	<div id="hotel-container" class="snapshot-box float-left fade-in">
+    <div id="hotel-container" class="snapshot-box float-left fade-in">
 		
-		<h2>Hotel Details</h2>
-		<div id="hotel-modal" class="modal">
-			<div class="modal-content">
-				<!-- Add scrollable-content class here -->
-				<div id="hotels" class="scrollable-content">
-					<table id="results" style="padding: 2%; overflow-y: auto;"></table>
-				</div>
-				<!-- Other content here -->
-				<div class="navigation-buttons">
-					<button id="scroll-up-hotel">↑</button>
-					<button id="back-to-top-hotel">∧</button>
-					<button id="scroll-down-hotel">↓</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div id="place-container" class="snapshot-box float-center fade-in">
+        <h2>Hotel Details</h2>
+        <div id="hotel-modal" class="modal">
+            <div class="modal-content">
+                <div id="hotels" class="scrollable-content">
+                    <table id="results" style="padding: 2%; overflow-y: auto;"></table>
+                </div>
+                <div id="info-content">
+                    <span id="iw-icon"></span>
+                    <span id="iw-url"></span>
+                    <span id="iw-address"></span>
+                    <div id="iw-phone-row"><span id="iw-phone"></span></div>
+                    <div id="iw-rating-row"><span id="iw-rating"></span></div>
+                    <div id="iw-website-row"><span id="iw-website"></span></div>
+                </div>
+                <div class="navigation-buttons">
+                    <button id="scroll-up-hotel">↑</button>
+                    <button id="back-to-top-hotel">∧</button>
+                    <button id="scroll-down-hotel">↓</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="place-container" class="snapshot-box float-center fade-in">
 		
-		<h2>Places of Interest</h2>
-		<div id="places-modal" class="modal">
-			<div class="modal-content">
-				<div id="places" class="scrollable-content">
-					<table id="places-results" style="width: 100%; border-collapse: collapse;">
-						<thead>
-							<tr>
-								<th>Icon</th>
-								<th>Name</th>
-								<th>Details</th>
-							</tr>
-						</thead>
-						<tbody>
-							<!-- Amenity results will populate here -->
-						</tbody>
-					</table>
-				</div>
-				<div class="navigation-buttons-black">
-					<button id="scroll-up-places" title="Scroll Up">↑</button>
-					<button id="back-to-top-places" title="Back to Top">∧</button>
-					<button id="scroll-down-places" title="Scroll Down">↓</button>
-				</div>
-			</div>
-		</div>
-	</div>
-	
-	<div id="weather-container" class="snapshot-box float-right fade-in">
+        <h2>Places of Interest</h2>
+        <div id="places-modal" class="modal">
+            <div class="modal-content">
+                <div id="places" class="scrollable-content">
+                    <table id="places-results" style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr>
+                                <th>Icon</th>
+                                <th>Name</th>
+                                <th>Details</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- Amenity results will populate here -->
+                        </tbody>
+                    </table>
+                </div>
+                <div class="navigation-buttons-black">
+                    <button id="scroll-up-places" title="Scroll Up">↑</button>
+                    <button id="back-to-top-places" title="Back to Top">∧</button>
+                    <button id="scroll-down-places" title="Scroll Down">↓</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div id="weather-container" class="snapshot-box float-right fade-in">
 		
-		<h2>Daily Forecast</h2>
-		<div class="scrollable-content">
-			<img id="weather-icon" alt="Weather Icon">
-			<div id="temp-div"></div>
-			<div id="weather-info"></div>
-		</div>
-	
-		<div id="hourly-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
-			<!-- Hourly forecast cards will be dynamically inserted here -->
-		</div>
-	
-		<div style="text-align: center; margin-top: 10px;">
-			<button id="hourly-scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⬅</button>
-			<button id="hourly-scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">➞</button>
-		</div>
-		<hr id="forecast-break">
-		<div id="forecast-container">
-			<div id="forecast-cards" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
-				<!-- Forecast cards will be dynamically inserted here -->
-			</div>
-			<div style="text-align: center; margin-top: 10px; display:none;">
-				<button id="scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⬅️</button>
-				<button id="scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">➡️</button>
-			</div>
-		</div>
-	</div>
+        <h2>Daily Forecast</h2>
+        <img id="weather-icon" alt="Weather Icon">
+        <div id="temp-div"></div>
+        <div id="weather-info"></div>
+
+        <div id="hourly-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
+            <!-- Hourly forecast cards will be dynamically inserted here -->
+        </div>
+        <div style="text-align: center; margin-top: 10px;">
+            <button id="hourly-scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
+            <button id="hourly-scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
+        </div>
+        <hr id="forecast-break">
+        <div id="forecast-container">
+            <div id="forecast-cards" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
+                <!-- Forecast cards will be dynamically inserted here -->
+            </div>
+            <div style="text-align: center; margin-top: 10px;">
+                <button id="scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;"></button>
+                <button id="scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;"></button>
+            </div>
+        </div>
+    </div>
+</section>
+
+
+
+
+
+
+
+
+
+
+
 	</section>
 
 
@@ -2024,7 +2065,7 @@
 			<div class="text-left contact-box-left">
 				<h3 class="text-left">Place an Advert</h3>
 				<div>
-					<span>Email</span>
+					<span>Email:</span>
 					<br><br>
 					<div class="contact-link"><a href="mailto:advert@snapshotlocation.com">advert@snapshotlocation.com</a></div>
 				</div>
@@ -2032,7 +2073,7 @@
 			<div class="text-right contact-box-right">
 				<h3>Get in Touch</h3>
 				<div>
-					<span>Email</span>
+					<span>Email:</span>
 					<br><br>
 					<div class="contact-link"><a href="mailto:hello@snapshotlocation.com">hello@snapshotlocation.com</a></div>
 				</div>
