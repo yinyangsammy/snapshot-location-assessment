@@ -836,6 +836,7 @@ color:#ef814e;
     transform: translateY(0);
     display: flex; /* Align containers side by side */
     justify-content: space-around;
+	display: none;
 }
 
 /* Additional styling for smooth animations within snapshot boxes */
@@ -1681,6 +1682,7 @@ i {
 	text-align: center;
 	position: relative;
 	z-index: 1;
+	display: none;
 }
 
 #map {
