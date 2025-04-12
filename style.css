@@ -1682,11 +1682,10 @@ i {
 	text-align: center;
 	position: relative;
 	z-index: 1;
-	display: none;
 }
 
 #map {
-	display: inline-block;
+	display: none;
     height: 100%;
     width: 100%;
 	border-top: 5px solid beige;
