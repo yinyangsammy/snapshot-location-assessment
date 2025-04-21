@@ -6,49 +6,27 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1.0">
 	<meta name="description" content="Snapshot Location, a snapshot of life in locations worldwide">
 	<meta name="keywords" content="location, destination, travel, traveling, holiday, weather, news, global news, headlines, time, safety, population, information">
-	<meta name="author" content="Snapshot">
+	<meta name="author" content="Snapshot Location">
+	
 	<title>Snapshot</title>
 	<link rel="stylesheet" href="style.css">
 	<link rel="preconnect" href="https://fonts.googleapis.com">
 	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
 		rel="stylesheet">
+	<link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+	<link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+  	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
+  	<link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
 		
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap" async
-		defer></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places,geometry"></script>
+	<!-- ✅ KEEP ONLY THIS Google Maps API SCRIPT -->
+	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap" async defer></script>
 	<script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous"></script>
 	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
 	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
 	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
-	<!-- Style for the map and search bar -->
-	<style>
-		#map {
-			height: 700px;
-			/* Set the size of the map */
-			width: 100%;
-		}
-
-		#search-container {
-			width: 45rem;
-			margin: 20px auto;
-			font-size: 2.5rem;
-		}
-
-		#autocomplete {
-			width: 100%;
-			padding: 10px;
-			font-size: 3rem;
-			text-transform: capitalize;
-		}
-
-		#info-content {
-			display: none;
-
-		}
-	</style>
-
+	
 </head>
 
 <body>
@@ -1821,8 +1799,56 @@
 					"Vietnam": "vn",
 					"Yemen": "ye",
 					"Zambia": "zm",
-					"Zimbabwe": "zw"
-					// Add the remaining mappings here...
+					"Zimbabwe": "zw",
+					"Brunei Darussalam": "bn",
+					"Côte d'Ivoire": "ci",
+					"Democratic Republic of the Congo": "cd",
+					"Republic of Congo": "cg",
+					"Czech Republic": "cz",
+					"The Gambia": "gm",
+					"Greenland": "gl",
+					"South Korea": "kr",
+					"Lao PDR": "la",
+					"Macedonia": "mk", // Often listed as "North Macedonia"
+					"Myanmar": "mm",
+					"North Korea": "kp",
+					"Palestine": "ps",
+					"Western Sahara": "eh",
+					"Swaziland": "sz", // Now called Eswatini
+					"French Guiana": "gf",
+					"Aruba": "aw",
+					"Anguilla": "ai",
+					"American Samoa": "as",
+					"Saint-Barthélemy": "bl",
+					"Bermuda": "bm",
+					"Cape Verde": "cv",
+					"Curaçao": "cw",
+					"Cayman Islands": "ky",
+					"Falkland Islands": "fk",
+					"Faeroe Islands": "fo",
+					"Federated States of Micronesia": "fm",
+					"Guam": "gu",
+					"Saint-Martin": "mf",
+					"Northern Mariana Islands": "mp",
+					"Montserrat": "ms",
+					"New Caledonia": "nc",
+					"Puerto Rico": "pr",
+					"French Polynesia": "pf",
+					"São Tomé and Principe": "st",
+					"Sint Maarten": "sx",
+					"Turks and Caicos Islands": "tc",
+					"British Virgin Islands": "vg",
+					"United States Virgin Islands": "vi",
+					"St. Eustatius (Netherlands)": "bq", // Same for Bonaire/Saba
+					"Saba (Netherlands)": "bq",
+					"Martinique": "mq",
+					"Canary Islands (Spain)": "ic", // Not official, fallback to "es" if needed
+					"Mayotte": "yt",
+					"Reunion": "re",
+					"Guadeloupe": "gp",
+					"Taiwan": "tw"
+
+					// Add any remaining mappings here...
 				};
 
 				// Select all paths with the class 'allPaths'
@@ -1931,112 +1957,383 @@
 
 </section>
 
+<section id="country-images">
+	
+		<div class="carousel-container">
+			<div class="image-container">
+				<div class="wgh-slider">
+				<input class="wgh-slider-target" type="radio" id="slide-1" name="slider"/>
+				<input class="wgh-slider-target" type="radio" id="slide-2" name="slider"/>
+				<input class="wgh-slider-target" type="radio" id="slide-3" name="slider" checked="checked"/>
+				<input class="wgh-slider-target" type="radio" id="slide-4" name="slider"/>
+				<input class="wgh-slider-target" type="radio" id="slide-5" name="slider"/>
+				<input class="wgh-slider-target" type="radio" id="slide-6" name="slider"/>
+				<input class="wgh-slider-target" type="radio" id="slide-7" name="slider"/>
+				<input class="wgh-slider-target" type="radio" id="slide-8" name="slider"/>
+				  <div class="wgh-slider__viewport">
+					<div class="wgh-slider__viewbox">
+					  <div class="wgh-slider__container">
+						<div class="wgh-slider-item">
+						  <div class="wgh-slider-item__inner">
+							<figure class="wgh-slider-item-figure">
+								<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+							</figure>
+							<label class="wgh-slider-item__trigger" for="slide-1" title="Show product 1"></label>
+						  </div>
+						</div>
+						<div class="wgh-slider-item">
+						  <div class="wgh-slider-item__inner">
+							<figure class="wgh-slider-item-figure">
+								<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+							</figure>
+							<label class="wgh-slider-item__trigger" for="slide-2" title="Show product 2"></label>
+						  </div>
+						</div>
+						<div class="wgh-slider-item">
+						  <div class="wgh-slider-item__inner">
+							<figure class="wgh-slider-item-figure">
+								<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+							</figure>
+							<label class="wgh-slider-item__trigger" for="slide-3" title="Show product 3"></label>
+						  </div>
+						</div>
+						<div class="wgh-slider-item">
+						  <div class="wgh-slider-item__inner">
+							<figure class="wgh-slider-item-figure">
+								<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+							</figure>
+							<label class="wgh-slider-item__trigger" for="slide-4" title="Show product 4"></label>
+						  </div>
+						</div>
+						<div class="wgh-slider-item">
+						  <div class="wgh-slider-item__inner">
+							<figure class="wgh-slider-item-figure">
+								<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+							</figure>
+							<label class="wgh-slider-item__trigger" for="slide-5" title="Show product 5"></label>
+						  </div>
+						</div>
+						<div class="wgh-slider-item">
+							<div class="wgh-slider-item__inner">
+								<figure class="wgh-slider-item-figure">
+									<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+								</figure>
+							  <label class="wgh-slider-item__trigger" for="slide-6" title="Show product 6"></label>
+							</div>
+						  </div>
+						  <div class="wgh-slider-item">
+							<div class="wgh-slider-item__inner">
+								<figure class="wgh-slider-item-figure">
+									<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+								</figure>
+							  <label class="wgh-slider-item__trigger" for="slide-7" title="Show product 7"></label>
+							</div>
+						  </div>
+						  <div class="wgh-slider-item">
+							<div class="wgh-slider-item__inner">
+								<figure class="wgh-slider-item-figure">
+									<img class="wgh-slider-item-figure__image" src="{$image$}" alt="Country Image">
+								</figure>
+							  <label class="wgh-slider-item__trigger" for="slide-8" title="Show product 8"></label>
+							</div>
+						  </div>
+					  </div>
+					</div>
+				  </div>
+				</div>
+			  </div>
+			<button class="carousel-btn prev">❮</button>
+			<button class="carousel-btn next">❯</button>
+		</div>
 
+</section>
+
+
+<script>
+
+ const PEXELS_API_KEY = "Ul0hvhgdeEs6ZpA9Z33AK39I8pMibQiFDNQy2oRHJWu6vuGz8eMUsnRY"; // Replace with actual API key
+
+/**
+ * Fetches images from Pexels for a given country and updates the slideshow.
+ * Fetches images from Pexels based on the exact width & height of `.image-container`
+ * @param {string} countryName - The name of the country to fetch images for.
+ */
+ 
+
+const totalSlides = 16; // Number of images to fetch
+const carouselContainer = document.querySelector(".wgh-slider__container");
+const prevButton = document.querySelector(".carousel-btn.prev");
+const nextButton = document.querySelector(".carousel-btn.next");
+
+let imageUrls = [];
+let autoSlideInterval;
+let imageWidth = 0;
+
+// 📸 **Fetch Images from Pexels & Populate Carousel**
+async function fetchCountryImages(countryName) {
+	try {
+		const response = await fetch(
+			`https://api.pexels.com/v1/search?query=${encodeURIComponent(countryName)}&per_page=${totalSlides}`,
+			{ headers: { Authorization: PEXELS_API_KEY } }
+		);
+		const data = await response.json();
+
+		if (!data.photos || data.photos.length === 0) {
+			console.warn("No images found for", countryName);
+			return;
+		}
+
+		imageUrls = data.photos.map(photo => photo.src.large);
+		generateSlides();
+	} catch (error) {
+		console.error("Error fetching images from Pexels:", error);
+	}
+}
+
+// 🎯 **Generate Dynamic Slides & Ensure Infinite Looping**
+function generateSlides() {
+	carouselContainer.innerHTML = ""; // Clear previous slides
+
+	imageUrls.forEach((url) => {
+		const slide = document.createElement("div");
+		slide.classList.add("wgh-slider-item");
+		slide.innerHTML = `
+			<div class="wgh-slider-item__inner">
+				<figure class="wgh-slider-item-figure">
+					<img class="wgh-slider-item-figure__image" src="${url}" alt="Country Image">
+				</figure>
+			</div>
+		`;
+		carouselContainer.appendChild(slide);
+	});
+	
+
+	// Clone first and last slides for seamless looping effect
+	const firstClone = carouselContainer.firstElementChild.cloneNode(true);
+	const lastClone = carouselContainer.lastElementChild.cloneNode(true);
+	carouselContainer.appendChild(firstClone);
+	carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
+
+	// Wait for the DOM to update, then fix positioning
+	setTimeout(() => {
+		updateImageWidth();
+		setInitialPosition();
+		startAutoSlide();
+	}, 0);
+}
+
+// 📏 **Update Image Width & Ensure Proper Sizing**
+
+function updateImageWidth() {
+    imageWidth = document.querySelector(".wgh-slider-item").offsetWidth;
+
+    // Force all images to match the container width
+    document.querySelectorAll(".wgh-slider-item-figure__image").forEach(img => {
+        img.style.width = `${imageWidth}px`;
+        img.style.height = "100%";  // Ensures full height while keeping proportions
+        img.style.objectFit = "cover"; // Ensures full coverage without distortion
+    });
+}
+
+
+// 🎯 **Set Correct Initial Position to Prevent Squashing**
+function setInitialPosition() {
+    requestAnimationFrame(() => {
+        carouselContainer.style.transition = "none";
+        carouselContainer.style.transform = `translateX(${-imageWidth * 1.65}px)`; // Adjusted for proper spacing
+    });
+}
+
+// 🎯 **Slide Next & Handle Infinite Looping**
+function nextSlide() {
+	carouselContainer.style.transition = "transform 0.5s ease-in-out";
+	carouselContainer.style.transform = `translateX(${-imageWidth * 2.5}px)`;
+
+	setTimeout(() => {
+		// Move first slide to the end
+		const firstSlide = carouselContainer.firstElementChild;
+		carouselContainer.appendChild(firstSlide);
+
+		// Instantly reset position without animation
+		requestAnimationFrame(() => {
+			carouselContainer.style.transition = "none";
+			carouselContainer.style.transform = `translateX(${-imageWidth * 1.65}px)`;  
+		});
+
+		// Re-enable smooth transition after repositioning
+		setTimeout(() => {
+			carouselContainer.style.transition = "transform 0.5s ease-in-out";
+		}, 50);
+	}, 500);
+}
+
+// 🎯 **Slide Prev & Handle Infinite Looping**
+function prevSlide() {
+	carouselContainer.style.transition = "transform 0.5s ease-in-out";
+	carouselContainer.style.transform = `translateX(0)`; // Move one step back
+
+	setTimeout(() => {
+		// Move last slide to the front
+		const lastSlide = carouselContainer.lastElementChild;
+		carouselContainer.insertBefore(lastSlide, carouselContainer.firstChild);
+
+		// Instantly reset position without animation
+		requestAnimationFrame(() => {
+			carouselContainer.style.transition = "none";
+			carouselContainer.style.transform = `translateX(${-imageWidth * 1.65}px)`;  
+		});
+
+		// Re-enable smooth transition after repositioning
+		setTimeout(() => {
+			carouselContainer.style.transition = "transform 0.5s ease-in-out";
+		}, 50);
+	}, 500);
+}
+
+// 🎯 **Start Auto Slide**
+function startAutoSlide() {
+	clearInterval(autoSlideInterval);
+	autoSlideInterval = setInterval(nextSlide, 5000);
+}
+
+// 🎯 **Pause Auto-slide When User Clicks & Restart**
+function pauseAutoSlide() {
+	clearInterval(autoSlideInterval);
+	setTimeout(startAutoSlide, 10000);
+}
+
+// 🎯 **Button Listeners**
+prevButton.addEventListener("click", () => {
+	prevSlide();
+	pauseAutoSlide();
+});
+
+nextButton.addEventListener("click", () => {
+	nextSlide();
+	pauseAutoSlide();
+});
+
+// 🚀 **Initialize First Fetch**
+fetchCountryImages("Japan"); // Replace "Japan" with dynamic country name
+
+// 🎯 **Update Image Width on Window Resize**
+window.addEventListener("resize", () => {
+	updateImageWidth();
+	setInitialPosition();
+});
+
+
+
+</script>
 
 	<hr id="page-break">
 
-
-
-
-
+	<section id="your-next-selection" class="text-center text-white">
+		<h2>Choose A City In Your Location</h2>
 	</section>
 
 	<section id="map-wrapper">
 		<div id="map-container">
+			<!-- Search Input (Manual City Entry) -->
 			<div id="search-container">
-				<input id="autocomplete" type="text" placeholder="Choose a City" autocomplete="on">
+				<input type="text" id="city-search" placeholder="Enter a city..." autocomplete="off">
+				<ul id="autocomplete-results"></ul>
 			</div>
-
-			<!-- The map container -->
-			<div id="map"
-				src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap">
-			</div>
+	
+			<!-- Google Map -->
+			<div id="map"></div>
 	</section>
 
+	
 
-<section id="second-selection">
-    <div id="hotel-container" class="snapshot-box float-left fade-in">
+	<section id="second-selection">
+		<div id="hotel-container" class="snapshot-box float-left fade-in">
+			<h2>Hotel Details</h2>
+			<div id="hotel-modal" class="modal">
+				<div class="modal-content">
+					<div id="hotels" class="scrollable-content">
+						<table id="hotel-results" style="padding: 2%; overflow-y: auto;"></table>
+					</div>
+					
+					<div class="navigation-buttons">
+						<button id="scroll-up-hotel">↑</button>
+						<button id="back-to-top-hotel">∧</button>
+						<button id="scroll-down-hotel">↓</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
-        <h2>Hotel Details</h2>
-        <div id="hotel-modal" class="modal">
-            <div class="modal-content">
-                <div id="hotels" class="scrollable-content">
-                    <table id="results" style="padding: 2%; overflow-y: auto;"></table>
-                </div>
-                <div id="info-content">
-                    <span id="iw-icon"></span>
-                    <span id="iw-url"></span>
-                    <span id="iw-address"></span>
-                    <div id="iw-phone-row"><span id="iw-phone"></span></div>
-                    <div id="iw-rating-row"><span id="iw-rating"></span></div>
-                    <div id="iw-website-row"><span id="iw-website"></span></div>
-                </div>
-                <div class="navigation-buttons">
-                    <button id="scroll-up-hotel">↑</button>
-                    <button id="back-to-top-hotel">∧</button>
-                    <button id="scroll-down-hotel">↓</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="place-container" class="snapshot-box float-center fade-in">
+		<div id="place-container" class="snapshot-box float-center fade-in">
+			<h2>Places of Interest</h2>
+	
 		
-        <h2>Places of Interest</h2>
-        <div id="places-modal" class="modal">
-            <div class="modal-content">
-                <div id="places" class="scrollable-content">
-                    <table id="places-results" style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr>
-                                <th>Icon</th>
-                                <th>Name</th>
-                                <th>Details</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <!-- Amenity results will populate here -->
-                        </tbody>
-                    </table>
-                </div>
-                <div class="navigation-buttons-black">
-                    <button id="scroll-up-places" title="Scroll Up">↑</button>
-                    <button id="back-to-top-places" title="Back to Top">∧</button>
-                    <button id="scroll-down-places" title="Scroll Down">↓</button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <div id="weather-container" class="snapshot-box float-right fade-in">
+			<!-- Modal for displaying results -->
+			<div id="places-modal" class="modal">
+				<div class="modal-content">
+					<div id="places" class="scrollable-content">
+						<table id="places-results" style="width: 100%; border-collapse: collapse;">
+							<thead>
+								<tr>
+									<th>Icon</th>
+									<th>Name</th>
+									<th>Details</th>
+								</tr>
+							</thead>
+							<tbody>
+								<!-- Amenity results will populate here -->
+							</tbody>
+						</table>
+					</div>
+					<div class="navigation-buttons-black">
+						<button id="scroll-up-places" title="Scroll Up">↑</button>
+						<button id="back-to-top-places" title="Back to Top">∧</button>
+						<button id="scroll-down-places" title="Scroll Down">↓</button>
+					</div>
+				</div>
+			</div>
+		</div>
 		
-        <h2>Daily Forecast</h2>
-        <img id="weather-icon" alt="Weather Icon">
-        <div id="temp-div"></div>
-        <div id="weather-info"></div>
+	
+		<div id="weather-container" class="snapshot-box float-right fade-in">
+			<h2>Weather Forecast</h2>
+			<img id="weather-icon" alt="Weather Icon">
+			<div id="temp-div"></div>
+			<div id="weather-info"></div>
+			<div id="hourly-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
+				<!-- Hourly forecast cards will be dynamically inserted here -->
+			</div>
+			<div style="text-align: center; margin-top: 10px;">
+				<button id="hourly-scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
+				<button id="hourly-scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
+			</div>
+			<div id="forecast-container">
+				<h2>5 Day Forecast</h2>
+				<div id="forecast-cards" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
+					<!-- Forecast cards will be dynamically inserted here -->
+				</div>
+				<div style="text-align: center; margin-top: 10px;">
+					<button id="scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
+					<button id="scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
+				</div>
+			</div>
+			<div id="long-term-forecast-container">
+				<h2>16 Day Forecast</h2>
+				<div id="long-term-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
+					<!-- 16-day forecast dynamically inserted here -->
+				</div>
+				<div style="text-align: center; margin-top: 10px;">
+					<button id="long-term-scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
+					<button id="long-term-scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
+				</div>
+			</div>			
+		</div>
+	</section>
+	
 
-        <div id="hourly-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
-            <!-- Hourly forecast cards will be dynamically inserted here -->
-        </div>
-        <div style="text-align: center; margin-top: 10px;">
-            <button id="hourly-scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
-            <button id="hourly-scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
-        </div>
-        <hr id="forecast-break">
-        <div id="forecast-container">
-            <div id="forecast-cards" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
-                <!-- Forecast cards will be dynamically inserted here -->
-            </div>
-            <div style="text-align: center; margin-top: 10px;">
-                <button id="scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;"></button>
-                <button id="scroll-right" style="background: none; border: none; font-size: 1.5em; cursor: pointer;"></button>
-            </div>
-        </div>
-    </div>
-</section>
-
-
-
+<!-- Leaflet + MarkerCluster JS -->
+<script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+<script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
 
 
 
