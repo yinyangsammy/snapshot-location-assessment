@@ -196,6 +196,7 @@ document.addEventListener("DOMContentLoaded", () => {
         "Yemen": "ye",
         "Zambia": "zm",
         "Zimbabwe": "zw"
+        
         // Add the remaining mappings here...
     };
 
@@ -216,7 +217,7 @@ document.addEventListener("DOMContentLoaded", () => {
 });
 
 
-	// Full mapping of countries to IANA time zones
+// Full mapping of countries to IANA time zones
 const countryTimeZones = {
     "Afghanistan": "Asia/Kabul",
     "Albania": "Europe/Tirane",
@@ -444,7 +445,7 @@ const countryTimeZones = {
     "Vanuatu": "Pacific/Efate",
     "Wallis and Futuna": "Pacific/Wallis",
     "Western Sahara": "Africa/El_Aaiun"
-    
+
 };
 
 // Global variables
@@ -472,7 +473,7 @@ async function getUser(place) {
          * @param {string} timeZone - The timezone to fetch the abbreviation for.
          * @returns {Promise<string>} - The abbreviation of the timezone.
          */
-        const fetchTimeZoneAbbreviation = async(timeZone) => {
+        const fetchTimeZoneAbbreviation = async (timeZone) => {
             if (timezoneCache[timeZone]) {
                 console.log(`Using cached abbreviation for ${timeZone}`);
                 return timezoneCache[timeZone]; // Return cached value if available
@@ -496,7 +497,7 @@ async function getUser(place) {
         /**
          * Updates the time on the page based on the selected timezone.
          */
-        const updateTime = async() => {
+        const updateTime = async () => {
             const options = {
                 timeZone,
                 hour: "2-digit",
@@ -536,64 +537,64 @@ async function getUser(place) {
 function manageVisibility(placeName) {
     const selectionSection = document.getElementById("your-selection");
     const fadeElements = [
-      "time-box",
-      "location-box",
-      "currency-box",
-      "info-container",
-      "headlines-container",
-      "currency-container",
+        "time-box",
+        "location-box",
+        "currency-box",
+        "info-container",
+        "headlines-container",
+        "currency-container",
     ];
-  
+
     if (placeName && placeName.trim().length > 0) {
-      // Hide the entire your-selection section
-      selectionSection.style.display = "none";
-  
-      // Fade in only the specified elements
-      fadeElements.forEach((id) => fadeInElement(id));
+        // Hide the entire your-selection section
+        selectionSection.style.display = "none";
+
+        // Fade in only the specified elements
+        fadeElements.forEach((id) => fadeInElement(id));
     } else {
-      // Reset visibility to default state
-      selectionSection.style.display = "block";
-      fadeElements.forEach((id) => resetVisibility(id));
+        // Reset visibility to default state
+        selectionSection.style.display = "block";
+        fadeElements.forEach((id) => resetVisibility(id));
     }
-  }
-  
-  // Helper function to fade in an element
-  function fadeInElement(id) {
+}
+
+// Helper function to fade in an element
+function fadeInElement(id) {
     const element = document.getElementById(id);
     if (element) {
-      element.style.opacity = 0;
-      element.style.display = "block"; // Ensure visibility before fading
-      let opacity = 0;
-  
-      const fadeInterval = setInterval(() => {
-        opacity += 0.1;
-        element.style.opacity = opacity;
-  
-        if (opacity >= 1) {
-          clearInterval(fadeInterval);
-        }
-      }, 50); // Smooth fade-in timing
+        element.style.opacity = 0;
+        element.style.display = "block"; // Ensure visibility before fading
+        let opacity = 0;
+
+        const fadeInterval = setInterval(() => {
+            opacity += 0.1;
+            element.style.opacity = opacity;
+
+            if (opacity >= 1) {
+                clearInterval(fadeInterval);
+            }
+        }, 50); // Smooth fade-in timing
     }
-  }
-  
-  // Helper function to reset element visibility
-  function resetVisibility(id) {
+}
+
+// Helper function to reset element visibility
+function resetVisibility(id) {
     const element = document.getElementById(id);
     if (element) {
-      element.style.display = "none";
-      element.style.opacity = 0; // Reset opacity
+        element.style.display = "none";
+        element.style.opacity = 0; // Reset opacity
     }
-  }
-  
-  // Hook into the existing search bar input handling
-  const searchInput = document.getElementById("search-input");
-  if (searchInput) {
+}
+
+// Hook into the existing search bar input handling
+const searchInput = document.getElementById("search-input");
+if (searchInput) {
     searchInput.addEventListener("input", () => {
-      const placeName = searchInput.value.trim();
-      manageVisibility(placeName);
+        const placeName = searchInput.value.trim();
+        manageVisibility(placeName);
     });
-  }
-  
+}
+
 
 /**
  * Creates and manages the modal for displaying country-specific information on hover and click.
@@ -853,36 +854,78 @@ function displayHourlyForecast(hourlyData) {
 
 function displayFiveDayForecast(hourlyData) {
     const forecastCards = document.getElementById('forecast-cards');
-    forecastCards.innerHTML = ''; // Clear previous forecasts
+    forecastCards.innerHTML = ''; // Clear old forecast cards
 
-    // Group forecasts by day (select one forecast per day, e.g., at noon)
-    const dailyForecasts = hourlyData.filter(item => {
-        const dateTime = new Date(item.dt * 1000);
-        return dateTime.getHours() === 12; // Pick the forecast for 12:00 PM
-    }).slice(0, 5); // Limit to the next 5 days
+    const dailyGroups = {};
 
-    dailyForecasts.forEach(item => {
-        const dateTime = new Date(item.dt * 1000); // Convert timestamp to date
-        const day = dateTime.toLocaleDateString('en-US', {
-            weekday: 'short'
-        }); // Get day of the week
-        const temperature = Math.round(item.main.temp - 273.15); // Convert Kelvin to Celsius
-        const description = item.weather[0].description;
-        const iconCode = item.weather[0].icon;
-        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+    // Group forecasts by date (YYYY-MM-DD)
+    hourlyData.forEach(item => {
+        const date = new Date(item.dt * 1000);
+        const dateKey = date.toISOString().split('T')[0];
+        if (!dailyGroups[dateKey]) dailyGroups[dateKey] = [];
+        dailyGroups[dateKey].push(item);
+    });
 
-        const cardHtml = `
-            <div class="forecast-card">
-                <p><strong>${day}</strong></p>
-                <img src="${iconUrl}" alt="${description}" height="30px" width="30px">
-                <p>${temperature}°C</p>
-                <p>${description}</p>
-            </div>
-        `;
+    // Get the first 5 days including today
+    const fiveDays = Object.keys(dailyGroups).slice(0, 5);
 
-        forecastCards.innerHTML += cardHtml;
+    fiveDays.forEach(dateKey => {
+        const readableDay = new Date(dateKey).toLocaleDateString('en-US', { weekday: 'short' });
+
+        const card = document.createElement('div');
+        card.classList.add('forecast-card', 'vertical-scroll-card');
+
+        const title = document.createElement('p');
+        title.innerHTML = `<strong>${readableDay}</strong>`;
+        card.appendChild(title);
+
+        const scrollWrapper = document.createElement('div');
+        scrollWrapper.classList.add('inner-scroll');
+
+        // Scroll up/down buttons
+        const upBtn = document.createElement('button');
+        upBtn.innerHTML = '▲';
+        upBtn.className = 'scroll-up';
+        upBtn.addEventListener('click', () => {
+            scrollWrapper.scrollBy({ top: -100, behavior: 'smooth' });
+        });
+
+        const downBtn = document.createElement('button');
+        downBtn.innerHTML = '▼';
+        downBtn.className = 'scroll-down';
+        downBtn.addEventListener('click', () => {
+            scrollWrapper.scrollBy({ top: 100, behavior: 'smooth' });
+        });
+
+        dailyGroups[dateKey].forEach(item => {
+            const time = new Date(item.dt * 1000).toLocaleTimeString('en-US', {
+                hour: '2-digit', minute: '2-digit'
+            });
+            const temp = Math.round(item.main.temp - 273.15);
+            const desc = item.weather[0].description;
+            const icon = item.weather[0].icon;
+            const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
+
+            const hourBlock = document.createElement('div');
+            hourBlock.classList.add('hour-block');
+            hourBlock.innerHTML = `
+                <p><strong>${time}</strong></p>
+                <img src="${iconUrl}" alt="${desc}" height="30px" width="30px">
+                <p>${temp}°C</p>
+                <p>${desc}</p>
+            `;
+
+            scrollWrapper.appendChild(hourBlock);
+        });
+
+        // Assemble everything
+        card.appendChild(upBtn);
+        card.appendChild(scrollWrapper);
+        card.appendChild(downBtn);
+        forecastCards.appendChild(card);
     });
 }
+
 
 /**
  * Makes the weather icon visible once it's loaded.
@@ -921,6 +964,7 @@ scrollRightButton.addEventListener('click', () => {
 const hourlyScrollLeftButton = document.getElementById('hourly-scroll-left');
 const hourlyScrollRightButton = document.getElementById('hourly-scroll-right');
 const hourlyForecast = document.getElementById('hourly-forecast');
+
 /**
  * Scrolls the hourly forecast left by 150px.
  */
@@ -931,6 +975,7 @@ hourlyScrollLeftButton.addEventListener('click', () => {
         behavior: 'smooth'
     });
 });
+
 /**
  * Scrolls the hourly forecast right by 150px.
  */
@@ -940,6 +985,7 @@ hourlyScrollRightButton.addEventListener('click', () => {
         behavior: 'smooth'
     });
 });
+
 
 // Time Container
 
@@ -1316,8 +1362,56 @@ const countryMapping = {
     "Vietnam": "vn",
     "Yemen": "ye",
     "Zambia": "zm",
-    "Zimbabwe": "zw"
-        // Add more mappings as needed
+    "Zimbabwe": "zw",
+    "Brunei Darussalam": "bn",
+"Ivory Coast": "ci",
+"Democratic Republic of the Congo": "cd",
+"Republic of Congo": "cg",
+"Czech Republic": "cz",
+"The Gambia": "gm",
+"Greenland": "gl",
+"South Korea": "kr",
+"Lao PDR": "la",
+"Macedonia": "mk", // Often listed as "North Macedonia"
+"Myanmar": "mm",
+"North Korea": "kp",
+"Palestine": "ps",
+"Western Sahara": "eh",
+"Swaziland": "sz", // Now called Eswatini
+"French Guiana": "gf",
+"Aruba": "aw",
+"Anguilla": "ai",
+"American Samoa": "as",
+"Saint-Barthélemy": "bl",
+"Bermuda": "bm",
+"Cape Verde": "cv",
+"Curaçao": "cw",
+"Cayman Islands": "ky",
+"Falkland Islands": "fk",
+"Faeroe Islands": "fo",
+"Federated States of Micronesia": "fm",
+"Guam": "gu",
+"Saint-Martin": "mf",
+"Northern Mariana Islands": "mp",
+"Montserrat": "ms",
+"New Caledonia": "nc",
+"Puerto Rico": "pr",
+"French Polynesia": "pf",
+"São Tomé and Principe": "st",
+"Sint Maarten": "sx",
+"Turks and Caicos Islands": "tc",
+"British Virgin Islands": "vg",
+"United States Virgin Islands": "vi",
+"St. Eustatius (Netherlands)": "bq", // Same for Bonaire/Saba
+"Saba (Netherlands)": "bq",
+"Martinique": "mq",
+"Canary Islands (Spain)": "ic", // Not official, fallback to "es" if needed
+"Mayotte": "yt",
+"Reunion": "re",
+"Guadeloupe": "gp",
+"Taiwan": "tw"
+
+    // Add more mappings as needed
 };
 
 // Keywords for filtering articles by category
@@ -1331,6 +1425,14 @@ const categoryKeywords = {
     sports: ["sports", "football", "soccer", "basketball", "tennis", "athletics"], // New sports category
     business: ["business", "finance", "economy", "startup", "stock", "investment", "market"] // New business category
 };
+
+/**
+ * Opens the headlines modal.
+ */
+function openHeadlinesModal() {
+    const modal = document.getElementById("headlines-modal");
+    if (modal) modal.style.display = "block";
+}
 
 // Function to fetch and display country data
 
@@ -1456,34 +1558,35 @@ async function getCountryData(countryName) {
                 </div>
             </div>
         `;
-		} catch (error) {
-			result.innerHTML = "<p>Country data not available</p>";
-			currencyContainer.textContent = "N/A";
-		}
-	}
+    } catch (error) {
+        result.innerHTML = "<p>Country data not available</p>";
+        currencyContainer.textContent = "N/A";
+    }
+}
 
-	// Map click event integration for handling country info and headlines
-	document.querySelectorAll(".allPaths").forEach(e => {
-		e.addEventListener("click", function () {
-			const countryName = e.id;
+// Map click event integration for handling country info and headlines
+document.querySelectorAll(".allPaths").forEach(e => {
+    e.addEventListener("click", function () {
+        const countryName = e.id;
 
-			// Fetch and display country data and news
-			fetchTopHeadlinesByCountry(countryName);
-			getCountryData(countryName);
+        // Fetch and display country data and news
+        fetchTopHeadlinesByCountry(countryName);
+        getCountryData(countryName);
+        fetchCountryImages(countryName); // Fetch images for slideshow
 
-			// Open the modal for displaying country information and headlines
-			openHeadlinesModal();
-		});
-	});
+        // Open the modal for displaying country information and headlines
+        openHeadlinesModal();
+    });
+});
 
-	// Function to fetch and display news headlines by country
+// Function to fetch and display news headlines by country
 
-	/**
- * Fetches and displays news headlines for a given country.
- * @param {string} countryName - The name of the country to fetch news headlines for.
- */
+/**
+* Fetches and displays news headlines for a given country.
+* @param {string} countryName - The name of the country to fetch news headlines for.
+*/
 
-    // Function to fetch and display news headlines by country
+// Function to fetch and display news headlines by country
 
 /**
  * Fetches and displays news headlines for a given country.
@@ -1878,18 +1981,18 @@ function initializeMaximizedButtons() {
         button.addEventListener('click', (e) => {
             // Close the cloned container
             const clonedContainer = e.target.closest('.snapshot-box');
-            clonedContainer.remove(); 
+            clonedContainer.remove();
         });
     });
 
     // Initialize scroll buttons for each maximized container
     document.querySelectorAll('.navigation-buttons-holidays button').forEach(button => {
-        button.addEventListener('click', handleScrollButtons); 
+        button.addEventListener('click', handleScrollButtons);
     });
 
     // Initialize scroll buttons for all other containers (e.g. headlines, etc.)
     document.querySelectorAll('.navigation-buttons-black button').forEach(button => {
-        button.addEventListener('click', handleScrollButtons); 
+        button.addEventListener('click', handleScrollButtons);
     });
 }
 
@@ -1897,7 +2000,7 @@ function initializeMaximizedButtons() {
 function handleScrollButtons(e) {
     const parentContainer = e.target.closest('.snapshot-box');
     const list = parentContainer.querySelector('.scrollable-content');
-    
+
     if (!list) return; // Exit if no scrollable content found
 
     const scrollAmount = e.target.id.includes('up') ? -100 : (e.target.id.includes('down') ? 100 : 0);
@@ -1934,110 +2037,110 @@ document.querySelectorAll(".window-controls button").forEach(button => {
 });
 
 // Function to fetch and display public holidays
-// Function to fetch and display public holidays
+
 async function fetchPublicHolidays(countryName) {
     try {
-      // Step 1: Get ISO country code using REST Countries API
-      const countryResponse = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
-      const countryData = await countryResponse.json();
-      const countryCode = countryData[0].cca2; // Extract ISO alpha-2 code (e.g., "GB" for UK)
-  
-      if (!countryCode) {
-        console.error(`Could not find ISO code for ${countryName}`);
-        return;
-      }
-  
-      // Step 2: Fetch public holidays from API Ninjas using the country code
-      const currentYear = new Date().getFullYear();
-      const holidaysResponse = await fetch(`https://api.api-ninjas.com/v1/holidays?country=${countryCode}&year=${currentYear}`, {
-        headers: { 'X-Api-Key': 'oynQZsr3dpVh2dKnjXNvLg==GgPfFc4Od4Sycuuy' }
-      });
-  
-      const holidays = await holidaysResponse.json();
-  
-      // Step 3: Filter and sort holidays from today onward
-      const today = new Date();
-      const upcomingHolidays = holidays
-        .map(holiday => ({
-          ...holiday,
-          date: new Date(holiday.date)
-        }))
-        .filter(holiday => holiday.date >= today)
-        .sort((a, b) => a.date - b.date);
-  
-      // Step 4: Display holidays in the UI
-      const holidaysList = document.getElementById("holidays-list");
-      holidaysList.innerHTML = ""; // Clear previous results
-  
-      if (upcomingHolidays.length === 0) {
-        holidaysList.innerHTML = "<li>No upcoming public holidays found.</li>";
-        return;
-      }
-      initializeHolidaysScrollButtons(); // Run it after rendering holidays
-      upcomingHolidays.forEach(holiday => {
-        const listItem = document.createElement("li");
-        listItem.textContent = `${holiday.date.toLocaleDateString()}: ${holiday.name}`;
-        holidaysList.appendChild(listItem);
-      });
-    } catch (error) {
-      console.error("Error fetching public holidays:", error);
-    }
-  }
-  
-  // Attach this to your map click event!
-  document.querySelectorAll(".allPaths").forEach((path) => {
-    path.addEventListener("click", () => {
-      const countryName = path.id; // Country name from map click
-      fetchPublicHolidays(countryName); // Fetch holidays!
-    });
-  });
-  
-  function initializeHolidaysScrollButtons() {
-      const holidaysList = document.getElementById("holidays-list");
-      const scrollUpBtn = document.getElementById("holidays-scroll-up");
-      const scrollDownBtn = document.getElementById("holidays-scroll-down");
-      const backToTopBtn = document.getElementById("holidays-back-to-top");
-  
-      if (!holidaysList) {
-          console.error("Holidays list not found!");
-          return;
-      }
-  
-      // Ensure we remove previous event listeners before adding new ones
-      scrollUpBtn?.removeEventListener("click", scrollUpHandler);
-      scrollDownBtn?.removeEventListener("click", scrollDownHandler);
-      backToTopBtn?.removeEventListener("click", backToTopHandler);
-  
-      function scrollUpHandler() {
-          holidaysList.scrollBy({ top: -100, behavior: "smooth" });
-      }
-  
-      function scrollDownHandler() {
-          holidaysList.scrollBy({ top: 100, behavior: "smooth" });
-      }
-  
-      function backToTopHandler() {
-          holidaysList.scrollTo({ top: 0, behavior: "smooth" });
-      }
-  
-      if (scrollUpBtn) {
-          scrollUpBtn.addEventListener("click", scrollUpHandler);
-      }
-  
-      if (scrollDownBtn) {
-          scrollDownBtn.addEventListener("click", scrollDownHandler);
-      }
-  
-      if (backToTopBtn) {
-          backToTopBtn.addEventListener("click", backToTopHandler);
-      }
-  
-      console.log("🔥 Holidays scroll buttons initialized! ✅");
-  
-      
-  }
+        // Step 1: Get ISO country code using REST Countries API
+        const countryResponse = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+        const countryData = await countryResponse.json();
+        const countryCode = countryData[0].cca2; // Extract ISO alpha-2 code (e.g., "GB" for UK)
 
-  async function fetchPublicHolidays(countryName) {
+        if (!countryCode) {
+            console.error(`Could not find ISO code for ${countryName}`);
+            return;
+        }
+
+        // Step 2: Fetch public holidays from API Ninjas using the country code
+        const currentYear = new Date().getFullYear();
+        const holidaysResponse = await fetch(`https://api.api-ninjas.com/v1/holidays?country=${countryCode}&year=${currentYear}`, {
+            headers: { 'X-Api-Key': 'oynQZsr3dpVh2dKnjXNvLg==GgPfFc4Od4Sycuuy' }
+        });
+
+        const holidays = await holidaysResponse.json();
+
+        // Step 3: Filter and sort holidays from today onward
+        const today = new Date();
+        const upcomingHolidays = holidays
+            .map(holiday => ({
+                ...holiday,
+                date: new Date(holiday.date)
+            }))
+            .filter(holiday => holiday.date >= today)
+            .sort((a, b) => a.date - b.date);
+
+        // Step 4: Display holidays in the UI
+        const holidaysList = document.getElementById("holidays-list");
+        holidaysList.innerHTML = ""; // Clear previous results
+
+        if (upcomingHolidays.length === 0) {
+            holidaysList.innerHTML = "<li>No upcoming public holidays found.</li>";
+            return;
+        }
+        initializeHolidaysScrollButtons(); // Run it after rendering holidays
+        upcomingHolidays.forEach(holiday => {
+            const listItem = document.createElement("li");
+            listItem.textContent = `${holiday.date.toLocaleDateString()}: ${holiday.name}`;
+            holidaysList.appendChild(listItem);
+        });
+    } catch (error) {
+        console.error("Error fetching public holidays:", error);
+    }
+}
+
+// Attach this to your map click event!
+document.querySelectorAll(".allPaths").forEach((path) => {
+    path.addEventListener("click", () => {
+        const countryName = path.id; // Country name from map click
+        fetchPublicHolidays(countryName); // Fetch holidays!
+    });
+});
+
+function initializeHolidaysScrollButtons() {
+    const holidaysList = document.getElementById("holidays-list");
+    const scrollUpBtn = document.getElementById("holidays-scroll-up");
+    const scrollDownBtn = document.getElementById("holidays-scroll-down");
+    const backToTopBtn = document.getElementById("holidays-back-to-top");
+
+    if (!holidaysList) {
+        console.error("Holidays list not found!");
+        return;
+    }
+
+    // Ensure we remove previous event listeners before adding new ones
+    scrollUpBtn?.removeEventListener("click", scrollUpHandler);
+    scrollDownBtn?.removeEventListener("click", scrollDownHandler);
+    backToTopBtn?.removeEventListener("click", backToTopHandler);
+
+    function scrollUpHandler() {
+        holidaysList.scrollBy({ top: -100, behavior: "smooth" });
+    }
+
+    function scrollDownHandler() {
+        holidaysList.scrollBy({ top: 100, behavior: "smooth" });
+    }
+
+    function backToTopHandler() {
+        holidaysList.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    if (scrollUpBtn) {
+        scrollUpBtn.addEventListener("click", scrollUpHandler);
+    }
+
+    if (scrollDownBtn) {
+        scrollDownBtn.addEventListener("click", scrollDownHandler);
+    }
+
+    if (backToTopBtn) {
+        backToTopBtn.addEventListener("click", backToTopHandler);
+    }
+
+    console.log("🔥 Holidays scroll buttons initialized! ✅");
+
+
+}
+
+async function fetchPublicHolidays(countryName) {
     try {
         console.log(`Fetching ISO code for: ${countryName}`);
 
@@ -2051,7 +2154,7 @@ async function fetchPublicHolidays(countryName) {
             return;
         }
 
-        const countryCode = countryData[0]?.cca2; 
+        const countryCode = countryData[0]?.cca2;
         console.log(`✅ Found ISO Code: ${countryCode}`);
 
         if (!countryCode) {
@@ -2083,7 +2186,7 @@ async function fetchPublicHolidays(countryName) {
 
         // Display holidays
         const holidaysList = document.getElementById("holidays-list");
-        holidaysList.innerHTML = ""; 
+        holidaysList.innerHTML = "";
 
         if (upcomingHolidays.length === 0) {
             holidaysList.innerHTML = "<li>No upcoming public holidays found.</li>";
@@ -2103,107 +2206,107 @@ async function fetchPublicHolidays(countryName) {
     }
 }
 
-  
 
-	// Weather Container
 
-	/**
- * Fetches and displays current weather and forecast data for a given city.
- * 
- * @param {string} city - The name of the city to fetch weather data for.
- */
+// Weather Container
 
-	function getWeather(city) {
-		const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
+/**
+* Fetches and displays current weather and forecast data for a given city.
+* 
+* @param {string} city - The name of the city to fetch weather data for.
+*/
 
-		if (!city) {
-			alert('Please enter a city');
-			return;
-		}
+function getWeather(city) {
+    const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
 
-		const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-		const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
+    if (!city) {
+        alert('Please enter a city');
+        return;
+    }
 
-		fetch(currentWeatherUrl)
-			.then(response => response.json())
-			.then(data => {
-				displayWeather(data);
-			})
-			.catch(error => {
-				console.error('Error fetching current weather data:', error);
-				alert('Error fetching current weather data. Please try again.');
-			});
+    const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
+    const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
 
-		fetch(forecastUrl)
-			.then(response => response.json())
-			.then(data => {
-				displayHourlyForecast(data.list);
-				displayFiveDayForecast(data.list);
-			})
-			.catch(error => {
-				console.error('Error fetching forecast data:', error);
-				alert('Error fetching forecast data. Please try again.');
-			});
-	}
+    fetch(currentWeatherUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayWeather(data);
+        })
+        .catch(error => {
+            console.error('Error fetching current weather data:', error);
+            alert('Error fetching current weather data. Please try again.');
+        });
 
-	/**
- * Displays the current weather information in the UI.
- * 
- * @param {Object} data - The weather data returned from the API.
- */
+    fetch(forecastUrl)
+        .then(response => response.json())
+        .then(data => {
+            displayHourlyForecast(data.list);
+            displayFiveDayForecast(data.list);
+        })
+        .catch(error => {
+            console.error('Error fetching forecast data:', error);
+            alert('Error fetching forecast data. Please try again.');
+        });
+}
 
-	function displayWeather(data) {
-		const tempDivInfo = document.getElementById('temp-div');
-		const weatherInfoDiv = document.getElementById('weather-info');
-		const weatherIcon = document.getElementById('weather-icon');
-		const hourlyForecastDiv = document.getElementById('hourly-forecast');
+/**
+* Displays the current weather information in the UI.
+* 
+* @param {Object} data - The weather data returned from the API.
+*/
 
-		// Clear previous content
-		weatherInfoDiv.innerHTML = '';
-		hourlyForecastDiv.innerHTML = '';
-		tempDivInfo.innerHTML = '';
+function displayWeather(data) {
+    const tempDivInfo = document.getElementById('temp-div');
+    const weatherInfoDiv = document.getElementById('weather-info');
+    const weatherIcon = document.getElementById('weather-icon');
+    const hourlyForecastDiv = document.getElementById('hourly-forecast');
 
-		if (data.cod === '404') {
-			weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
-		} else {
-			const cityName = data.name;
-			const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
-			const description = data.weather[0].description;
-			const iconCode = data.weather[0].icon;
-			const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
+    // Clear previous content
+    weatherInfoDiv.innerHTML = '';
+    hourlyForecastDiv.innerHTML = '';
+    tempDivInfo.innerHTML = '';
 
-			const temperatureHTML = `<p>${temperature}°C</p>`;
-			const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
+    if (data.cod === '404') {
+        weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
+    } else {
+        const cityName = data.name;
+        const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
+        const description = data.weather[0].description;
+        const iconCode = data.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
 
-			tempDivInfo.innerHTML = temperatureHTML;
-			weatherInfoDiv.innerHTML = weatherHtml;
-			weatherIcon.src = iconUrl;
-			weatherIcon.alt = description;
+        const temperatureHTML = `<p>${temperature}°C</p>`;
+        const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
 
-			showImage();
-		}
-	}
+        tempDivInfo.innerHTML = temperatureHTML;
+        weatherInfoDiv.innerHTML = weatherHtml;
+        weatherIcon.src = iconUrl;
+        weatherIcon.alt = description;
 
-	/**
- * Displays the hourly weather forecast for the next 24 hours in the UI.
- * 
- * @param {Array} hourlyData - An array of weather forecast data points.
- */
+        showImage();
+    }
+}
 
-	function displayHourlyForecast(hourlyData) {
-		const hourlyForecastDiv = document.getElementById('hourly-forecast');
-		const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
+/**
+* Displays the hourly weather forecast for the next 24 hours in the UI.
+* 
+* @param {Array} hourlyData - An array of weather forecast data points.
+*/
 
-		hourlyForecastDiv.innerHTML = ''; // Clear previous content
+function displayHourlyForecast(hourlyData) {
+    const hourlyForecastDiv = document.getElementById('hourly-forecast');
+    const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
 
-		next24Hours.forEach(item => {
-			const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
-			const hour = dateTime.getHours();
-			const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
-			const iconCode = item.weather[0].icon;
-			const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+    hourlyForecastDiv.innerHTML = ''; // Clear previous content
 
-			const hourlyItemHtml = `
+    next24Hours.forEach(item => {
+        const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
+        const hour = dateTime.getHours();
+        const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
+        const iconCode = item.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+        const hourlyItemHtml = `
             <div class="hourly-item">
                 <span>${hour}:00</span>
                 <img src="${iconUrl}" alt="Hourly Weather Icon">
@@ -2211,35 +2314,35 @@ async function fetchPublicHolidays(countryName) {
             </div>
         `;
 
-			hourlyForecastDiv.innerHTML += hourlyItemHtml;
-		});
-	}
+        hourlyForecastDiv.innerHTML += hourlyItemHtml;
+    });
+}
 
-	/**
- * Displays the 5-day weather forecast in the UI, selecting one forecast per day at noon.
- * 
- * @param {Array} hourlyData - An array of weather forecast data points.
- */
+/**
+* Displays the 5-day weather forecast in the UI, selecting one forecast per day at noon.
+* 
+* @param {Array} hourlyData - An array of weather forecast data points.
+*/
 
-	function displayFiveDayForecast(hourlyData) {
-		const forecastCards = document.getElementById('forecast-cards');
-		forecastCards.innerHTML = ''; // Clear previous forecasts
+function displayFiveDayForecast(hourlyData) {
+    const forecastCards = document.getElementById('forecast-cards');
+    forecastCards.innerHTML = ''; // Clear previous forecasts
 
-		// Group forecasts by day (select one forecast per day, e.g., at noon)
-		const dailyForecasts = hourlyData.filter(item => {
-			const dateTime = new Date(item.dt * 1000);
-			return dateTime.getHours() === 12; // Pick the forecast for 12:00 PM
-		}).slice(0, 5); // Limit to the next 5 days
+    // Group forecasts by day (select one forecast per day, e.g., at noon)
+    const dailyForecasts = hourlyData.filter(item => {
+        const dateTime = new Date(item.dt * 1000);
+        return dateTime.getHours() === 12; // Pick the forecast for 12:00 PM
+    }).slice(0, 5); // Limit to the next 5 days
 
-		dailyForecasts.forEach(item => {
-			const dateTime = new Date(item.dt * 1000); // Convert timestamp to date
-			const day = dateTime.toLocaleDateString('en-US', { weekday: 'short' }); // Get day of the week
-			const temperature = Math.round(item.main.temp - 273.15); // Convert Kelvin to Celsius
-			const description = item.weather[0].description;
-			const iconCode = item.weather[0].icon;
-			const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+    dailyForecasts.forEach(item => {
+        const dateTime = new Date(item.dt * 1000); // Convert timestamp to date
+        const day = dateTime.toLocaleDateString('en-US', { weekday: 'short' }); // Get day of the week
+        const temperature = Math.round(item.main.temp - 273.15); // Convert Kelvin to Celsius
+        const description = item.weather[0].description;
+        const iconCode = item.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
 
-			const cardHtml = `
+        const cardHtml = `
             <div class="forecast-card">
                 <p><strong>${day}</strong></p>
                 <img src="${iconUrl}" alt="${description}">
@@ -2248,654 +2351,1294 @@ async function fetchPublicHolidays(countryName) {
             </div>
         `;
 
-			forecastCards.innerHTML += cardHtml;
-		});
-	}
+        forecastCards.innerHTML += cardHtml;
+    });
+}
 
-	// Add scrolling functionality for the 5-day forecast
+/**
+ * Fetch and display the 16-day weather forecast.
+ * @param {string} city - The name of the city.
+ */
+function getLongTermForecast(city) {
+    const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
+
+    // Step 1: Convert city name to latitude & longitude
+    fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.cod !== 200) {
+                alert("Error fetching city coordinates.");
+                return;
+            }
+
+            const { lat, lon } = data.coord;
+
+            // Step 2: Fetch 16-day forecast using One Call API
+            fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${apiKey}`)
+                .then(response => response.json())
+                .then(data => {
+                    displayLongTermForecast(data.daily);
+                })
+                .catch(error => {
+                    console.error('Error fetching 16-day forecast:', error);
+                    alert('Error fetching 16-day forecast. Please try again.');
+                });
+        })
+        .catch(error => {
+            console.error('Error fetching city coordinates:', error);
+            alert('Error fetching city coordinates. Please try again.');
+        });
+}
+
+
+/**
+ * Displays the 16-day weather forecast in a scrolling format.
+ * @param {Array} dailyData - Array of daily weather data.
+ */
+function displayLongTermForecast(dailyData) {
+    const longTermForecastDiv = document.getElementById('long-term-forecast');
+    longTermForecastDiv.innerHTML = ''; // Clear previous forecasts
+
+    dailyData.slice(0, 16).forEach(item => {
+        const dateTime = new Date(item.dt * 1000);
+        const formattedDate = dateTime.toLocaleDateString('en-US', { weekday: 'short', month: 'short', day: 'numeric' });
+        const temperature = Math.round(item.temp.day); // No need to convert, API returns Celsius
+        const description = item.weather[0].description;
+        const iconCode = item.weather[0].icon;
+        const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
+
+        const cardHtml = `
+            <div class="forecast-card">
+                <p><strong>${formattedDate}</strong></p>
+                <img src="${iconUrl}" alt="${description}">
+                <p>${temperature}°C</p>
+                <p>${description}</p>
+            </div>
+        `;
+
+        longTermForecastDiv.innerHTML += cardHtml;
+    });
+}
+
+
+
+// Add scrolling functionality to the 16-day forecast
+document.getElementById('long-term-scroll-left').addEventListener('click', () => {
+    document.getElementById('long-term-forecast').scrollBy({ left: -150, behavior: 'smooth' });
+});
+
+document.getElementById('long-term-scroll-right').addEventListener('click', () => {
+    document.getElementById('long-term-forecast').scrollBy({ left: 150, behavior: 'smooth' });
+});
+
+
+// Add scrolling functionality for the 5-day forecast
 /**
  * Scrolls the 5-day forecast cards to the left when the left arrow is clicked.
  */
 
-	document.getElementById("scroll-left").addEventListener("click", () => {
-		const forecastCards = document.getElementById("forecast-cards");
-		forecastCards.scrollBy({ left: -150, behavior: "smooth" });
-	});
-
-	/**
- * Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
- */
-
-	document.getElementById("scroll-right").addEventListener("click", () => {
-		const forecastCards = document.getElementById("forecast-cards");
-		forecastCards.scrollBy({ left: 150, behavior: "smooth" });
-	});
-
-	/**
- * Displays the weather icon by making the image element visible once it's loaded.
- */
-
-	function showImage() {
-		const weatherIcon = document.getElementById('weather-icon');
-		weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
-	}
-
-
-
-
-	// Google Map with Search Bar //
-
-	// Google Map with Search Bar //
-let map, autocomplete, infowindow, marker;
+document.getElementById("scroll-left").addEventListener("click", () => {
+    const forecastCards = document.getElementById("forecast-cards");
+    forecastCards.scrollBy({ left: -150, behavior: "smooth" });
+});
 
 /**
- * Initializes the Google Map, sets up autocomplete search functionality, and manages events like place selection.
- */
-function initMap() {
-    // Initialize map with global view
-    map = new google.maps.Map(document.getElementById("map"), {
-        center: { lat: 0, lng: 0 }, // Center of the world
-        zoom: 2, // World view
-    });
+* Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
+*/
 
-    // Clear the input field to reset the search bar to the placeholder text
-    document.getElementById("autocomplete").value = "";
+document.getElementById("scroll-right").addEventListener("click", () => {
+    const forecastCards = document.getElementById("forecast-cards");
+    forecastCards.scrollBy({ left: 150, behavior: "smooth" });
+});
 
-    // Create a marker that will be placed on the map
-    marker = new google.maps.Marker({
-        map: map,
-        draggable: true, // Allow the user to drag the marker
-    });
+/**
+* Displays the weather icon by making the image element visible once it's loaded.
+*/
 
-    // Create an infowindow to display location info
-    infowindow = new google.maps.InfoWindow();
+function showImage() {
+    const weatherIcon = document.getElementById('weather-icon');
+    weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
+}
 
-    // Set up the autocomplete input field
-    autocomplete = new google.maps.places.Autocomplete(document.getElementById("autocomplete"), {
-        types: ["geocode"], // Restrict to geographic locations
-    });
 
-    // When a place is selected from the autocomplete dropdown
-    autocomplete.addListener("place_changed", function () {
-        let place = autocomplete.getPlace();
 
-        // Check if the place has geometry (location)
-        if (place.geometry) {
-            // Set the map to the selected location
-            map.setCenter(place.geometry.location);
-            map.setZoom(15); // Zoom in after selection
 
-            // Move the marker to the selected location
-            marker.setPosition(place.geometry.location);
+// OpenStreets Map with Leaflet Search Bar //
 
-            // Display the location name in the infowindow
-            infowindow.setContent(
-                "<strong>" + place.name + "</strong><br>" + place.formatted_address
-            );
-            infowindow.open(map, marker);
+// Initialize Map with Leaflet
+let map, marker, markersLayer;
+const markerCluster = L.markerClusterGroup();
+const CACHE_EXPIRATION = 30 * 60 * 1000; // Cache expires in 30 minutes
+const markers = {}; // Store markers
+const pinnedMarkers = new Set(); // Stores pinned markerIDs
 
-            // Fetch weather for the selected location
-            const cityName = place.name || place.formatted_address.split(",")[0];
-            getWeather(cityName);
+function generatePopupContent(markerID, name, type, address, phone, website, iconUrl) {
+    const isPinned = pinnedMarkers.has(markerID);
+    const pinLabel = isPinned ? "❌ Unpin" : "📌 Pin";
 
-            // Search for nearby hotels and amenities
-            searchHotels();
-            searchNearbyAmenities();
+    const iconHTML = iconUrl
+  ? iconUrl.startsWith("http")
+      ? `<div style="margin-bottom: 5px;">
+             <img src="${iconUrl}" alt="${type} icon" style="width: 40px; height: 40px;"><br>
+         </div>`
+      : `<div style="margin-bottom: 5px;"><div style="font-size: 24px;">${iconUrl}</div></div>`
+  : "";
 
-            // Trigger fade-in for the containers
-            fadeInContainers();
+
+    return `
+        <div style="text-align: center; min-height: 100px; padding-bottom: 5px;">
+            ${iconHTML}
+            <strong>${name}</strong> (${type})<br>
+            📍 ${address}<br>
+            📞 ${phone}<br>
+            🔗 ${website}<br><br>
+            <button onclick="togglePin('${markerID}', markers['${markerID}'])" style="margin-top: 5px; cursor: pointer;">
+                ${pinLabel}
+            </button>
+        </div>
+    `;
+}
+
+
+
+// 🌟 Icon Definitions
+const defaultAmenityIcon = L.icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon.png',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30]
+});
+
+const pinnedAmenityIcon = L.icon({
+    iconUrl: 'https://unpkg.com/leaflet@1.9.3/dist/images/marker-icon-red.png',
+    iconSize: [30, 30],
+    iconAnchor: [15, 30],
+    popupAnchor: [0, -30]
+});
+
+// Toggle pin/unpin and update icon (amenities only)
+function togglePin(markerID, marker) {
+    const amenityType = marker.options.amenityType || "unknown";
+    const emoji = amenityEmojiMap?.[amenityType] || "📍";
+
+    if (pinnedMarkers.has(markerID)) {
+        // 🔁 Unpin
+        pinnedMarkers.delete(markerID);
+
+        // Restore default Leaflet blue icon
+        marker.setIcon(L.icon({
+            iconUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png',
+            iconSize: [25, 41],
+            iconAnchor: [12, 41],
+            popupAnchor: [1, -34],
+            shadowUrl: 'https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png'
+        }));
+
+        // Re-add to markerCluster if not already there
+        if (!markerCluster.hasLayer(marker)) {
+            markerCluster.addLayer(marker);
         }
-    });
 
-    // Add a drag event listener to the marker to update the location when it's dragged
-    google.maps.event.addListener(marker, "dragend", function () {
-        let latLng = marker.getPosition();
-        let geocoder = new google.maps.Geocoder();
-        geocoder.geocode({ location: latLng }, function (results, status) {
-            if (status === "OK" && results[0]) {
-                infowindow.setContent("<strong>" + results[0].formatted_address + "</strong>");
-                infowindow.open(map, marker);
+        // Remove from map (if it was added directly)
+        if (map.hasLayer(marker)) {
+            map.removeLayer(marker);
+        }
 
-                // Fetch weather for the dragged location
-                const cityName = results[0].address_components[0].long_name;
-                getWeather(cityName);
+        // Update popup
+        const currentPopup = marker.getPopup().getContent();
+        marker.setPopupContent(currentPopup.replace("❌ Unpin", "📌 Pin"));
 
-                // Update hotels and amenities based on new location
-                searchHotels();
-                searchNearbyAmenities();
+    } else {
+        // 📌 Pin
+        pinnedMarkers.add(markerID);
 
-                // Trigger fade-in for the containers
-                fadeInContainers();
-            }
-        });
-    });
+        // Set emoji pin icon
+        marker.setIcon(getPinnedEmojiIcon(emoji));
 
-    // Add bounds_changed listener to dynamically search hotels and amenities as the user scrolls or zooms the map
-    google.maps.event.addListener(map, "bounds_changed", function () {
-        searchHotels();
-        searchNearbyAmenities();
-    });
+        // Remove from cluster if needed
+        if (markerCluster.hasLayer(marker)) {
+            markerCluster.removeLayer(marker);
+        }
 
-    // Initialize with containers hidden
-    const allContainers = document.querySelectorAll(
-        "#hotel-container, #place-container, #weather-container"
-    );
-    allContainers.forEach((container) => (container.style.display = "none"));
+        // Ensure added to map directly
+        if (!map.hasLayer(marker)) {
+            map.addLayer(marker);
+        }
 
-    /**
-     * Function to fade in containers when a valid place is selected.
-     */
-    function fadeInContainers() {
-        allContainers.forEach((container) => {
-            if (container) {
-                container.classList.add("fade-in"); // Ensure fade-in is applied
-                container.style.display = "block"; // Make the container visible
-            }
-        });
+        // Update popup
+        const currentPopup = marker.getPopup().getContent();
+        marker.setPopupContent(currentPopup.replace("📌 Pin", "❌ Unpin"));
     }
 }
 
 
-// Functionality for searching hotels, nearby amenities, weather, and other related tasks should follow below.
+
+
+function getPinnedEmojiIcon(emoji) {
+    return L.divIcon({
+        html: `<div style="position: relative; font-size: 24px;">
+                    📍<span style="position: absolute; top: -0.3em; left: 0.15em;">${emoji}</span>
+               </div>`,
+        className: "emoji-pin-marker",
+        iconSize: [30, 40],
+        iconAnchor: [15, 35],
+        popupAnchor: [0, -35],
+    });
+}
+
+
+// Amenity button cache
+const amenityCache = {
+    landmark: [], museum: [], park: [], place_of_worship: [], restaurant: [], pub: [],bar: [], nightclub: [], biergarten: [], recycling: [],
+    cinema: [], theatre: [], arts_centre: [], events_venue: [], bank: [], bureau_de_change: [], casino: [], pharmacy: [], clinic: [], hospital: [], dentist: [], school: [], 
+    university: [], shop: [], fuel: [], car_rental: [], atm: [], police: [], parking: [], post_office: [], marketplace: [], cafe: [],
+    fast_food: [], bicycle_rental: [],
+};
+
+function initMap() {
+    // Set up Leaflet map
+    map = L.map('map').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
+
+    // Add marker layer
+    markersLayer = L.layerGroup().addTo(map);
+    markerCluster.addTo(map);
+
+    // Create a draggable marker
+    marker = L.marker([0, 0], { draggable: true }).addTo(map);
+    marker.on("dragend", () => reverseGeocode(marker.getLatLng()));
+
+    // Event listener for Enter key in search input
+    document.getElementById("city-search").addEventListener("keypress", function (e) {
+        if (e.key === 'Enter') fetchCityData();
+    });
+
+    // Hide containers initially
+    document.querySelectorAll("#hotel-container, #place-container, #weather-container")
+        .forEach(container => container.style.display = "none");
+
+    // Initialize amenity buttons
+    initAmenityButtons();
+}
+
+// Initialize Amenity Buttons with Icons
+function initAmenityButtons() {
+    const icons = {
+        landmark: "🏛️", museum: "🏺", park: "🌳", place_of_worship: "⛪", cafe: "☕", fast_food: "🥡", restaurant: "🍽️", pub: "🍻",
+        bar: "🍸", nightclub: "🎶", cinema: "🎬", theatre: "🎭",  arts_centre: "🖼️", events_venue: "🎙️", 
+        bank: "🏦", bureau_de_change: "💷", atm: "🏧", casino: "🎲", bicycle_rental: "🚲", fuel: "⛽", car_rental: "🚘", 
+        police: "🚔", parking: "🅿️", pharmacy: "💊", clinic: "🩺", hospital: "🏥", dentist: "🦷", 
+        marketplace: "🛒", school: "🏫", university: "🎓", post_office: "🏣", recycling: "♻️"
+    };
+    
+    document.querySelector("#place-container > h2").insertAdjacentHTML('afterend', `
+        <div id="amenity-buttons" style="margin: 10px 0; display: flex; flex-wrap: wrap; gap: 10px;">
+            ${Object.keys(icons).map(type => `
+                <button id="${type}-button" class="amenity-button">
+                    ${icons[type]} ${type.replace(/_/g, ' ').toUpperCase()}
+                </button>
+            `).join('')}
+        </div>
+    `);
+
+    Object.keys(icons).forEach(type => {
+        document.getElementById(`${type}-button`).addEventListener('click', () => fetchAmenityData(type));
+    });
+}
+
+// Fetch Specific Amenity Type
+async function fetchAmenityData(type) {
+    const { lat, lng } = marker.getLatLng();
+    if (amenityCache[type].length > 0) {
+        displayAmenitiesData(amenityCache[type]);
+        plotMarkers(amenityCache[type], "amenity");
+        return;
+    }
+
+    let queryType;
+
+    switch (type) {
+        case "museum":
+            queryType = `
+                (
+                    node["tourism"="museum"](around:5000,${lat},${lng});
+                    way["tourism"="museum"](around:5000,${lat},${lng});
+                    relation["tourism"="museum"](around:5000,${lat},${lng});
+                );`;
+            break;
+        case "park":
+            queryType = `
+                (
+                    node["leisure"="park"](around:5000,${lat},${lng});
+                    way["leisure"="park"](around:5000,${lat},${lng});
+                    relation["leisure"="park"](around:5000,${lat},${lng});
+                );`;
+            break;
+        case "landmark":
+            queryType = `
+                (
+                    node["tourism"="attraction"](around:5000,${lat},${lng});
+                    way["tourism"="attraction"](around:5000,${lat},${lng});
+                    node["historic"](around:5000,${lat},${lng});
+                    way["historic"](around:5000,${lat},${lng});
+                    relation["historic"](around:5000,${lat},${lng});
+                );`;
+            break;
+        default:
+            queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
+            break;
+    }
+
+    const overpassQuery = `[out:json];${queryType}out center;`;
+    const overpassURL = `https://overpass-api.de/api/interpreter?data=${encodeURIComponent(overpassQuery)}`;
+
+    try {
+        const response = await fetch(overpassURL);
+        const data = await response.json();
+        amenityCache[type] = data.elements;
+        displayAmenitiesData(data.elements);
+        plotMarkers(data.elements);
+    } catch (error) {
+        console.error(`Error fetching ${type}:`, error);
+    }
+}
 
 
 
-	// Hotel Search Integration
 
-	/**
- * Searches for hotels within the current map bounds and displays them on the map and in a results table.
- */
+// Fetch City Data using Nominatim API
+async function fetchCityData() {
+    const cityName = document.getElementById('city-search').value.trim();
+    if (!cityName) return;
 
-	function searchHotels() {
-		const MARKER_PATH = "https://maps.google.com/mapfiles/ms/icons/";  // Path to Google Map marker icons
-		let places = new google.maps.places.PlacesService(map);
-		let infoWindow = new google.maps.InfoWindow();
-		let markers = [];
+    const nominatimURL = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}`;
 
-		const search = {
-			bounds: map.getBounds(),
-			types: ["lodging"]
-		};
+    try {
+        const response = await fetch(nominatimURL);
+        const data = await response.json();
+        if (data.length === 0) return alert("City not found. Try again.");
 
-		places.nearbySearch(search, (results, status) => {
-			if (status === google.maps.places.PlacesServiceStatus.OK) {
-				clearMarkers(); // Clear existing markers
-				clearResults(); // Clear existing results
+        const { lat, lon, display_name } = data[0];
 
-				results.forEach((result, i) => {
-					// Use the same marker icon as for other places (used for place-container)
-					const markerIcon = `${MARKER_PATH}blue-dot.png`;  // Adjust icon if necessary
+        // Update map view and marker position
+        map.setView([lat, lon], 12);
+        marker.setLatLng([lat, lon]);
 
-					const marker = new google.maps.Marker({
-						position: result.geometry.location,
-						map: map,
-						icon: markerIcon // Using the blue icon here
-					});
+        // Show place name in popup
+        // Show place name in popup
+marker.bindPopup(`<strong>${display_name}</strong>`).openPopup();
 
-					// Fetch detailed place information for the hotel
-					places.getDetails({ placeId: result.place_id }, (place, status) => {
-						if (status === google.maps.places.PlacesServiceStatus.OK) {
-							const content = `
-                            <div>
-                                <strong>${place.name}</strong><br>
-                                ${place.formatted_address || "No address available"}<br>
-                                ${place.website ? `<a href="${place.website}" target="_blank">Website</a>` : "No website available"}<br>
-                                ${place.international_phone_number || "No phone number available"}<br>
-                                ${place.rating ? `Rating: ${place.rating} ★` : "No rating available"}
-                            </div>
-                        `;
+marker.on("popupopen", (e) => {
+    const popupEl = e.popup.getElement();
+    if (!popupEl) return;
 
-							// Show hotel details on marker click
-							marker.addListener("click", () => {
-								infoWindow.setContent(content);
-								infoWindow.open(map, marker);
-							});
+    setTimeout(() => {
+        const markerID = `${amenity.lat}-${amenity.lon}`;
+        const isPinned = pinnedMarkers.has(markerID);
 
-							addResult(place, i); // Add result to the table
-						}
-					});
+        const pinBtn = document.createElement("button");
+        pinBtn.textContent = isPinned ? "Unpin 📌" : "Pin 📍";
+        pinBtn.style.cursor = "pointer";
+        pinBtn.style.marginTop = "6px";
+        pinBtn.style.background = "#f0f0f0";
+        pinBtn.style.border = "1px solid #ccc";
+        pinBtn.style.padding = "4px 8px";
+        pinBtn.style.borderRadius = "4px";
+        pinBtn.style.fontSize = "0.9em";
 
-					markers.push(marker); // Keep track of markers
-				});
-			}
-		});
+        pinBtn.addEventListener("click", () => {
+            if (pinnedMarkers.has(markerID)) {
+                pinnedMarkers.delete(markerID);
+                pinBtn.textContent = "Pin 📍";
+            } else {
+                pinnedMarkers.add(markerID);
+                pinBtn.textContent = "Unpin 📌";
+            }
+        });
 
-		
-	/**
-	 * Clears all markers from the map.
-	 */
+        // Prevent duplicate buttons
+        if (!popupEl.querySelector("button")) {
+            popupEl.appendChild(pinBtn);
+        }
+    }, 50); // Delay ensures popup is fully rendered even on high zoom
+});
 
-		function clearMarkers() {
-			markers.forEach(marker => marker.setMap(null));
-			markers = [];
-		}
+        
 
-		/**
-	 * Clears all the results from the results table.
-	 */
-
-		function clearResults() {
-			const results = document.getElementById("results");
-			while (results.firstChild) {
-				results.removeChild(results.firstChild);
-			}
-		}
-
-		/**
-	 * Adds a hotel result to the results table.
-	 * @param {object} place - The hotel place object to be added.
-	 * @param {number} i - The index of the result.
-	 */
-
-		function addResult(place, i) {
-			const results = document.getElementById("results");
-			const markerIcon = `${MARKER_PATH}blue-dot.png`;  // Ensure we're using the same icon
-
-			const tr = document.createElement("tr");
-			tr.style.backgroundColor = i % 2 === 0 ? "#F0F0F0" : "#FFFFFF";
-			tr.onclick = () => google.maps.event.trigger(markers[i], "click");
-
-			const iconTd = document.createElement("td");
-			const nameTd = document.createElement("td");
-			const detailsTd = document.createElement("td");
-			const icon = document.createElement("img");
-
-			icon.src = markerIcon;
-			icon.className = "placeIcon";
-			iconTd.appendChild(icon);
-
-			nameTd.textContent = place.name;
-
-			detailsTd.innerHTML = `
-            ${place.formatted_address || "No address available"}<br>
-            ${place.website ? `<a href="${place.website}" target="_blank">Website</a>` : "No website available"}<br>
-            ${place.international_phone_number || "No phone number available"}
-        `;
-
-			tr.appendChild(iconTd);
-			tr.appendChild(nameTd);
-			tr.appendChild(detailsTd);
-			results.appendChild(tr);
-
-			// Create the stars for the rating and add it under the hotel name
-			let starsHtml = '';
-			if (place.rating) {
-				const stars = Math.round(place.rating);  // Round the rating to the nearest whole number
-				for (let i = 0; i < 5; i++) {
-					starsHtml += i < stars ? '★' : '☆'; // Filled and empty stars
-				}
-				nameTd.innerHTML += `<br><span>${starsHtml}</span>`; // Display stars below the name
-			} else {
-				nameTd.innerHTML += `<br><span>No rating</span>`; // If no rating available
-			}
-
-			detailsTd.innerHTML = `
-            ${place.formatted_address || "No address available"}<br>
-            ${place.website ? `<a href="${place.website}" target="_blank">Website</a>` : "No website available"}<br>
-            ${place.international_phone_number || "No phone number available"}
-        `;
-
-			tr.appendChild(iconTd);
-			tr.appendChild(nameTd); // Append name and stars to the middle column
-			tr.appendChild(detailsTd); // Append other details to the right column
-			results.appendChild(tr);
-		}
-	}
+        // Fetch hotels and amenities
+        fetchWeather(lat, lon);  // Fetch weather data for the selected city
+        fetchHotels(lat, lon);
+        fetchNearbyAmenities(lat, lon);
+        fadeInContainers();
+    } catch (error) {
+        console.error('Nominatim API Error:', error);
+    }
+}
 
 
-	// Amenity Search Integration
+// Fetch Weather Data using OpenWeatherMap API
+// === Fetch Weather Data ===
+async function fetchWeather(lat, lon) {
+    const apiKey = '642eeb6e64dce24c37374b7c13a2d4d4';
 
-/**
- * Searches for nearby amenities within the current map bounds and displays them on the map and in a results table.
- */
+    const weatherURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
+    const hourlyURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=40&appid=${apiKey}`;
+    const dailyURL = `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&units=metric&cnt=5&appid=${apiKey}`;
+    const sixteenDayURL = `https://pro.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=16&units=metric&appid=${apiKey}`;
 
-	function searchNearbyAmenities() {
-		const placesTableBody = document.querySelector("#places-results tbody"); // Table body for amenities
-		const placesService = new google.maps.places.PlacesService(map);
-		let amenitiesMarkers = []; // Array to store markers for amenities
+    try {
+        const [weatherResponse, hourlyResponse, dailyResponse, sixteenDayResponse] = await Promise.all([
+            fetch(weatherURL),
+            fetch(hourlyURL),
+            fetch(dailyURL),
+            fetch(sixteenDayURL)
+        ]);
 
-		// Define the search categories
-		const categories = [
-			"museum", "park", "cinema", "point_of_interest", "restaurant", "cafe",
-			"shopping_mall", "movie_theater", "bar", "tourist_attraction"
-		];
+        const weatherData = await weatherResponse.json();
+        const hourlyData = await hourlyResponse.json();
+        const dailyData = await dailyResponse.json();
+        const sixteenDayData = await sixteenDayResponse.json();
 
-		// To store results across all categories
-		let allResults = [];
+        displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData);
+    } catch (error) {
+        console.error('Error fetching weather:', error);
+    }
+}
 
-		/**
-	 * Performs a search for a given category of amenities.
-	 * @param {string} category - The category of amenities to search for (e.g., museum, restaurant).
-	 */
+// === Display Weather Data ===
+function displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData) {
+    const weatherContainer = document.getElementById("weather-container");
 
-		// Function to perform search for each category
-		function performSearch(category) {
-			const search = {
-				bounds: map.getBounds(),
-				types: [category], // Search for one category at a time
-			};
+    // === DAILY (Today) Forecast ===
+    const currentWeather = weatherData.list[0];
+    const iconUrl = `https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`;
 
-			placesService.nearbySearch(search, (results, status) => {
-				if (status === google.maps.places.PlacesServiceStatus.OK) {
-					allResults = allResults.concat(results); // Add results to the overall collection
-					processResults(); // Process the results as soon as new results are added
-				}
-			});
-		}
+    let dailyHtml = `
+        <h2>Daily Forecast</h2>
+        <img id="weather-icon" src="${iconUrl}" alt="Weather Icon">
+        <div id="temp-div">
+            <p class="weather-text">${Math.round(currentWeather.main.temp)}°C</p>
+        </div>
+        <div id="weather-info">
+            <p class="weather-text">${currentWeather.weather[0].description}</p>
+        </div>`;
 
-		// Perform search for all categories
-		categories.forEach(category => performSearch(category));
+    // === HOURLY (Next 6 Hours) ===
+    let hourlyHtml = '';
+    hourlyData.list.slice(0, 6).forEach(hour => {
+        const hourIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
+        const time = new Date(hour.dt * 1000);
+        const hours = time.getHours().toString().padStart(2, '0');
+        const minutes = time.getMinutes().toString().padStart(2, '0');
+        hourlyHtml += `
+            <div class="hourly-item">
+                <img src="${hourIcon}" alt="Icon">
+                <p class="weather-text">${Math.round(hour.main.temp)}°C</p>
+                <p class="weather-text">${hours}:${minutes}</p>
+            </div>`;
+    });
 
-		// Function to process all accumulated results and populate the table
+    // === 5-DAY Forecast ===
+    let fiveDayHtml = '';
+    dailyData.list.slice(0, 5).forEach(day => {
+        const icon = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
+        fiveDayHtml += `
+            <div class="forecast-card">
+                <p class="weather-text">${new Date(day.dt * 1000).toDateString()}</p>
+                <img src="${icon}" alt="${day.weather[0].description}">
+                <p class="weather-text">${Math.round(day.temp.day)}°C</p>
+                <p class="weather-text">${day.weather[0].description}</p>
+            </div>`;
+    });
 
-		/**
-	 * Processes and displays all accumulated results in the table.
-	 */
+    // === 16-DAY Forecast ===
+    let longTermHtml = '';
+    sixteenDayData.list.forEach(entry => {
+        const icon = `https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png`;
+        longTermHtml += `
+            <div class="forecast-card">
+                <p class="weather-text">${new Date(entry.dt * 1000).toDateString()}</p>
+                <img src="${icon}" alt="${entry.weather[0].description}">
+                <p class="weather-text">${Math.round(entry.temp.day)}°C</p>
+                <p class="weather-text">${entry.weather[0].description}</p>
+            </div>`;
+    });
 
-		function processResults() {
-			clearTableBody(placesTableBody); // Clear existing table rows
-			allResults.forEach((result) => {
-				// Skip hotels (we've already removed them)
-				if (result.types.includes("lodging")) {
-					return;
-				}
+    // === Final Injected Layout ===
+    weatherContainer.innerHTML = `
+        ${dailyHtml}
+        <div id="hourly-forecast" class="scroll-container">
+            ${hourlyHtml}
+        </div>
+        <div class="scroll-controls">
+            <button id="hourly-scroll-left">⟸</button>
+            <button id="hourly-scroll-right">⟹</button>
+        </div>
+        <hr id="forecast-break">
+        <div id="forecast-container">
+            <h2>5-Day Forecast</h2>
+            <br>
+            <div id="forecast-cards" class="scroll-container">
+                ${fiveDayHtml}
+            </div>
+            <div class="scroll-controls">
+                <button id="scroll-left">⟸</button>
+                <button id="scroll-right">⟹</button>
+            </div>
+        </div>
+        <hr id="forecast-break-2">
+        <div id="long-term-forecast-container">
+            <h2>16-Day Forecast</h2>
+            <div id="long-term-forecast" class="scroll-container">
+                ${longTermHtml}
+            </div>
+            <div class="scroll-controls">
+                <button id="long-term-scroll-left">⟸</button>
+                <button id="long-term-scroll-right">⟹</button>
+            </div>
+        </div>`;
 
-				// Add basic result info to the table
-				const row = document.createElement("tr");
+        // === Add Hourly Timelines to Each 5-Day Forecast Card ===
+function enhanceFiveDayForecastCards(hourlyList) {
+    const forecastCards = document.querySelectorAll('#forecast-cards .forecast-card');
 
-				const iconTd = document.createElement("td");
-				const nameTd = document.createElement("td");
-				const detailsTd = document.createElement("td");
+    forecastCards.forEach(card => {
+        const dateText = card.querySelector('p').textContent;
+        const cardDate = new Date(dateText);
+        const cardDay = cardDate.getDate();
 
-				const icon = document.createElement("img");
-				icon.src = result.icon || "https://maps.google.com/mapfiles/ms/icons/blue-dot.png";
-				icon.alt = "Icon";
-				icon.width = 30;
-				iconTd.appendChild(icon);
+        // Filter hourly data matching this day
+        const hourlyForDay = hourlyList.filter(item => {
+            const itemDate = new Date(item.dt * 1000);
+            return itemDate.getDate() === cardDay;
+        });
 
-				nameTd.textContent = result.name;
-				detailsTd.textContent = "Loading..."; // Placeholder text until details are fetched
+        if (hourlyForDay.length > 0) {
+            // Build hourly strip with times and icons
+            const scrollStrip = document.createElement('div');
+            scrollStrip.className = 'mini-hourly-strip';
+            scrollStrip.style.cssText = 'display: flex; overflow-x: auto; gap: 8px; padding-top: 8px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.2);';
 
-				row.appendChild(iconTd);
-				row.appendChild(nameTd);
-				row.appendChild(detailsTd);
-				placesTableBody.appendChild(row);
+            hourlyForDay.forEach(hourItem => {
+                const hour = new Date(hourItem.dt * 1000);
+                const readableHour = hour.toLocaleTimeString('en-US', { hour: 'numeric', hour12: true });
+                const icon = `https://openweathermap.org/img/wn/${hourItem.weather[0].icon}.png`;
 
-				// Add a marker for each amenity
-				const marker = new google.maps.Marker({
-					position: result.geometry.location,
-					map: map,
-					icon: "https://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-				});
+                const hourBlock = document.createElement('div');
+                hourBlock.style.cssText = 'flex: 0 0 auto; text-align: center; min-width: 60px;';
+                hourBlock.innerHTML = `
+                    <img src="${icon}" alt="" style="width: 40px; height: 40px;">
+                    <p style="font-size: 0.8em;">${readableHour}</p>
+                `;
+                scrollStrip.appendChild(hourBlock);
+            });
 
-				amenitiesMarkers.push(marker);
+            card.appendChild(scrollStrip);
+        }
+    });
+}
 
-				// Prepare content for the infowindow
-				let content = `
-                <div>
-                    <strong>${result.name}</strong><br>
-                    ${result.vicinity || "No address available"}<br>
-                    ${result.types ? result.types.join(", ") : "No category available"}
+// === Call After Weather is Rendered ===
+setTimeout(() => {
+    if (typeof hourlyData !== 'undefined') {
+        enhanceFiveDayForecastCards(hourlyData.list);
+    }
+}, 100);
+
+// === Scroll Buttons for HOURLY / Daily Forecast ===
+document.getElementById("hourly-scroll-left").addEventListener("click", () => {
+    document.getElementById("hourly-forecast").scrollBy({
+        left: -300,
+        behavior: "smooth"
+    });
+});
+
+document.getElementById("hourly-scroll-right").addEventListener("click", () => {
+    document.getElementById("hourly-forecast").scrollBy({
+        left: 300,
+        behavior: "smooth"
+    });
+});
+
+// Example for the 5-Day forecast
+document.getElementById("scroll-left").addEventListener("click", () => {
+    document.getElementById("forecast-cards").scrollBy({ left: -300, behavior: "smooth" });
+});
+
+document.getElementById("scroll-right").addEventListener("click", () => {
+    document.getElementById("forecast-cards").scrollBy({ left: 300, behavior: "smooth" });
+});
+
+// === Scroll Buttons for 16-Day Forecast ===
+document.getElementById("long-term-scroll-left").addEventListener("click", () => {
+    document.getElementById("long-term-forecast").scrollBy({
+        left: -300,
+        behavior: "smooth"
+    });
+});
+
+document.getElementById("long-term-scroll-right").addEventListener("click", () => {
+    document.getElementById("long-term-forecast").scrollBy({
+        left: 300,
+        behavior: "smooth"
+    });
+});
+
+
+    // === Add Mini Horizontal Scroll Arrows to Each 5-Day Forecast Card ===
+setTimeout(() => {
+    const forecastCards = document.querySelectorAll("#forecast-cards .forecast-card");
+
+    forecastCards.forEach((card, index) => {
+        // Create scrollable inner content (if not already present)
+        let innerScroll = card.querySelector(".mini-hourly-strip");
+        if (!innerScroll) {
+            const existingContent = card.innerHTML;
+            card.innerHTML = `
+                <div class="mini-hourly-strip">
+                    ${existingContent}
                 </div>
             `;
+        }
 
-				// Add a click listener to display details in an infowindow
-				marker.addListener("click", () => {
-					infowindow.setContent(content);
-					infowindow.open(map, marker);
-				});
+        // Create arrow buttons for horizontal scrolling (if not already present)
+        let miniScrollControls = card.querySelector(".mini-scroll-controls");
+        if (!miniScrollControls) {
+            card.innerHTML += `
+                <div class="mini-scroll-controls">
+                    <button class="mini-scroll-left">⟸</button>
+                    <button class="mini-scroll-right">⟹</button>
+                </div>
+            `;
+        }
+    });
 
-				// Highlight the marker when the table row is clicked
-				row.addEventListener("click", () => {
-					map.setCenter(result.geometry.location);
-					infowindow.setContent(content);
-					infowindow.open(map, marker);
-				});
+    // Add scroll behavior for each card (horizontal scrolling) using same logic as big arrows
+    document.querySelectorAll(".mini-scroll-left").forEach((btn, i) => {
+        btn.addEventListener("click", () => {
+            const scrollContainer = document.querySelectorAll(".mini-hourly-strip")[i];
+            scrollContainer.scrollBy({ left: -100, behavior: "smooth" });
+        });
+    });
 
-				// Fetch and update detailed information (address, phone number, website)
-				placesService.getDetails({ placeId: result.place_id }, (placeDetails, status) => {
-					if (status === google.maps.places.PlacesServiceStatus.OK) {
-						detailsTd.innerHTML = `
-                        ${placeDetails.formatted_address || "No address available"}<br>
-                        ${placeDetails.formatted_phone_number || "No phone number available"}<br>
-                        ${placeDetails.website ? `<a href="${placeDetails.website}" target="_blank">Website</a>` : "No website available"}<br>
-                        ${placeDetails.rating ? `Rating: ${placeDetails.rating} / 5` : "No rating available"}
-                    `;
+    document.querySelectorAll(".mini-scroll-right").forEach((btn, i) => {
+        btn.addEventListener("click", () => {
+            const scrollContainer = document.querySelectorAll(".mini-hourly-strip")[i];
+            scrollContainer.scrollBy({ left: 100, behavior: "smooth" });
+        });
+    });
+}, 100); // Delay to make sure DOM is ready
 
-						// Update content for infowindow with more details
-						content = `
-                        <div>
-                            <strong>${placeDetails.name}</strong><br>
-                            ${placeDetails.formatted_address || "No address available"}<br>
-                            ${placeDetails.formatted_phone_number || "No phone number available"}<br>
-                            ${placeDetails.website ? `<a href="${placeDetails.website}" target="_blank">Website</a>` : "No website available"}<br>
-                            ${placeDetails.rating ? `Rating: ${placeDetails.rating} / 5` : "No rating available"}
-                        </div>
-                    `;
-					}
-				});
-			});
-		}
+    // Fade-in Animation Class
+    const elementsToFadeIn = weatherContainer.querySelectorAll('h2, .forecast-item, .forecast-card, .hourly-item');
+    elementsToFadeIn.forEach(element => {
+        element.classList.add('fade-in');
+    });
+}
 
-		// Utility function to clear the table body
+// CSS (Make sure to add this to your styles)
+const styles = `
+    .weather-text {
+        font-size: 1.1rem;
+        text-align: center;
+    }
 
-	/**
-	 * Clears the content of the places results table.
-	 * @param {HTMLElement} tableBody - The table body element to be cleared.
-	 */
+    .scroll-container {
+        display: flex;
+        overflow-x: auto;
+        gap: 10px;
+        scroll-behavior: smooth;
+        scrollbar-width: none; /* Removes scrollbar in Firefox */
+    }
 
-		function clearTableBody(container) {
-			while (container.firstChild) {
-				container.removeChild(container.firstChild);
-			}
-		}
-	}
+    .scroll-container::-webkit-scrollbar {
+        display: none; /* Removes scrollbar in Chrome, Safari, Edge */
+    }
 
-	// Scrolling for hotels and places modals
-	$(document).ready(function () {
-		
-		// Hotel scrolling
+    .scroll-controls {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .scroll-controls button {
+        background: none;
+        border: none;
+        font-size: 1.5em;
+        cursor: pointer;
+    }
+`;
+
+// Append styles to the document
+const styleSheet = document.createElement("style");
+styleSheet.innerText = styles;
+document.head.appendChild(styleSheet);
+
+
+// Scroll Functionality for Forecast Sections
+function setupScrollButtons(containerId, leftBtnId, rightBtnId) {
+    const container = document.getElementById(containerId);
+    const leftBtn = document.getElementById(leftBtnId);
+    const rightBtn = document.getElementById(rightBtnId);
+
+    if (!container || !leftBtn || !rightBtn) return; // Exit if elements are missing
+
+    const scrollAmount = 200; // Adjust for smooth scrolling
+
+    // Scroll left
+    leftBtn.addEventListener("click", () => {
+        container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+    });
+
+    // Scroll right
+    rightBtn.addEventListener("click", () => {
+        container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+    });
+
+    // Hide/show buttons based on scroll position
+    function toggleScrollButtons() {
+        leftBtn.style.visibility = container.scrollLeft > 0 ? "visible" : "hidden";
+        rightBtn.style.visibility = container.scrollLeft + container.clientWidth < container.scrollWidth ? "visible" : "hidden";
+    }
+
+    container.addEventListener("scroll", toggleScrollButtons);
+    toggleScrollButtons(); // Initial check
+}
+
+// Activate Scroll for Hourly, 5-Day & 16-Day Forecasts
+document.addEventListener("DOMContentLoaded", () => {
+    setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
+    setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
+    setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
+});
+
+
+
+// Fetch Hotels using Overpass API
+async function fetchHotels(lat, lon) {
+    const cacheKey = `hotels_${lat}_${lon}`;
+    const cachedData = getCachedData(cacheKey);
+    if (cachedData) return displayHotelData(cachedData), plotMarkers(cachedData, "hotel");
+
+    const overpassURL = `https://overpass-api.de/api/interpreter?data=[out:json];node["tourism"="hotel"](around:5000,${lat},${lon});out;`;
+
+    try {
+        const response = await fetch(overpassURL);
+        const data = await response.json();
+
+        cacheData(cacheKey, data.elements);
+        displayHotelData(data.elements);
+        plotMarkers(data.elements, "hotel");
+    } catch (error) {
+        console.error('Error fetching hotels:', error);
+    }
+}
+
+
+
+// Fetch Nearby Amenities using Overpass API
+let amenitiesRequested = false; // Prevent auto-fetch on map load
+
+async function fetchNearbyAmenities(lat, lon) {
+    if (!amenitiesRequested) return; // Block auto-fetch on page load
+
+    const cacheKey = `amenities_${lat}_${lon}`;
+    const cachedData = getCachedData(cacheKey);
+    if (cachedData) return displayAmenitiesData(cachedData), plotMarkers(cachedData, "amenity");
+
+    const overpassURL = `https://overpass-api.de/api/interpreter?data=[out:json];node["amenity"](around:5000,${lat},${lon});out;`;
+
+    try {
+        const response = await fetch(overpassURL);
+        const data = await response.json();
+
+        cacheData(cacheKey, data.elements);
+        displayAmenitiesData(data.elements);
+        plotMarkers(data.elements);
+    } catch (error) {
+        console.error('Error fetching amenities:', error);
+    }
+}
+
+// Function to request amenities when a button is clicked
+function requestAmenities() {
+    amenitiesRequested = true;
+    const { lat, lng } = marker.getLatLng();
+    fetchNearbyAmenities(lat, lng);
+}
+
+
+// Fetch Specific Amenity Type
+async function fetchAmenityData(type) {
+    const { lat, lng } = marker.getLatLng();
+    if (amenityCache[type].length > 0) return displayAmenitiesData(amenityCache[type]), plotMarkers(amenityCache[type], "amenity");
+
+    const overpassURL = `https://overpass-api.de/api/interpreter?data=[out:json];node["amenity"="${type}"](around:5000,${lat},${lng});out;`;
+
+    try {
+        const response = await fetch(overpassURL);
+        const data = await response.json();
+        amenityCache[type] = data.elements;
+        displayAmenitiesData(data.elements);
+        plotMarkers(data.elements);
+    } catch (error) {
+        console.error(`Error fetching ${type}:`, error);
+    }
+}
+
+// Display Hotels
+
+// Global hotel marker store
+const hotelMarkers = {}; // { "lat-lon": marker }
+
+function displayHotelData(hotels) {
+    const tbody = document.querySelector("#hotel-results");
+    tbody.innerHTML = ""; // Clear previous entries
+
+    // Remove any existing hotel markers
+    Object.keys(hotelMarkers).forEach(id => {
+        map.removeLayer(hotelMarkers[id]);
+    });
+    Object.keys(hotelMarkers).forEach(key => delete hotelMarkers[key]);
+
+    hotels.forEach(hotel => {
+        const name = hotel.tags.name || "Unnamed Hotel";
+        const street = hotel.tags["addr:street"] || "";
+        const city = hotel.tags["addr:city"] || "";
+        const phone = hotel.tags.phone || hotel.tags["contact:phone"] || "";
+        const website = hotel.tags.website ? `<a href="${hotel.tags.website}" target="_blank">Website</a>` : "";
+        const fullAddress = [street, city].filter(Boolean).join(", ") || "No address";
+
+        // Marker ID
+        const markerID = `${hotel.lat}-${hotel.lon}`;
+
+        // Add marker to map
+        const marker = L.marker([hotel.lat, hotel.lon], {
+            icon: L.divIcon({
+                className: 'hotel-marker-icon',
+                html: '<i class="fas fa-bed"></i>',
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+            })
+        }).addTo(map);
+
+        // Popup
+        const popupHTML = `
+        <div style="font-family: sans-serif; line-height: 1.4;">
+            <div style="font-size: 1.4em;">${icon} <strong>${name}</strong></div>
+            <div><strong>📍 Address:</strong> ${fullAddress}</div>
+            ${phone ? `<div><strong>📞 Phone:</strong> ${phone}</div>` : ""}
+            ${website ? `<div><strong>🔗</strong> ${website}</div>` : ""}
+            <button class="pin-toggle" style="margin-top: 5px; cursor: pointer;">📌 Pin</button>
+        </div>
+    `;
+    
+        
+        hotelMarkers[markerID] = marker;
+
+        // Build table row
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-marker-id", markerID); // 🔗 Connect row to marker
+
+        const tdName = document.createElement("td");
+        tdName.textContent = name;
+        tdName.style.textAlign = "left";
+        tdName.style.padding = "5px";
+        tdName.style.width = "25%";
+        tdName.style.fontWeight = "bold";
+
+        const tdAddress = document.createElement("td");
+        tdAddress.textContent = fullAddress;
+        tdAddress.style.textAlign = "center";
+        tdAddress.style.padding = "5px";
+        tdAddress.style.width = "25%";
+
+        const tdPhone = document.createElement("td");
+        tdPhone.textContent = phone || "No phone";
+        tdPhone.style.textAlign = "center";
+        tdPhone.style.padding = "5px";
+        tdPhone.style.width = "25%";
+
+        const tdWebsite = document.createElement("td");
+        tdWebsite.innerHTML = website || "No website";
+        tdWebsite.style.textAlign = "right";
+        tdWebsite.style.padding = "5px";
+        tdWebsite.style.width = "25%";
+
+        tr.append(tdName, tdAddress, tdPhone, tdWebsite);
+        tbody.appendChild(tr);
+    });
+
+    // Enable table click-to-popup for hotel markers
+    tbody.querySelectorAll("tr").forEach(row => {
+        row.addEventListener("click", () => {
+            const markerID = row.getAttribute("data-marker-id");
+            const marker = hotelMarkers[markerID];
+            if (marker) {
+                marker.openPopup();
+                map.setView(marker.getLatLng(), 17);
+
+                row.classList.add("highlight");
+                row.scrollIntoView({ behavior: "smooth", block: "center" });
+                setTimeout(() => {
+                    row.classList.remove("highlight");
+                }, 2000);
+            }
+        });
+    });
+
+    // Make hotel table full-width and consistent
+    tbody.style.width = "100%";
+    tbody.style.tableLayout = "fixed";
+}
+
+
+// Display Amenities
+
+// Global marker store
+
+const amenityMarkers = {}; // { "lat-lon": marker }
+
+function displayAmenitiesData(amenities) {
+    const tbody = document.querySelector("#places-results tbody");
+    tbody.innerHTML = ""; // Clear previous entries
+
+    // Reset marker store
+    Object.keys(amenityMarkers).forEach(id => {
+        map.removeLayer(amenityMarkers[id]);
+    });
+    Object.keys(amenityMarkers).forEach(key => delete amenityMarkers[key]);
+
+    amenities.forEach(amenity => {
+        const name = amenity.tags.name || "Unnamed Place";
+        const street = amenity.tags["addr:street"] || "";
+        const houseNumber = amenity.tags["addr:housenumber"] || "";
+        const city = amenity.tags["addr:city"] || "";
+        const postcode = amenity.tags["addr:postcode"] || "";
+        const fullAddress = [houseNumber, street, city, postcode].filter(Boolean).join(", ") || "N/A";
+        const phone = amenity.tags["contact:phone"] || amenity.tags["phone"] || "";
+        const website = amenity.tags.website ? `<a href="${amenity.tags.website}" target="_blank">🌐 Visit Website</a>` : "";
+
+        const amenityType = amenity.tags.amenity || "default";
+const amenityIcons = {
+    landmark: "🏛️", museum: "🏺", park: "🌳", place_of_worship: "⛪", cafe: "☕", fast_food: "🥡", pub: "🍻", restaurant: "🍽️", 
+    bar: "🍸", nightclub: "🎶", cinema: "🎬", theatre: "🎭", arts_centre: "🖼️", events_venue: "🎙️",
+    bank: "🏦", bureau_de_change: "💷", atm: "🏧", casino: "🎲", bicycle_rental: "🚲", fuel: "⛽", car_rental: "🚘", pharmacy: "💊", clinic: "🩺",
+    hospital: "🏥", dentist: "🦷", police: "🚔", marketplace: "🛒", school: "🏫", university: "🎓",
+    parking: "🅿️", post_office: "🏣",  recycling: "♻️" 
+};
+const icon = amenityIcons[amenityType] || "🏠";
+
+        // Create and add marker with popup
+        const marker = L.marker([amenity.lat, amenity.lon]).addTo(map);
+        const markerID = `${amenity.lat}-${amenity.lon}`;
+        const popupHTML = `
+            <div style="font-family: sans-serif; line-height: 1.4;">
+                <div style="font-size: 1.4em;">${icon} <strong>${name}</strong></div>
+                <div><strong>📍 Address:</strong> ${fullAddress}</div>
+                ${phone ? `<div><strong>📞 Phone:</strong> ${phone}</div>` : ""}
+                ${website ? `<div><strong>🔗</strong> ${website}</div>` : ""}
+            </div>
+        `;
+       
+        amenityMarkers[markerID] = marker;
+
+        // Create table row
+        const tr = document.createElement("tr");
+        tr.setAttribute("data-marker-id", markerID); // 🔗 Connect row to marker
+
+        const tdIcon = document.createElement("td");
+        tdIcon.innerHTML = icon;
+        tdIcon.style.textAlign = "center";
+
+        const tdName = document.createElement("td");
+        tdName.textContent = name;
+
+        const tdAddress = document.createElement("td");
+
+        const mapIcon = `<span style="cursor:pointer; margin-left: 8px;" title="View on map">🗺️</span>`;
+
+        // Build address column content
+        tdAddress.innerHTML = fullAddress === "N/A"
+          ? `${mapIcon}`
+          : `${fullAddress} ${mapIcon}`;
+        
+        // Bind the correct marker
+        const mapIconEl = tdAddress.querySelector("span");
+        if (mapIconEl) {
+            mapIconEl.addEventListener("click", () => {
+                const marker = amenityMarkers[markerID]; // ✅ Correct source
+                if (marker) {
+                    marker.openPopup();
+                    map.setView(marker.getLatLng(), 17);
+                }
+            });
+        }
+
+        const tdContact = document.createElement("td");
+        tdContact.innerHTML = phone ? phone : "";
+        if (website) tdContact.innerHTML += `<br>${website}`;
+
+        tr.append(tdIcon, tdName, tdAddress, tdContact);
+        tbody.appendChild(tr);
+
+        
+    });
+
+    // Enable table click-to-popup
+    tbody.querySelectorAll("tr").forEach(row => {
+        row.addEventListener("click", () => {
+            const markerID = row.getAttribute("data-marker-id");
+            const marker = amenityMarkers[markerID];
+            if (marker) {
+                marker.openPopup();
+                map.setView(marker.getLatLng(), 17); // Optional: zoom into marker
+            }
+        });
+    });
+}
+
+
+// Reverse Geocode using Nominatim
+async function reverseGeocode({ lat, lng }) {
+    try {
+        const response = await fetch(`https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}`);
+        const data = await response.json();
+        marker.bindPopup(`<strong>${data.display_name}</strong>`).openPopup();
+    } catch (error) {
+        console.error('Reverse Geocode Error:', error);
+    }
+}
+
+const amenityEmojiMap = {
+    landmark: "🏛️", museum: "🏺", park: "🌳", place_of_worship: "⛪", cafe: "☕", fast_food: "🥡", restaurant: "🍽️", pub: "🍻",
+        bar: "🍸", nightclub: "🎶", cinema: "🎬", theatre: "🎭",  arts_centre: "🖼️", events_venue: "🎙️", 
+        bank: "🏦", bureau_de_change: "💷", atm: "🏧", casino: "🎲", bicycle_rental: "🚲", fuel: "⛽", car_rental: "🚘", 
+        police: "🚔", parking: "🅿️", pharmacy: "💊", clinic: "🩺", hospital: "🏥", dentist: "🦷", 
+        marketplace: "🛒", school: "🏫", university: "🎓", post_office: "🏣", recycling: "♻️", hotel: "🏨",
+    // Add more as you wish!
+};
+
+
+// Plot Markers on the Map
+function plotMarkers(data, type) {
+    Object.keys(markers).forEach(markerID => {
+        if (!pinnedMarkers.has(markerID)) {
+            const marker = markers[markerID];
+            markerCluster.removeLayer(marker);
+            markersLayer.removeLayer(marker);
+            delete markers[markerID];
+        }
+    });
+
+    data.forEach(item => {
+        if (!item.lat || !item.lon) return;
+
+        const name = item.tags?.name || "Unnamed";
+        const itemType = type === "hotel" ? "hotel" : item.tags?.amenity || "unknown";
+        const markerID = `${item.lat}-${item.lon}`;
+
+        const address = [item.tags["addr:housenumber"], item.tags["addr:street"], item.tags["addr:city"], item.tags["addr:postcode"]]
+            .filter(Boolean).join(", ") || "No address available";
+        const phone = item.tags["contact:phone"] || item.tags["phone"] || "No phone available";
+        const website = item.tags.website ? `<a href="${item.tags.website}" target="_blank">Visit Website</a>` : "No website";
+
+        const isPinned = pinnedMarkers.has(markerID);
+
+        const iconUrl = (itemType === "hotel")
+    ? "🏨" // Let generatePopupContent show hotel emoji directly
+    : amenityEmojiMap[itemType] || null;
+
+        const popupContent = generatePopupContent(markerID, name, itemType, address, phone, website, iconUrl);
+
+        let markerOptions = { amenityType: itemType };
+
+        if (itemType !== "hotel") {
+            const emoji = amenityEmojiMap[itemType] || "📌";
+            markerOptions.icon = L.divIcon({
+                html: `<div style="font-size: 24px;">${emoji}</div>`,
+                className: "",
+                iconSize: [30, 30],
+                iconAnchor: [15, 30],
+                popupAnchor: [0, -30]
+            });
+
+            const iconHTML = iconUrl
+    ? iconUrl.startsWith("http") 
+        ? `<div style="margin-bottom: 5px;"><img src="${iconUrl}" alt="Icon" style="width: 40px; height: 40px; display: inline-block;"><br></div>`
+        : `<div style="margin-bottom: 5px;"><div style="font-size: 24px;">${iconUrl}</div></div>`
+    : `<div style="margin-bottom: 5px;"><div style="font-size: 24px;">📍</div></div>`;
+
+        }
+
+        const marker = L.marker([item.lat, item.lon], markerOptions).bindPopup(popupContent).addTo(markersLayer);
+
+        // Only cluster unpinned
+        if (!isPinned) {
+            markerCluster.addLayer(marker);
+        } else {
+            map.addLayer(marker);
+        }
+
+        // Store marker
+        markers[markerID] = marker;
+
+        if (itemType === "hotel" && !hotelMarkers[markerID]) {
+    const popupHTML = `
+        <div style="font-family: sans-serif; line-height: 1.4;">
+            <div style="font-size: 1.3em;"><strong>${name}</strong></div>
+            <div><strong>📍 Address:</strong> ${address}</div>
+            ${phone ? `<div><strong>📞 Phone:</strong> ${phone}</div>` : ""}
+            ${website ? `<div><strong>🔗</strong> ${website}</div>` : ""}
+        </div>
+    `;
+
+    marker.setIcon(L.divIcon({
+        html: `<div style="font-size: 20px;">🏨</div>`,
+        className: "",
+        iconSize: [30, 30],
+        iconAnchor: [15, 30],
+        popupAnchor: [0, -30],
+    }));
+
+    marker.bindPopup(popupHTML);
+
+    // 👇 Add reference so popups still work!
+    hotelMarkers[markerID] = marker;
+    markers[markerID] = marker;
+}
+
+    });
+}
+
+// Function to enhance marker popups with extra details
+
+function updateMarkerPopups() {
+    console.log("updateMarkerPopups() called");
+
+    document.querySelectorAll("#places-results tbody tr").forEach(row => {
+        let lat = parseFloat(row.getAttribute("data-lat"));
+        let lon = parseFloat(row.getAttribute("data-lon"));
+        let markerID = `${lat}-${lon}`;
+
+        let name = row.getAttribute("data-name") || "Unnamed";
+        let type = row.getAttribute("data-type") || "Unknown";
+        let address = row.getAttribute("data-address") || "Address not available";
+        let phone = row.getAttribute("data-phone") || "Phone not available";
+        let website = row.getAttribute("data-website") 
+            ? `<a href="${row.getAttribute("data-website")}" target="_blank">Visit Website</a>` 
+            : "No website";
+
+        let iconElement = row.querySelector("img.amenity-icon");
+        let iconUrl = iconElement ? iconElement.src : "icons/default.png";
+
+        const isPinned = pinnedMarkers.has(markerID);
+
+        if (markers[markerID]) {
+            let popupContent = generatePopupContent(markerID, name, type, address, phone, website, iconUrl);
+
+            markers[markerID].setPopupContent(popupContent);
+            console.log(`Popup updated for marker ${markerID} with type: ${type}`);
+        } else {
+            console.warn(`Marker not found for: ${markerID}`);
+        }
+    });
+}
+
+// Ensure popups update after icons are set
+setTimeout(updateMarkerPopups, 500); // Delay ensures markers are fully created before updating
+
+// Fade-in Containers
+function fadeInContainers() {
+    document.querySelectorAll("#hotel-container, #place-container, #weather-container").forEach(container => {
+        container.classList.add("fade-in");
+        container.style.display = "block";
+    });
+}
+
+// Caching Functions
+function cacheData(key, data) { localStorage.setItem(key, JSON.stringify({ data, timestamp: Date.now() })); }
+function getCachedData(key) { const cache = JSON.parse(localStorage.getItem(key)); return cache && (Date.now() - cache.timestamp < CACHE_EXPIRATION) ? cache.data : null; }
+
+// Ensure containers are always set to display block before fading in
+function fadeInContainers() {
+    document.querySelectorAll("#hotel-container, #place-container, #weather-container").forEach(container => {
+        container.style.display = "block";  // Ensure it's visible
+        container.classList.add("fade-in");
+    });
+}
+
+// Call it immediately to ensure it's applied correctly
+fadeInContainers();
+
+
+// Scrolling for hotels and places modals
+$(document).ready(function () {
+
+    // Hotel scrolling
+    /**
+         * Adds scrolling functionality to the hotel list in the modal.
+         * - Scrolls up when the "scroll-up-hotel" button is clicked.
+         * - Scrolls down when the "scroll-down-hotel" button is clicked.
+         * - Scrolls to the top when the "back-to-top-hotel" button is clicked.
+         */
+
+    const hotelScrollable = $("#hotels");
+    $("#scroll-up-hotel").on("click", () => hotelScrollable.scrollTop(hotelScrollable.scrollTop() - 100));
+    $("#scroll-down-hotel").on("click", () => hotelScrollable.scrollTop(hotelScrollable.scrollTop() + 100));
+    $("#back-to-top-hotel").on("click", () => hotelScrollable.scrollTop(0));
+
+    // Places scrolling
+
+    /**
+* Adds scrolling functionality to the places list in the modal.
+* - Scrolls up when the "scroll-up-places" button is clicked.
+* - Scrolls down when the "scroll-down-places" button is clicked.
+* - Scrolls to the top when the "back-to-top-places" button is clicked.
+*/
+    const placesScrollable = $("#places");
+    $("#scroll-up-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() - 100));
+    $("#scroll-down-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() + 100));
+    $("#back-to-top-places").on("click", () => placesScrollable.scrollTop(0));
+});
+
 /**
-     * Adds scrolling functionality to the hotel list in the modal.
-     * - Scrolls up when the "scroll-up-hotel" button is clicked.
-     * - Scrolls down when the "scroll-down-hotel" button is clicked.
-     * - Scrolls to the top when the "back-to-top-hotel" button is clicked.
-     */
+* Adds click event listeners to elements with the "allPaths" class.
+* - Displays the second selection container with a fade-in effect.
+* - Animates the visibility of snapshot boxes sequentially.
+* - Updates the content of places and weather information sections.
+*/
 
-		const hotelScrollable = $("#hotels");
-		$("#scroll-up-hotel").on("click", () => hotelScrollable.scrollTop(hotelScrollable.scrollTop() - 100));
-		$("#scroll-down-hotel").on("click", () => hotelScrollable.scrollTop(hotelScrollable.scrollTop() + 100));
-		$("#back-to-top-hotel").on("click", () => hotelScrollable.scrollTop(0));
+document.querySelectorAll(".allPaths").forEach((path) => {
+    path.addEventListener("click", () => {
+        const secondSelection = document.getElementById("second-selection");
+        const snapshotBoxes = document.querySelectorAll(".snapshot-box");
 
-		// Places scrolling
+        // Show the container if not already visible
+        if (!secondSelection.classList.contains("visible")) {
+            secondSelection.style.display = "flex";
+            setTimeout(() => {
+                secondSelection.classList.add("visible");
+            }, 50);
+        }
 
-		  /**
-     * Adds scrolling functionality to the places list in the modal.
-     * - Scrolls up when the "scroll-up-places" button is clicked.
-     * - Scrolls down when the "scroll-down-places" button is clicked.
-     * - Scrolls to the top when the "back-to-top-places" button is clicked.
-     */
-		const placesScrollable = $("#places");
-		$("#scroll-up-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() - 100));
-		$("#scroll-down-places").on("click", () => placesScrollable.scrollTop(placesScrollable.scrollTop() + 100));
-		$("#back-to-top-places").on("click", () => placesScrollable.scrollTop(0));
-	});
+        // Animate each box
+        snapshotBoxes.forEach((box, index) => {
+            setTimeout(() => {
+                box.classList.add("show");
+            }, index * 300);
+        });
 
-	/**
- * Adds click event listeners to elements with the "allPaths" class.
- * - Displays the second selection container with a fade-in effect.
- * - Animates the visibility of snapshot boxes sequentially.
- * - Updates the content of places and weather information sections.
- */
-
-	document.querySelectorAll(".allPaths").forEach((path) => {
-		path.addEventListener("click", () => {
-			const secondSelection = document.getElementById("second-selection");
-			const snapshotBoxes = document.querySelectorAll(".snapshot-box");
-
-			// Show the container if not already visible
-			if (!secondSelection.classList.contains("visible")) {
-				secondSelection.style.display = "flex";
-				setTimeout(() => {
-					secondSelection.classList.add("visible");
-				}, 50);
-			}
-
-			// Animate each box
-			snapshotBoxes.forEach((box, index) => {
-				setTimeout(() => {
-					box.classList.add("show");
-				}, index * 300);
-			});
-
-			// Update Places and Weather content
-			document.getElementById("places-results").innerHTML = ` 
+        // Update Places and Weather content
+        document.getElementById("places-results").innerHTML = ` 
             <tr>
                 <td><img src="path/to/icon.png" alt="Icon" style="width: 32px; height: 32px;"></td>
                 <td>Central Park</td>
                 <td>Beautiful scenery</td>
             </tr>`;
-			document.getElementById("temp-div").innerHTML = `<h3>28°C</h3><p>Sunny</p>`;
-			document.getElementById("weather-info").innerText = "Perfect weather for outdoor activities!";
-		});
-	});
-
-	// Get the search box and second-selection section
-	const searchBox = document.getElementById("search-box"); // Replace with the correct ID for your search box
-	const secondSelection = document.getElementById("second-selection");
-
-	// Add event listener to the search box
-/**
- * Adds an input event listener to the search box.
- * - Displays the second-selection section with a fade-in effect when input has a value.
- * - Hides the second-selection section with a fade-out effect when the input is cleared.
- */
-
-	searchBox.addEventListener("input", () => {
-		// Check if the input has a value
-		if (searchBox.value.trim() !== "") {
-			// Show second-selection if not already visible
-			if (!secondSelection.classList.contains("visible")) {
-				secondSelection.style.display = "block"; // Make it visible
-				setTimeout(() => {
-					secondSelection.classList.add("visible"); // Trigger fade-in
-				}, 50); // Delay for smooth transition
-			}
-		} else {
-			// Hide second-selection if the input is cleared
-			secondSelection.classList.remove("visible");
-			setTimeout(() => {
-				secondSelection.style.display = "none";
-			}, 800); // Match the fade-out duration
-		}
-	});
-
-	document.getElementById("postcode-link").addEventListener("click", function (event) {
-    event.preventDefault(); // Stops default behavior, even if 'role="button"' is missing
-    const mapmodal = document.getElementById("map-modal");
-    const closeModal = document.getElementById("close-map-modal");
-
-    // Show the modal
-    mapmodal.style.display = "block";
-
-    // Close the modal when the close button is clicked
-    closeModal.addEventListener("click", function () {
-        mapmodal.style.display = "none";
+        document.getElementById("temp-div").innerHTML = `<h3>28°C</h3><p>Sunny</p>`;
     });
-
-    // Close the modal when clicking outside of it
-    window.addEventListener("click", function (event) {
-        if (event.target === mapmodal) {
-            mapmodal.style.display = "none";
-        }
-    });
-});
-
-// Function to maximize or minimize the container
-function toggleMaximize(containerId) {
-    const container = document.getElementById(containerId);
-    if (container.classList.contains('maximized')) {
-        container.classList.remove('maximized');
-    } else {
-        container.classList.add('maximized');
-    }
-}
-
-// Function to close the container
-function closeContainer(containerId) {
-    const container = document.getElementById(containerId);
-    container.style.display = 'none';
-}
-
-// Attach maximize/minimize and close functionality to each container's buttons
-document.addEventListener('DOMContentLoaded', () => {
-    const containers = ['hotel-container', 'place-container', 'weather-container'];
-
-    containers.forEach(containerId => {
-        const maximizeButton = document.querySelector(`#${containerId} .maximize-btn`);
-        const closeButton = document.querySelector(`#${containerId} .close-btn`);
-
-        // Maximize/Minimize functionality
-        maximizeButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent map click interference
-            toggleMaximize(containerId);
-        });
-        
-        
-        // Close functionality
-        closeButton.addEventListener('click', (event) => {
-            event.stopPropagation(); // Prevent map click interference
-            closeContainer(containerId);
-        });
-    });
-
-    // Function to update scroll buttons for dynamic containers
-function updateScrollButtons(containerId, leftBtnId, rightBtnId) {
-    const container = document.getElementById(containerId);
-    const leftButton = document.getElementById(leftBtnId);
-    const rightButton = document.getElementById(rightBtnId);
-
-    leftButton.style.display = container.scrollLeft > 0 ? "block" : "none";
-    rightButton.style.display = container.scrollWidth > container.clientWidth + container.scrollLeft ? "block" : "none";
-}
-
-// Event listeners for scroll buttons
-document.getElementById("hotels-scroll-left").addEventListener("click", () => {
-    document.getElementById("hotels-list").scrollBy({ left: -200, behavior: "smooth" });
-});
-document.getElementById("hotels-scroll-right").addEventListener("click", () => {
-    document.getElementById("hotels-list").scrollBy({ left: 200, behavior: "smooth" });
-});
-
-document.getElementById("places-scroll-left").addEventListener("click", () => {
-    document.getElementById("places-list").scrollBy({ left: -200, behavior: "smooth" });
-});
-document.getElementById("places-scroll-right").addEventListener("click", () => {
-    document.getElementById("places-list").scrollBy({ left: 200, behavior: "smooth" });
-});
-    
-// Initialize scroll buttons
-setupScrollButtons();
-
-// Attach maximize functionality to buttons
-document.querySelectorAll('.maximize-btn').forEach(button => {
-    button.addEventListener('click', () => {
-        cloneAndMaximize(button);
-    });
-});
-
-// Change background color of header and buttons
-const header = document.querySelector("#headlines-header");
-if (header) {
-    header.style.backgroundColor = "black";
-    header.style.color = "white";
-}
-
-document.querySelectorAll(".window-controls button").forEach(button => {
-    button.style.backgroundColor = "rgb(181, 165, 155, 0)";
-    button.style.color = "black";
-});
-
 });
 
 
