@@ -1,133 +1,127 @@
 <!DOCTYPE html>
 <html lang="en-US">
-
-<head>
-	<meta charset="UTF-8">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	<meta name="description" content="Snapshot Location, a snapshot of life in locations worldwide">
-	<meta name="keywords" content="location, travel, travelling, holiday, weather, weather, time, safety, population">
-	<meta name="author" content="Snapshot">
-	<title>Snapshot</title>
-	<link rel="stylesheet" href="style.css">
-	<link rel="preconnect" href="https://fonts.googleapis.com">
-	<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-	<link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap" async defer></script>
-	<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places,geometry"></script>
-	<script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous"></script>
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
-	<script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
-	<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-</head>
-
-<body>
-
-	<header class="text-center page-header" id="header">
-		<div class="vertical-center">
-		<h1 id="brand">Snapshot Location</h1>
-		<p id="tagline">A snapshot of locations worldwide!</p>
-		</div>
-	</header>
-	
-	<nav class="black-background text-center text-uppercase">
-		<a href="safety.html#safety" aria-label="See the safety of all locations">Safety</a>
-		<a href="index.html#location" aria-label="See a snapshot of a specific location">Location</a>
-		<a href="weather.html#weather" aria-label="See the weather of all locations">Weather</a>
-	</nav>
-
-    <iframe id="weather-map" src=
-"https://map.worldweatheronline.com/" 
-          height="1500rem" width="91.5%" position>
-  </iframe>
-
-  
-  
-	<section id="contact">
-		<h2 class="text-center">Contact</h2>
-		<br>
-		<div class="contact-boxes-container">
-			<div class="text-left contact-box-left">
-				<h3 class="text-left">Place an Advert</h3>
-				<div>
-					<span>Email:</span>
-					<br><br>
-					<div class="contact-link"><a href="mailto:advert@snapshotlocation.com">advert@snapshotlocation.com</a></div>
-				</div>
-			</div>
-			<div class="text-right contact-box-right">
-				<h3>Get in Touch</h3>
-				<div>
-					<span>Email:</span>
-					<br><br>
-					<div class="contact-link"><a href="mailto:hello@snapshotlocation.com">hello@snapshotlocation.com</a></div>
-				</div>
-			</div>
-			<div class="contact-box-center">
-				<h3>Address</h3>
-				<p>Snapshot Location<br>1 Brook Street<br>London<br>
-				
-					<b>
-						<a id="postcode-link" role="button"><span style="color: beige;">→</span>  W1S 1JD  <span style="color: beige;">←</span></a>
-					</b>
-						
-				<br>UK
-				</p>
-				<br>
-				<h3>Phone</h3>
-				<div>Dial Code: +44</div>
-				<br>
-				<div id="contact-number" class="contact-link"><a href="tel:+442035671980">020700000000</a></div>
-				<br>
-			</div>
-		</div>
-	</section>
-	
-	<!-- Modal -->
-	<div id="map-modal" class="mapmodal">
-		<div class="mapmodal-content">
-			<div class="close" id="close-map-modal">&times;</div>
-			<iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
-		</div>
-	</div>
-
-	<script>document.getElementById("postcode-link").addEventListener("click", function (event) {
-		// No need for preventDefault since href="javascript:void(0)" already prevents navigation
-		const mapmodal = document.getElementById("map-modal");
-		const closeModal = document.getElementById("close-map-modal");
-	
-		// Show the modal
-		mapmodal.style.display = "block";
-	
-		// Close the modal when the close button is clicked
-		closeModal.addEventListener("click", function () {
-			mapmodal.style.display = "none";
-		});
-	
-		// Close the modal when clicking outside of it
-		window.addEventListener("click", function (event) {
-			if (event.target === mapmodal) {
-				mapmodal.style.display = "none";
-			}
-		});
-	});
-
-	
-	</script>
-
-
-	<footer class="text-uppercase">
-
-		
-
-		<a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Find us on Facebook (link opens in a new tab)">Facebook<i class="fa-brands fa-facebook fa-xl"></i></a>
-		<a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Find us on Instagram (link opens in a new tab)">Instagram<i class="fa-brands fa-square-instagram fa-xl"></i></a>
-		<a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="Find us on YouTube (link opens in a new tab)">YouTube<i class="fa-brands fa-square-youtube fa-xl"></i></a>
-		<a href="https://www.twitter.com" target="_blank" rel="noopener" aria-label="Find us on Twitter (link opens in a new tab)">Twitter<i class="fa-brands fa-square-x-twitter fa-xl"></i></a>
-
-		<p>Copyright © Snapshot Location 2024</p>
-		
-	</footer>
-
-</body>
-
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Snapshot Location, a snapshot of life in locations worldwide">
+    <meta name="keywords" content="location, travel, travelling, holiday, weather, weather, time, safety, population">
+    <meta name="author" content="Snapshot">
+    <title>Snapshot Location</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap" rel="stylesheet">
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap" async defer></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places,geometry"></script>
+    <script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
+    <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  </head>
+  <body>
+    <header class="text-center page-header" id="header">
+      <div class="vertical-center">
+        <h1 id="brand">Snapshot Location</h1>
+        <p id="tagline">A snapshot of locations worldwide!</p>
+      </div>
+    </header>
+    <nav class="black-background text-center text-uppercase">
+      <a href="safety.html#safety" aria-label="See the safety of all locations">Safety</a>
+      <a href="index.html#location" aria-label="See a snapshot of a specific location">Location</a>
+      <a href="weather.html#weather" aria-label="See the weather of all locations">Weather</a>
+    </nav>
+    <iframe title="weather-map" id="weather-map" src="https://map.worldweatheronline.com/" height="1500rem" width="91.5%" position></iframe>
+    <section id="contact">
+      <h2 class="text-center">Contact</h2>
+      <br>
+      <div class="contact-boxes-container">
+        <div class="text-left contact-box-left">
+          <h3 class="text-left">Place an Advert</h3>
+          <div>
+            <span>Email:</span>
+            <br>
+            <br>
+            <div class="contact-link">
+              <a href="mailto:advert@snapshotlocation.com">advert@snapshotlocation.com</a>
+            </div>
+          </div>
+        </div>
+        <div class="text-right contact-box-right">
+          <h3>Get in Touch</h3>
+          <div>
+            <span>Email:</span>
+            <br>
+            <br>
+            <div class="contact-link">
+              <a href="mailto:hello@snapshotlocation.com">hello@snapshotlocation.com</a>
+            </div>
+          </div>
+        </div>
+        <div class="contact-box-center">
+          <h3>Address</h3>
+          <p>Snapshot Location <br>1 Brook Street <br>London <br>
+            <b>
+              <a id="postcode-link" role="button">
+                <span style="color: beige;">→</span> W1S 1JD <span style="color: beige;">←</span>
+              </a>
+            </b>
+            <br>UK
+          </p>
+          <br>
+          <h3>Phone</h3>
+          <div>Dial Code: +44</div>
+          <br>
+          <div id="contact-number" class="contact-link">
+            <a href="tel:+442035671980">020700000000</a>
+          </div>
+          <br>
+        </div>
+      </div>
+    </section>
+    <!-- Modal -->
+    <div id="map-modal" class="mapmodal">
+      <div class="mapmodal-content">
+        <div class="close" id="close-map-modal">&times;</div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+      </div>
+    </div>
+    <script>
+      document.getElementById("postcode-link").addEventListener("click", function(event) {
+        // No need for preventDefault since href="javascript:void(0)" already prevents navigation
+        const mapmodal = document.getElementById("map-modal");
+        const closeModal = document.getElementById("close-map-modal");
+        // Show the modal
+        mapmodal.style.display = "block";
+        // Close the modal when the close button is clicked
+        closeModal.addEventListener("click", function() {
+          mapmodal.style.display = "none";
+        });
+        // Close the modal when clicking outside of it
+        window.addEventListener("click", function(event) {
+          if (event.target === mapmodal) {
+            mapmodal.style.display = "none";
+          }
+        });
+      });
+    </script>
+    <footer class="text-uppercase">
+      <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Find us on Facebook (link opens in a new tab)">
+        <span class="footer-text">Facebook</span>
+        <i class="fa-brands fa-facebook fa-xl"></i>
+      </a>
+      <a href="https://www.instagram.com" target="_blank" rel="noopener" aria-label="Find us on Instagram (link opens in a new tab)">
+        <span class="footer-text">Instagram</span>
+        <i class="fa-brands fa-square-instagram fa-xl"></i>
+      </a>
+      <a href="https://www.youtube.com" target="_blank" rel="noopener" aria-label="Find us on YouTube (link opens in a new tab)">
+        <span class="footer-text">YouTube</span>
+        <i class="fa-brands fa-square-youtube fa-xl"></i>
+      </a>
+      <a href="https://www.twitter.com" target="_blank" rel="noopener" aria-label="Find us on Twitter (link opens in a new tab)">
+        <span class="footer-text">Twitter</span>
+        <i class="fa-brands fa-square-x-twitter fa-xl"></i>
+      </a>
+      <p class="footer-text">Copyright © Snapshot Location 2025</p>
+    </footer>
+  </body>
 </html>
