@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="en-US">
+  <!-- Head -->
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,23 +15,32 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places&callback=initMap" async defer></script>
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&libraries=places,geometry"></script>
     <script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
     <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
   </head>
+  <!-- Head End -->
+  <!-- Body -->
   <body>
+    <!-- Header -->
     <header class="text-center page-header" id="header">
       <div class="vertical-center">
         <h1 id="brand">Snapshot Location</h1>
         <p id="tagline">A snapshot of locations worldwide!</p>
       </div>
     </header>
+    <!-- Header End -->
+    <!-- Nav Bar -->
     <nav class="black-background text-center text-uppercase">
-      <a href="safety.html#safety" aria-label="See the safety of all locations">Safety</a>
-      <a href="index.html#location" aria-label="See a snapshot of a specific location">Location</a>
+      <a href="safety.html#safety" aria-label="See the safety of the location">Safety</a>
+      <a href="index.html#location" aria-label="See the name of the location">Location</a>
       <a href="weather.html#weather" aria-label="See the weather of all locations">Weather</a>
     </nav>
-    <iframe title="weather-map" id="weather-map" src="https://map.worldweatheronline.com/" height="1500rem" width="91.5%" position></iframe>
+    <!-- Nav Bar End -->
+    <!-- Weather Map -->
+    <iframe title="weather-map" id="weather-map" src="https://map.worldweatheronline.com/"></iframe>
+    <!-- Weather Map End -->
+    <!-- Contact Details -->
     <section id="contact">
       <h2 class="text-center">Contact</h2>
       <br>
@@ -69,20 +79,20 @@
           </p>
           <br>
           <h3>Phone</h3>
-          <div>Dial Code: +44</div>
+          <div>UK Dial Code: +44</div>
           <br>
           <div id="contact-number" class="contact-link">
-            <a href="tel:+442035671980">020700000000</a>
+            <a href="tel:+442012345678">02012345678</a>
           </div>
           <br>
         </div>
       </div>
     </section>
-    <!-- Modal -->
+    <!-- Postcode Modal -->
     <div id="map-modal" class="mapmodal">
       <div class="mapmodal-content">
         <div class="close" id="close-map-modal">&times;</div>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border: 0.5rem solid black;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
     <script>
@@ -104,7 +114,10 @@
         });
       });
     </script>
+    <!-- Contact Details End -->
+    <!-- Footer -->
     <footer class="text-uppercase">
+      <!-- Social Media Links -->
       <a href="https://www.facebook.com" target="_blank" rel="noopener" aria-label="Find us on Facebook (link opens in a new tab)">
         <span class="footer-text">Facebook</span>
         <i class="fa-brands fa-facebook fa-xl"></i>
@@ -123,5 +136,7 @@
       </a>
       <p class="footer-text">Copyright © Snapshot Location 2025</p>
     </footer>
+    <!-- Footer End -->
   </body>
+  <!-- Body End -->
 </html>
