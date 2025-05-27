@@ -628,39 +628,37 @@ function resizeModalByScreen() {
 	const width = window.innerWidth;
 	const namePopup = document.getElementById("namep");
 
-	// 📦 Scale based on screen width
+	// Scale based on screen width
 	if (width >= 3300) {
 		modal.style.transform = "scale(2.5)";
 	} else if (width >= 2600) {
-		modal.style.transform = "scale(2)";
-	} else if (width >= 2000) {
 		modal.style.transform = "scale(1.8)";
+	} else if (width >= 2000) {
+		modal.style.transform = "scale(1.6)";
 	} else if (width >= 1650) {
-		modal.style.transform = "scale(1.1)";
+		modal.style.transform = "scale(1.4)";
 	} else if (width >= 1250) {
-		modal.style.transform = "scale(1)";
-	} else if (width >= 1050) {
-		modal.style.transform = "scale(0.9)";
+		modal.style.transform = "scale(1.1)";
 	} else if (width <= 600) {
 		modal.style.transform = "scale(0.6)";
 	} else if (width <= 768) {
-		modal.style.transform = "scale(0.8)";
+		modal.style.transform = "scale(0.7)";
 	} else if (width <= 1050) {
 		modal.style.transform = "scale(0.9)";
 	} else {
 		modal.style.transform = "scale(1)";
 	}
 
-	// 📍 Also adjust position on smaller screens
+	// Also adjust position on smaller screens
 	if (width <= 768 && modal.style.display === "flex" && namePopup) {
 		const nameRect = namePopup.getBoundingClientRect();
 		const modalRect = modal.getBoundingClientRect();
 
-		// 🧠 Position to left of name popup, higher up
+		// Position to left of name popup, higher up
 		let adjustedLeft = nameRect.left - modalRect.width - 70;
 		let adjustedTop = nameRect.top - modalRect.height - 90;
 
-		// 🔒 Clamp inside viewport
+		// Clamp inside viewport
 		adjustedLeft = Math.max(10, adjustedLeft);
 		adjustedTop = Math.max(10, adjustedTop);
 
@@ -711,7 +709,7 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 
 		const hoverClass = path.className.baseVal.replace(/ /g, ".");
 		document.querySelectorAll(`.${hoverClass}`).forEach((el) => {
-			el.style.fill = "#ef814e";
+			el.style.fill = "rgb(226, 135, 101)";
 		});
 		const namePopup = document.getElementById("name");
 		namePopup.style.transition = "opacity 0.2s ease-in"; // ⏱️ Fast fade-in
@@ -739,7 +737,7 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 		modalText.innerHTML = `Scroll down for a snapshot of:<br><b>${path.id}</b>`;
 		modal.style.display = "flex";
 
-		// 🧭 POSITION modal to the LEFT of the #name tooltip
+		// POSITION modal to the LEFT of the #name tooltip
 		const tooltip = document.getElementById("name");
 		const tooltipRect = tooltip.getBoundingClientRect();
 		const modalWidth = 250;
@@ -749,17 +747,17 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 		let top = tooltipRect.top + window.scrollY;
 		let left = tooltipRect.left - modalWidth - padding;
 
-		// ⛔ Clamp left edge
+		// Clamp left edge
 		if (left < padding) {
 			left = padding;
 		}
 
-		// ⛔ Clamp bottom edge
+		// Clamp bottom edge
 		if (top + modalHeight > window.scrollY + window.innerHeight) {
 			top = window.scrollY + window.innerHeight - modalHeight - padding;
 		}
 
-		// ✅ Final position
+		// Final position
 		modal.style.top = `${top}px`;
 		modal.style.left = `${left}px`;
 
@@ -807,11 +805,11 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 			const nameRect = namePopup.getBoundingClientRect();
 			const modalRect = modal.getBoundingClientRect();
 
-			// 📦 Pull modal farther left and higher above #name popup
+			// Pull modal farther left and higher above #name popup
 			let adjustedLeft = nameRect.left - modalRect.width - 20; // more left
 			let adjustedTop = nameRect.top - modalRect.height - 5; // more above
 
-			// 🔒 Clamp within screen edges
+			// Clamp within screen edges
 			adjustedLeft = Math.max(10, adjustedLeft);
 			adjustedTop = Math.max(10, adjustedTop);
 
@@ -852,7 +850,7 @@ const observer = new IntersectionObserver((entries) => {
 
 observer.observe(mapElement);
 
-// 🎯 Fade out both #name and modal on scroll down
+// Fade out both #name and modal on scroll down
 let fadeTriggered = false;
 window.addEventListener("scroll", () => {
 	if (fadeTriggered) return;
@@ -863,7 +861,7 @@ window.addEventListener("scroll", () => {
 
 		const namePopup = document.getElementById("name");
 
-		// 1️⃣ Fade out modal popup immediately
+		// Fade out modal popup immediately
 		if (modal.style.display === "flex") {
 			modal.style.transition = "opacity 0.8s ease";
 			modal.style.opacity = "0";
@@ -874,12 +872,12 @@ window.addEventListener("scroll", () => {
 			}, 800);
 		}
 
-		// 2️⃣ Fade out name popup after a longer, smoother delay
+		// Fade out name popup after a longer, smoother delay
 		if (namePopup) {
 			setTimeout(() => {
 				namePopup.style.transition = "opacity 1.2s ease";
 				namePopup.style.opacity = "0";
-			}, 700); // ⏳ Delay start of fade-out
+			}, 700); // Delay start of fade-out
 		}
 
 		// Reset flag so this can happen again if needed
@@ -1566,7 +1564,7 @@ const countryMapping = {
 	"North Korea": "kp",
 	"Palestine": "ps",
 	"Western Sahara": "eh",
-	"Swaziland": "sz", // Now called Eswatini
+	"Swaziland": "sz",
 	"French Guiana": "gf",
 	"Aruba": "aw",
 	"Anguilla": "ai",
@@ -1591,10 +1589,10 @@ const countryMapping = {
 	"Turks and Caicos Islands": "tc",
 	"British Virgin Islands": "vg",
 	"United States Virgin Islands": "vi",
-	"St. Eustatius (Netherlands)": "bq", // Same for Bonaire/Saba
+	"St. Eustatius (Netherlands)": "bq",
 	"Saba (Netherlands)": "bq",
 	"Martinique": "mq",
-	"Canary Islands (Spain)": "ic", // Not official, fallback to "es" if needed
+	"Canary Islands (Spain)": "es",
 	"Mayotte": "yt",
 	"Reunion": "re",
 	"Guadeloupe": "gp",
@@ -2064,7 +2062,7 @@ function cloneAndMaximize(button) {
 	// Initialize scroll buttons inside the maximized container
 	initializeMaximizedButtons();
 
-	// 🟢 Ensure holidays scroll buttons work inside the maximized container
+	// Ensure holidays scroll buttons work inside the maximized container
 	initializeHolidaysScrollButtonsForContainer(clonedBox);
 }
 
@@ -2773,7 +2771,7 @@ function togglePin(markerID, marker) {
 	const emoji = amenityEmojiMap?.[amenityType] || "📍";
 
 	if (pinnedMarkers.has(markerID)) {
-		// 🔁 Unpin
+		// Unpin
 		pinnedMarkers.delete(markerID);
 
 		// Restore default Leaflet blue icon
@@ -2812,7 +2810,7 @@ function togglePin(markerID, marker) {
 		// 📌 Pin
 		pinnedMarkers.add(markerID);
 
-		// 🔥 Custom icon with red pin overlayed on hotel or amenity emoji
+		// Custom icon with red pin overlayed on hotel or amenity emoji
 		const baseEmoji = (amenityType === "hotel") ? "🏨" : emoji;
 
 		marker.setIcon(L.divIcon({
@@ -3060,8 +3058,6 @@ async function fetchAmenityData(type) {
 		console.error(`Error fetching ${type}:`, error);
 	}
 }
-
-
 
 
 // Fetch City Data using Nominatim API
@@ -3604,7 +3600,7 @@ function displayHotelData(hotels) {
 				iconAnchor: [15, 40],
 				popupAnchor: [0, -40],
 			}),
-			amenityType: "hotel", // 🛎️ IMPORTANT! this tells togglePin() it's a hotel!
+			amenityType: "hotel",
 		});
 
 		// Add hotel markers to cluster too!
@@ -3636,7 +3632,7 @@ function displayHotelData(hotels) {
 
 		hotelMarkers[markerID] = marker;
 
-		// 🧾 Create table row
+		// Create table row
 		const tr = document.createElement("tr");
 		tr.setAttribute("data-marker-id", markerID);
 
@@ -3656,7 +3652,7 @@ function displayHotelData(hotels) {
 		tdAddress.style.padding = "5px";
 		tdAddress.style.width = "25%";
 
-		// 📍 Click zoom to marker
+		// Click zoom to marker
 		const mapIconEl = tdAddress.querySelector("span");
 		if (mapIconEl) {
 			mapIconEl.addEventListener("click", () => {
@@ -3686,7 +3682,7 @@ function displayHotelData(hotels) {
 		tbody.appendChild(tr);
 	});
 
-	// 🖱️ Enable click on table row to zoom to marker
+	// Enable click on table row to zoom to marker
 	tbody.querySelectorAll("tr").forEach(row => {
 		row.addEventListener("click", () => {
 			const markerID = row.getAttribute("data-marker-id");
@@ -3695,7 +3691,7 @@ function displayHotelData(hotels) {
 				marker.openPopup();
 				map.setView(marker.getLatLng(), 17);
 
-				// 💥 Force bind the pin button immediately after popup opens
+				// Force bind the pin button immediately after popup opens
 				setTimeout(() => {
 					const popupEl = document.querySelector(".leaflet-popup");
 					const pinBtn = popupEl?.querySelector(".pin-toggle");
@@ -3705,7 +3701,7 @@ function displayHotelData(hotels) {
 							marker.closePopup();
 						});
 					}
-				}, 0); // ← Zero delay puts it at the end of the current call stack
+				}, 0);
 
 				row.classList.add("highlight");
 				row.scrollIntoView({
@@ -3798,7 +3794,7 @@ function displayAmenitiesData(amenities) {
 
 		const markerID = `${amenity.lat}-${amenity.lon}`;
 
-		// 🧾 Table row
+		// Table row
 		const tr = document.createElement("tr");
 		tr.setAttribute("data-marker-id", markerID);
 
@@ -3820,7 +3816,7 @@ function displayAmenitiesData(amenities) {
 		tr.append(tdIcon, tdName, tdAddress, tdContact);
 		tbody.appendChild(tr);
 
-		// 🔍 Click-to-zoom from 🗺️ icon
+		// Click-to-zoom from 🗺️ icon
 		const mapIconEl = tdAddress.querySelector("span");
 		if (mapIconEl) {
 			mapIconEl.addEventListener("click", () => {
@@ -3832,7 +3828,7 @@ function displayAmenitiesData(amenities) {
 			});
 		}
 
-		// 🖱️ Full row click = open popup
+		// Full row click = open popup
 		tr.addEventListener("click", () => {
 			const marker = markers[markerID];
 			if (marker) {
@@ -3843,7 +3839,7 @@ function displayAmenitiesData(amenities) {
 		});
 	});
 
-	// ✨ Let plotMarkers() handle marker icons, popups, clustering, etc.
+	// Let plotMarkers() handle marker icons, popups, clustering, etc.
 	plotMarkers(amenities, "amenity");
 }
 
@@ -3928,7 +3924,7 @@ function plotMarkers(data, type) {
 				"unknown";
 		}
 
-		// 👑 Force standard "landmark" classification if tagged as historic or attraction
+		// Force standard "landmark" classification if tagged as historic or attraction
 		if (
 			item.tags?.tourism === "attraction" ||
 			item.tags?.historic ||
@@ -4027,7 +4023,7 @@ function plotMarkers(data, type) {
 			});
 
 
-			// 👇 Add reference so popups still work!
+			// Add reference so popups still work!
 			hotelMarkers[markerID] = marker;
 			markers[markerID] = marker;
 		}
