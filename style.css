@@ -5686,6 +5686,10 @@ input.wgh-slider-target {
     z-index: 10000000000;
     margin-top: 15rem;
   }
+
+  footer {
+    position: sticky;
+  }
   
 }
 
@@ -5889,6 +5893,7 @@ input.wgh-slider-target {
   }
 
   footer > a {
+    position: sticky;
     font-size: 1.2em;
   }
 }
