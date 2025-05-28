@@ -5684,11 +5684,9 @@ input.wgh-slider-target {
 
   #contact {
     z-index: 10000000000;
+    margin-top: 15rem;
   }
   
-	.contact-link {
-		z-index: 10000000001;
-	}
 }
 
 /* Phone Screens 450px and below */
