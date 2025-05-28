@@ -5865,6 +5865,7 @@ input.wgh-slider-target {
   #city-search {
     width: 12rem;
     font-size: x-large;
+    height: 2.5rem;
   }
 
   #places {
@@ -5884,7 +5885,7 @@ input.wgh-slider-target {
 
   #contact {
     font-size: 0.26em;
-    margin-top: 5vh;
+    margin-top: 15rem;
   }
 
   footer > a {
