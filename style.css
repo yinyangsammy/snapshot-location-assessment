@@ -3956,20 +3956,12 @@ input.wgh-slider-target {
     font-size: 2rem;
   }
 
-  nav > a {
-    font-size: 1.5em;
-  }
-
   .navigation-buttons button {
     margin-top: 3%;
   }
 
   .amenity-button {
     width: 8.5em;
-  }
-
-  footer a {
-    font-size: 1.5em;
   }
 
   footer {
