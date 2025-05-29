@@ -3792,16 +3792,16 @@ input.wgh-slider-target {
 /* No less than 1650px, no greater than 2600px */
 @media (min-width: 1650px) and (max-width: 2600px) {
   #header {
-    height: 20rem;
+    height: 19rem;
   }
 
   #tagline {
     font-size: 1.75em;
-    margin-bottom: 4%;
+    margin-bottom: 3.5%;
   }
 
   nav > a {
-    font-size: 1.8em;
+    font-size: 1.7em;
   }
 
   h2 {
