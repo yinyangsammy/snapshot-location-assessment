@@ -3620,12 +3620,8 @@ input.wgh-slider-target {
     font-size: 8rem;
   }
 
-  nav {
-    padding: 2rem 1rem;
-  }
-
   nav a {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
 
   h3 {
@@ -3732,7 +3728,7 @@ input.wgh-slider-target {
   }
 
   footer a {
-    font-size: 2.5rem;
+    font-size: 2.2rem;
   }
 
   footer > p {
@@ -3805,7 +3801,7 @@ input.wgh-slider-target {
   }
 
   nav > a {
-    font-size: 1.5em;
+    font-size: 1.8em;
   }
 
   h2 {
@@ -3917,7 +3913,7 @@ input.wgh-slider-target {
   }
 
   footer a {
-    font-size: 1.75em;
+    font-size: 1.9em;
   }
 
   footer > p {
