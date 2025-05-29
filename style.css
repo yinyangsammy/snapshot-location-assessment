@@ -4108,7 +4108,7 @@ input.wgh-slider-target {
   }
 
   nav > a {
-    font-size: 1.2em;
+    font-size: 1.3em;
   }
 
   h2 {
@@ -4201,7 +4201,7 @@ input.wgh-slider-target {
   }
 
   footer > a {
-    font-size: 1.2em;
+    font-size: 1.3em;
   }
 
   footer > p {
@@ -4256,12 +4256,6 @@ input.wgh-slider-target {
     max-width: 90%;
     margin: 1rem auto;
     font-size: 1.2rem;
-  }
-
-  #city-search {
-    width: 30vw;
-    height: 6.5vh;
-    font-size: 2.2em;
   }
 
   #autocomplete {
