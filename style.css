@@ -827,7 +827,7 @@ img {
   font-weight: 600;
   overflow: hidden;
   margin-top: 3%;
-
+  font-family: "Roboto", sans-serif;
   height: 118rem;
   text-underline-position: under;
 }
