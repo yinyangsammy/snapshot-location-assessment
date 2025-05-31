@@ -927,6 +927,7 @@ img {
   height: 120rem;
   padding-bottom: 1.5%;
   border: 2px solid black;
+  font-family: "Roboto", sans-serif;
 }
 
 /* Places Results */
