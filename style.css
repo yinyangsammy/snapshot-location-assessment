@@ -4168,8 +4168,8 @@ input.wgh-slider-target {
   }
 
   footer {
-    padding-bottom: 0;
-    height: 3.5rem;
+		padding-bottom: 0;
+		height: 3rem;
   }
 
   footer > a {
