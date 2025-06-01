@@ -17,7 +17,6 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 - [User experience](#user-experience)
   * [User Stories](#user-stories)
     - [Visitor Goals](#visitor-goals)
-    - [Site Owner Goals](#developer-goals)
 - [Design](#design)
   + [Colour Scheme](#colour-scheme)
   + [Typography](#typography)
@@ -129,7 +128,9 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         
         #### Map 2 - Black & White Clickable SVG Map
         
-        The second map is a black and white SVG image of the world with all the countries filling with a 'burnt sienna' shade of brown on user hover and click. 
+        The second map is a black and white SVG image of the world with all the countries filling with a 'burnt sienna' shade of brown on user hover and click.
+
+        <h3 align="center"><img src="assets/readme/simple_world_map_svg.jpg"></h3>
         
         #### Map 3 - OpenStreetMap Map + Emojis
         
@@ -181,7 +182,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         The SVG Map of the world features clickable countries, the names of which appear when the user hovers over that region of the globe.
 
-         <h3 align="center"><img src="assets/readme/simple_world_map_svg.jpg"></h3>
+         <h3 align="center"><img src="assets/readme/hover-name.jpg"></h3>
 
         When the user clicks on any country, the following information fades in below:
 
