@@ -635,13 +635,13 @@ Responsivity tests were carried out using Google Chrome DevTools & Microsoft Edg
 - Nest Hub Max
 
 #### Iphone 
-<h2 align="center"><img src="assets/readme/toon-bazaar-iphone.png"></h2>
+<h2 align="center"><img src="assets/readme/iphone.png"></h2>
 
 #### Ipad 
-<h2 align="center"><img src="assets/readme/toon-bazaar-ipad.png"></h2>
+<h2 align="center"><img src="assets/readme/ipad.png"></h2>
 
 #### Nest Hub Max 
-<h2 align="center"><img src="assets/readme/toon-bazaar-nest-hub-max.png"></h2>
+<h2 align="center"><img src="assets/readme/nest-hub-max.png"></h2>
 
 I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 2160) screens to verify the web pages would work across monitor sizes. 
 
