@@ -182,7 +182,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         The SVG Map of the world features clickable countries, the names of which appear when the user hovers over that region of the globe.
 
-         <h3 align="center"><img src="assets/readme/hover-name.jpg"></h3>
+         <h3 align="center"><img src="assets/readme/hover-name.png"></h3>
 
         When the user clicks on any country, the following information fades in below:
 
