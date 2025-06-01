@@ -100,19 +100,19 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
          
          -   Merienda One is used for the logo, name and general branding, including all major headings, branching down from top to bottom.
         
-        <h3 align="center"><img src="assets/readme/merienda-one.jpg"></h3>
+        <h3 align="center"><img src="assets/readme/merienda-one.png"></h3>
 
     2)  "Open Sans"
 
          -   Open Sans is used for the main body of the website, so as to make reading as easy as possible for the user.
         
-        <h3 align="center"><img src="assets/readme/open-sans.jpg"></h3>
+        <h3 align="center"><img src="assets/readme/open-sans.jpeg"></h3>
 
     3) "Roboto"
 
          -    Roboto is used for the hotels and places of interest tables, so that even on smaller screens, the results really stand out.
 
-        <h3 align="center"><img src="assets/readme/roboto.jpg"></h3>
+        <h3 align="center"><img src="assets/readme/roboto.jpeg"></h3>
 
          
     -   ## Imagery
