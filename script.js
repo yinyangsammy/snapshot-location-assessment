@@ -4194,6 +4194,7 @@ style.textContent = `
     white-space: normal;
     padding: 1vh;
     background-color: white;
+	font-family: "Roboto", sans-serif;
   }
 
   #places-results td:first-child {
