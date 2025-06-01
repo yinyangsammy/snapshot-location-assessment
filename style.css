@@ -518,31 +518,22 @@ img {
   color: white;
   font-size: 1.25rem;
   max-height: calc(23.5rem - 5rem);
-  /* Adjusting for the header and buttons height */
   overflow-y: auto;
   scrollbar-width: none;
-  /* For Firefox */
   max-width: 23.5em;
 }
 
 #holidays-section {
   display: flex;
-  /* Make it flex to align content properly */
   flex-direction: column;
-  /* Stack elements vertically */
   align-items: center;
-  /* Center items horizontally */
   justify-content: flex-start;
-  /* Start content from the top */
   background: rgba(21, 21, 21, 0.9);
   width: 37.5vw;
-  /* Take full width inside container */
   max-width: 100%;
-  /* Adjust as needed */
   max-height: 24rem;
   margin: 0 auto;
   position: relative;
-  /* Contain absolute elements */
 }
 
 #holidays-section h4 {
@@ -763,23 +754,18 @@ img {
   /* Hide scrollbar in Chrome, Safari, and Edge */
 }
 
-/* Attribution Section */
+
 #attribution {
   background: #000;
-  /* Sleek black background */
   color: silver;
-  /* Silver text */
   text-align: center;
   font-size: 0.85em;
   margin-top: 10px;
   padding: 10px;
   border: 1px solid silver;
-  /* Silver border for definition */
   border-radius: 5px;
   box-shadow: 0 4px 6px rgba(255, 255, 255, 0.1);
-  /* Subtle glow effect */
   font-family: Arial, sans-serif;
-  /* Clean, modern font */
 }
 
 /* Weather Box */
@@ -884,10 +870,8 @@ img {
 
 #hotels {
   max-height: 107.5rem;
-  /* Restrict height of scrollable area */
   width: 24vw;
   overflow-y: auto;
-  /* Enable scrolling */
   -ms-overflow-style: none;
   /* IE/Edge scrollbar hidden */
   scrollbar-width: none;
@@ -981,11 +965,8 @@ img {
 /* Target icons in the places container */
 #places-results td img {
   width: 40px;
-  /* Adjust to match hotel icon size */
   height: 40px;
-  /* Ensures square scaling */
   object-fit: contain;
-  /* Maintains aspect ratio */
 }
 
 .leaflet-marker-icon.emoji-pin-marker {
@@ -1024,7 +1005,7 @@ img {
   transform: scale(1);
 }
 
-/* Conatiner Fade In Animation */
+/* Container Fade In Animation */
 
 .fade-in {
   animation: fadeIn 0.5s ease-in-out;
@@ -1085,7 +1066,6 @@ img {
   font-weight: 700;
   z-index: 999;
   overflow: hidden;
-  /* Hides scrollbars but still allows scrolling */
   display: flex;
   transform: translate(-50%, -50%);
   /* Ensures perfect centering */
@@ -1104,7 +1084,6 @@ img {
   box-shadow: 0 0 20px rgba(0, 0, 0, 0.5);
   /* Floating effect */
   overflow: hidden;
-  /* Hide scrollbars visually */
   padding: 20px;
   position: relative;
 }
@@ -4602,7 +4581,7 @@ input.wgh-slider-target {
   }
 
   nav {
-    padding: 0.5rem;
+    padding: 0.3rem;
   }
 
   nav a {
@@ -4781,10 +4760,6 @@ input.wgh-slider-target {
   #tagline {
     font-size: 0.95em;
     margin-bottom: 4%;
-  }
-
-  nav {
-    padding: 1vh;
   }
 
   nav > a {
