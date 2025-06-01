@@ -3707,6 +3707,10 @@ input.wgh-slider-target {
     padding-bottom: 3%;
   }
 
+  footer {
+		height: 4rem;
+	}
+
   footer a {
     font-size: 2.2rem;
   }
