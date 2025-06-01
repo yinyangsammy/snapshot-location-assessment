@@ -5640,10 +5640,6 @@ input.wgh-slider-target {
     z-index: 10000000000;
     margin-top: 15rem;
   }
-
-  footer {
-    position: sticky;
-  }
   
 }
 
@@ -5967,4 +5963,10 @@ input.wgh-slider-target {
 
 #name.fade-out {
   animation: fadeOutName 0.9s ease forwards;
+}
+
+footer {
+    position:absolute;
+    width:100%;
+    bottom:0px;
 }
