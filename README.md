@@ -174,84 +174,112 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
 -   # Structure & Features
 
-    -   ## Information Architecture
+    The website has 3 pages:
 
-        The website has 3 pages:
+-   ## 1) *Homepage aka Location*
 
-        ### 1) *Homepage aka Location*
+    The Home & Landing page features 2 interactive maps and a photo carousel separating the two:
+
+    ### Top Half
         
-        The Home & Landing page with 2 interactive maps and a photo carousel separating the two:
+    ### Map 1 - Countries
 
-        #### Map 1 - Countries
+    The SVG Map of the world features clickable countries, the names of which appear when the user hovers over that region of the globe.
 
-        The SVG Map of the world features clickable countries, the names of which appear when the user hovers over that region of the globe.
+    <h3 align="center"><img src="assets/readme/hover-name.png"></h3>
 
-         <h3 align="center"><img src="assets/readme/hover-name.png"></h3>
+    When the user clicks on any country, the following information fades in below:
+ 
+    i) Country Time & Timezone
+        
+    ii) Country Name
+        
+    iii) Country Currency
 
-        When the user clicks on any country, the following information fades in below:
+    <h3 align="center"><img src="assets/readme/boxes.png"></h3>
+
+    iv) News Headlines
+
+    v) Country Information
+
+    vi) Exchange Rates
+
+    <h3 align="center"><img src="assets/readme/info.png"></h3>
+
+    ### Pexels Photo Carousel for Countries
+
+    The photo carousel separates the top half and the bottom half of the page, displaying photos of the country that the user has clicked in a striking carousel.
+
+    <h3 align="center"><img src="assets/readme/snapshot-colombia.png"></h3>
+
+    
+    ### Bottom Half
+
+    ### Map 2 - Cities / Addresses
+
+    The OpenStreetMaps Map of the world features a search bar just above, where the user can input an address or city name. On clicking enter:
+        
+    1. The map will zoom into that address.
+
+    <h3 align="center"><img src="assets/readme/openstreetsmap.png"></h3>
 
         
-        i) Country Time & Timezone
+    2. The map will populate itself with hotels.
+
+    <h3 align="center"><img src="assets/readme/map-hotels.png"></h3>
+
+    3. The following information fades in below the map:
         
-        ii) Country Name
+    i) List of Hotels
         
-        iii) Country Currency
-
-        <h3 align="center"><img src="assets/readme/boxes.png"></h3>
-
-        iv) News Headlines
-
-        v) Country Information
-
-        vi) Exchange Rates
-
-        <h3 align="center"><img src="assets/readme/info.png"></h3>
-       
-
-        #### Map 2 - Cities / Addresses
-
-        The OpenStreetMaps Map of the world features a search bar just above, where the user can input an address or city name. On clicking enter:
+    ii) List of Places of Interest
         
-        1. The map will zoom into that address.
+    iii) Weather Forecast (Daily, 5 day & 16 day)
+
+    <h3 align="center"><img src="assets/readme/table-hotels.png"></h3>
+
+    4. If you click on the map emoji for one of the hotels populated in the table, the actual map will zoom in on the hotel in question.
+
+    <h3 align="center"><img src="assets/readme/table-hotels.png"></h3>
+
+    5. There is then the option to choose from different amenity buttons within the place-container besides the hotel container
+
+    <h3 align="center"><img src="assets/readme/amenity-buttons-places.png"></h3>
+    
+    6. Click on any amenity button and the map will be populated with markers for their respective amenities.
+
+    <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
+
+    ## 2) *Safety Page*
+
+    ## 3) *Weather Page*
+
+    # Structural Irregularities
+
+    <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+    
+    
+
+    -   The website includes a few structural irregularities & console errors:
+
+        ### CORS WARNING
         
-        2. The map will populate itself with hotels.
+        - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
+        
+        -  This is a harmless connectivity check used by Google's Maps API and does not affect functionality or performance. 
+        
+        -   Google Places API proved prohibitively expensive (£1000+ for the first month of use, for 2-3 city searches/day), so I had to exchange Google Cloud Services for OpenStreetMaps & Leaflet.
+        
+        -   Removing Google Maps would remove helpful features like search autocomplete and timezone fetching.
 
-        <h3 align="center"><img src="assets/readme/map-hotels.png"></h3>
+        -   Therefore I've left it for now.
 
-        3. The hotel container just below will also populate the same hotels as displayed on the map within a table.
-
-        <h3 align="center"><img src="assets/readme/table-hotels.png"></h3>
-
-        4. There is then the option to choose amongst different amenities within the place-container besides the hotel container and the map will be populated with markers for those amenities.
-
-        <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
-
-        #### Photo Carousel for Countries
-
-        The 
-
-    ## Structural Irregularities
-
-    -   The website includes a few structural irregularities:
+        -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
 
         ### Embedded CSS 
         
-        -   Background image styling placed in the head of the HTML file    instead of including it in the CSS stylesheet. Rationale:
+        -   The wise fx currency widget came with inline styling.
 
-            I wanted a background image which would stand out to potential users as a piece of quality artwork in its own right. However, I didn't want it to detract from the artists' artwork in the foreground. 
-        
-            Therefore, I opted for a fixed static background, whereby I could scroll through artwork in the foreground with nothing moving in the background. This proved to be the easiest way to do so, with the least impact on loading performance.
-
-        ### Flexbox & Media Queries 
-
-        -   My Media Queries use of Flexbox css is extensive because whenever I tried to create text boxes and make them flex with the images, I encountered two problems:
-
-            -   [i] **Space vs Size** - I couldn't fit enough text inside a box the same size as one of the about section's border images. I tried using two boxes in column-formation (each one sized according to the image next to it), but then formatting the text in the two boxes to look conjoined gave me problems. I tried flex-grow, flex-shrink and flex-basis, but to no avail.
-
-            -   [ii] **Duality vs Binary** - I needed the about section to flex with both the columns and the rows of images bordering it, but with flex I either had the option of choosing to flex the text with the row of images or the column of images, never both.
-            Therefore, I had to set different css rules for Media Queries spanning all the device sizes, from a tiny Galaxy Fold resolution to a 4K monitor resolution.
-
-            If ever confronted with trying to build an image border around an article of text again, I will obviously use an alternative and more efficient way to do so.
     
 -   # Features
 
@@ -325,36 +353,12 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
     <h2 align="center"><img src="assets/readme/footer-normal.jpg"></h2>
     <h2 align="center"><img src="assets/readme/footer-hover.jpg"></h2>
     
-    -   ### Form
-
-        -   The Form is featured on the Contact Page.
-        -   The Form features various useful checkboxes and inputs, so that the potential client or artist can provide plenty of information as succinctly as possible:
-
-            - Mandatory Fields:
-
-                1. Name
-                2. Email
-                3. Nature of Request
-                4. Description of Request
-
-            - Optional Fields:
-
-                5. Vision
-                6. Service Checkboxes
-                7. File Upload (Artwork)
-                8. Newsletter Email SignUp
-        
-        -   The Form features the Jomhuria font, so as to look elegant while retaining a cartoon / comic feel. It is also easy on the eyes as far as legibility is concerned.
-
-        -   The Form is spaced out with larger line-breaks, for the sake of both legibility and accessibility. The added space aids users of smaller screens and touch devices in pressing checkboxes and dropdown lists.
-
-    <h2 align="center"><img src="assets/readme/toon-bazaar-form.png"></h2>
 
     -   ### 404 Page
    
         -   I added a custom 404 error page to help the user navigate back to the homepage if they enter an incorrect URL.  The 404 page features the site's header, navigation bar and footer plus an image of a cartoon wolf spray-painting the numbers "404", an explanation that they're lost and a button back to the Homepage. The back button is there in case the user hasn't realised they can use the navigation bar to get back to each of the web pages. I created the 404.html page on my repository by following this [Github Documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site).
   
-    <h2 align="center"><img src="assets/readme/404-page.png"></h2>
+    <h2 align="center"><img src="assets/readme/404.png"></h2>
 
     -  ## Future Features
 
