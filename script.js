@@ -1,3 +1,5 @@
+let liveClockInterval; // For managing time updates
+
 document.addEventListener("DOMContentLoaded", () => {
 	const countryNameToCode = {
 		"Afghanistan": "af",
@@ -54,7 +56,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		"Equatorial Guinea": "gq",
 		"Eritrea": "er",
 		"Estonia": "ee",
-		"Eswatini (fmr. Swaziland)": "sz",
+		"Swaziland": "sz",
 		"Ethiopia": "et",
 		"Fiji": "fj",
 		"Finland": "fi",
@@ -82,6 +84,7 @@ document.addEventListener("DOMContentLoaded", () => {
 		"Ireland": "ie",
 		"Israel": "il",
 		"Italy": "it",
+		"Ivory Coast": "ci",
 		"Jamaica": "jm",
 		"Japan": "jp",
 		"Jordan": "jo",
@@ -394,6 +397,7 @@ const countryTimeZones = {
 	"Tajikistan": "Asia/Dushanbe",
 	"Tanzania": "Africa/Dar_es_Salaam",
 	"Thailand": "Asia/Bangkok",
+	"Tunisia": "Asia/Tunis",
 	"Turkey": "Asia/Istanbul",
 	"Turkmenistan": "Asia/Ashgabat",
 	"United Kingdom": "Europe/London",
@@ -448,7 +452,6 @@ const countryTimeZones = {
 };
 
 // Global variables
-let liveClockInterval; // For managing time updates
 let timezoneCache = {}; // Cache for timezone abbreviations
 
 /**
@@ -472,26 +475,32 @@ async function getUser(place) {
 		 * @param {string} timeZone - The timezone to fetch the abbreviation for.
 		 * @returns {Promise<string>} - The abbreviation of the timezone.
 		 */
-		const fetchTimeZoneAbbreviation = async (timeZone) => {
-			if (timezoneCache[timeZone]) {
-				console.log(`Using cached abbreviation for ${timeZone}`);
-				return timezoneCache[timeZone]; // Return cached value if available
-			}
-
+		function fetchTimeZoneAbbreviation(timeZone) {
 			try {
-				console.log(`Fetching abbreviation for ${timeZone}...`);
-				const response = await fetch(`https://worldtimeapi.org/api/timezone/${timeZone}`);
-				if (!response.ok) {
-					throw new Error(`HTTP error! status: ${response.status}`);
+				const abbreviation = new Intl.DateTimeFormat('en-US', {
+						timeZone,
+						timeZoneName: 'short'
+					})
+					.formatToParts(new Date())
+					.find(part => part.type === 'timeZoneName')?.value;
+
+				if (abbreviation) {
+					timezoneCache[timeZone] = abbreviation;
+					if (!timezoneCache[timeZone]) {
+						console.log(`🕓 Cached abbreviation for ${timeZone}: ${abbreviation}`);
+					}
+
+					return abbreviation;
+				} else {
+					console.warn(`Abbreviation not found for ${timeZone}. Using fallback.`);
+					return '...';
 				}
-				const data = await response.json();
-				timezoneCache[timeZone] = data.abbreviation || ""; // Cache the result
-				return timezoneCache[timeZone];
-			} catch (error) {
-				console.error("Error fetching timezone data:", error);
-				return ""; // Fallback abbreviation
+			} catch (err) {
+				console.error(`Error getting abbreviation for ${timeZone}:`, err);
+				return '...';
 			}
-		};
+		}
+
 
 		/**
 		 * Updates the time on the page based on the selected timezone.
@@ -2195,6 +2204,7 @@ function initializeMaximizedButtons() {
 		});
 	});
 
+
 	// Initialize scroll buttons for each maximized container
 	document.querySelectorAll('.navigation-buttons-holidays button').forEach(button => {
 		button.addEventListener('click', handleScrollButtons);
@@ -3091,7 +3101,8 @@ async function fetchCityData() {
 			if (!popupEl) return;
 
 			setTimeout(() => {
-				const markerID = `${amenity.lat}-${amenity.lon}`;
+				const markerID = `${lat}-${lon}`;
+
 				const isPinned = pinnedMarkers.has(markerID);
 
 				const pinBtn = document.createElement("button");
@@ -3113,6 +3124,7 @@ async function fetchCityData() {
 						pinBtn.textContent = "Unpin 📌";
 					}
 				});
+
 
 				// Prevent duplicate buttons
 				if (!popupEl.querySelector("button")) {
@@ -4034,7 +4046,6 @@ function plotMarkers(data, type) {
 // Function to enhance marker popups with extra details
 
 function updateMarkerPopups() {
-	console.log("updateMarkerPopups() called");
 
 	document.querySelectorAll("#places-results tbody tr").forEach(row => {
 		let lat = parseFloat(row.getAttribute("data-lat"));
@@ -4161,7 +4172,7 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 		// Update Places and Weather content
 		document.getElementById("places-results").innerHTML = ` 
             <tr>
-                <td><img src="path/to/icon.png" alt="Icon" style="width: 32px; height: 32px;"></td>
+                <td><img src="https://placehold.co/40x40" alt="placeholder"></td>
                 <td>Central Park</td>
                 <td>Beautiful scenery</td>
             </tr>`;
@@ -4194,7 +4205,7 @@ style.textContent = `
     white-space: normal;
     padding: 1vh;
     background-color: white;
-	font-family: "Roboto", sans-serif;
+    
   }
 
   #places-results td:first-child {
@@ -4203,4 +4214,7 @@ style.textContent = `
     max-width: 30px;
 }
 `;
+
 document.head.appendChild(style);
+
+window.initMap = initMap;
