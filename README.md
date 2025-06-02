@@ -100,7 +100,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
          
          -   Merienda One is used for the logo, name and general branding, including all major headings, branching down from top to bottom.
         
-        <h3 align="center"><img src="assets/readme/merienda-one.png"></h3>
+        <h3 align="center"><img src="assets/readme/merienda-one.jpg"></h3>
 
     2)  "Open Sans"
 
