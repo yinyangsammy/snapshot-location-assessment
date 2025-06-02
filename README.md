@@ -23,8 +23,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
   + [Imagery](#imagery)
   + [Icons](#icons)
 - [Structure](#structure)
-  + [Information Architecture](#information-architecture)
-  + [Irregular Structure](#irregular-structure)
+- [Irregular Structure](#irregular-structure)
 - [Features](#features)
     + [Current Features](#current-features)
         + [Navigation Bar](#navigation-bar)
@@ -132,9 +131,11 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         <h3 align="center"><img src="assets/readme/simple_world_map_svg.jpg"></h3>
         
-        #### Map 3 - OpenStreetMap Map + Emojis
+        #### Map 3 - OpenStreetMap Map + Emoji Icons
         
         The third map is a plain OpenStreetMap which I have found no need to cover with any filter, as I believe it suits the rest of the page fairly well. This map is imbued with a hotel emoji for each hotel result on first load, and then features amenity emojis on each amenity button click.
+
+        ## Icons
 
 
         ### Emoji Icons
@@ -172,7 +173,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         - I used icons from Font Awesome for social media links in the footer, to improve clarity and efficiency for my users.
 
 
--   # Structure & Features
+-   # Structure
 
     The website has 3 pages:
 
@@ -219,14 +220,14 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     The OpenStreetMaps Map of the world features a search bar just above, where the user can input an address or city name. On clicking enter:
         
-    1. The map will zoom into that address.
+    1) The map will zoom into that address.
 
     <h3 align="center"><img src="assets/readme/openstreetsmap.png"></h3>
 
         
-    2. The map will populate itself with hotels.
+    2) The map will populate itself with hotels.
 
-    3. The following information fades in below the map:
+    3) The following information fades in below the map:
         
     i) Hotel Details
         
@@ -236,39 +237,39 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     <h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
 
-    4. If you click on the map emoji for one of the hotels populated in the table, the actual map will zoom in on the hotel in question.
+    4) If you click on the map emoji for one of the hotels populated in the table, the actual map will zoom in on the hotel in question.
 
     <h3 align="center"><img src="assets/readme/hotel-zoom.png"></h3>
 
-    5. There is then the option to choose from different amenity buttons within the place-container besides the hotel container
+    5) There is then the option to choose from different amenity buttons within the place-container besides the hotel container
 
     <h3 align="center"><img src="assets/readme/amenity-buttons-table.png"></h3>
     
-    6. Click on any amenity button and the map will be populated with markers for their respective amenities.
+    6) Click on any amenity button and the map will be populated with markers for their respective amenities.
 
     <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
 
-    7. To the right of the place-container, the user will find the weather forecasts for the address they have entered. The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. The five day forecast comes next and once again can be assessed in 3 hour increments. Lastly, the 16 day forecast just gives a daily average for each day.
+    7) To the right of the place-container, the user will find the weather forecasts for the address they have entered. The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. The five day forecast comes next and once again can be assessed in 3 hour increments. Lastly, the 16 day forecast just gives a daily average for each day.
 
     <h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
 
 
     ## 2) *Safety Page*
 
-    The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook)
+    The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook).
 
     ## 3) *Weather Page*
 
-    The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/)
+    The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/).
 
-    # Structural Irregularities
+ -   # Irregular Structure
 
-    <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
     
     
-    -   The website includes a few structural irregularities & console errors:
+The website includes a few structural irregularities & console errors:
 
-        ### CORS WARNING
+1)    ### CORS WARNING
         
         - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
         
@@ -282,9 +283,28 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
 
+        2)    ### Quota Errors
+
+        As I am using many API services on their free pricing plan while in the developmental stage, occasionally the user will experience errors such as the following:
+
+        400 Bad Request 
+        403 Forbidden
+        426 Upgrade Required
+
+        or the likes of
+
+        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
+
+        which is an analytics call trying to send data back to Wise’s servers, informing which site is using their widget.
+
+
         ### Embedded CSS 
         
         -   The wise fx currency widget came with inline styling.
+
+        ### Embedded Javascript
+
+        -   I have kept the script inline for the Pexels picture carousel, as its functionality seems to work much more smoothly that way. At some point I will try to deduct why. More on this in bugs.
 
     
 -   # Features
