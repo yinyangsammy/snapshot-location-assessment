@@ -4218,3 +4218,7 @@ style.textContent = `
 document.head.appendChild(style);
 
 window.initMap = initMap;
+
+if (!window.L) { // Leaflet failed to load
+  document.getElementById('map-wrapper').classList.add('hidden');
+}

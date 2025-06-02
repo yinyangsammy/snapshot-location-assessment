@@ -675,7 +675,7 @@ img {
   max-width: 90%;
   min-height: fit-content;
   height: 100%;
-  max-height: 120rem;
+  max-height: 200rem;
   margin-left: 1%;
   margin-right: 1.5%;
   padding: 1.75%;
@@ -1109,7 +1109,7 @@ img {
 
 /* Hidden Containers */
 .snapshot-box.hidden {
-  display: none;
+  display: none !important;
 }
 
 .navigation-buttons {
