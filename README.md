@@ -1,7 +1,7 @@
-ME<h1 align="center" bold>Snapshot Location</h1>
+<h1 align="center" bold>Snapshot Location</h1>
 
 
-<h3 align="center"><img src="assets/readme/mockup-screens-iphone-grey.png"></h3>
+<h3 align="center"><img src="assets/readme/mockup-screens-iphone-grey.jpg"></h3>
 
 Snapshot Location is your go-to website for discovering more about a particular location.
 
