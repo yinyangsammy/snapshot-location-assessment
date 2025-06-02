@@ -158,6 +158,8 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         When clicking on a hotel or amenity on the map, a popup marker will display with relevant information (icon, name, address, phone number & website). At the bottom, the user will find a pin button, entailing them to pin the respective hotel or amenity to the map, while they look at other potential places of interest.
 
+        <h3 align="center"><img src="assets/readme/pin-button.png"></h3>
+
         #### Map Emoji 🗺️
 
         Among the information populated in the table results for both hotels and amenities, the user will find a map emoji. On clicking this map emoji, the map itself will zoom in on the respective amenity or hotel.
@@ -168,7 +170,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         - I used icons from Font Awesome for social media links in the footer, to improve clarity and efficiency for my users.
 
 
--   # Structure
+-   # Structure & Features
 
     -   ## Information Architecture
 
@@ -186,15 +188,20 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         When the user clicks on any country, the following information fades in below:
 
-        1. Country Time & Timezone
-        2. Country Name
-        3. Country Currency
+        
+        i) Country Time & Timezone
+        
+        ii) Country Name
+        
+        iii) Country Currency
 
         <h3 align="center"><img src="assets/readme/boxes.png"></h3>
 
-        * News Headlines
-        * Country Information
-        * Exchange Rates
+        iv) News Headlines
+
+        v) Country Information
+
+        vi) Exchange Rates
 
         <h3 align="center"><img src="assets/readme/info.png"></h3>
        
@@ -207,19 +214,15 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         
         2. The map will populate itself with hotels.
 
+        <h3 align="center"><img src="assets/readme/map-hotels.png"></h3>
+
         3. The hotel container just below will also populate the same hotels as displayed on the map within a table.
 
-        <h3 align="center"><img src="assets/readme/boxes.png"></h3>
+        <h3 align="center"><img src="assets/readme/table-hotels.png"></h3>
 
-        * News Headlines
-        * Country Information
-        * Exchange Rates
+        4. There is then the option to choose amongst different amenities within the place-container besides the hotel container and the map will be populated with markers for those amenities.
 
-        <h3 align="center"><img src="assets/readme/info.png"></h3>
-
-        
-
-        There is then the option to choose amongst different amenities within the place-container besides the hotel container and the map will be populated with markers for those amenities.
+        <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
 
         #### Photo Carousel for Countries
 
@@ -646,13 +649,13 @@ Responsivity tests were carried out using Google Chrome DevTools & Microsoft Edg
 I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 2160) screens to verify the web pages would work across monitor sizes. 
 
 #### FHD (1920x1080) 
-<h2 align="center"><img src="assets/readme/toon-bazaar-fhd.jpg"></h2>
+<h2 align="center"><img src="assets/readme/snapshot-location-fhd.jpg"></h2>
 
 #### 2k (2560x1440)
-<h2 align="center"><img src="assets/readme/toon-bazaar-2k.jpg"></h2>
+<h2 align="center"><img src="assets/readme/snapshot-location-2k.jpg"></h2>
 
 #### 4K (3840 x 2160)
-<h2 align="center"><img src="assets/readme/toon-bazaar-4k.jpg"></h2>
+<h2 align="center"><img src="assets/readme/snapshot-location-4k.jpg"></h2>
 
 # Testing User Experience
 
