@@ -2111,30 +2111,6 @@ i {
   margin-bottom: 10%;
 }
 
-.heading-text-center-left {
-  font-size: 3em;
-  text-align: center;
-  z-index: 100;
-  position: absolute;
-  color: white;
-  font-weight: bold;
-  left: 31%;
-  top: 60vh;
-  filter: drop-shadow(1px 1px 1px silver);
-}
-
-.heading-text-center-right {
-  font-size: 3em;
-  text-align: center;
-  z-index: 100;
-  position: absolute;
-  color: white;
-  font-weight: bold;
-  right: 28%;
-  top: 60vh;
-  filter: drop-shadow(1px 1px 1px beige);
-}
-
 .warning-text-center {
   text-align: center;
   font-family: "Roboto", sans-serif;
