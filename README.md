@@ -228,11 +228,11 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     3. The following information fades in below the map:
         
-    i) List of Hotels
+    i) Hotel Details
         
-    ii) List of Places of Interest
+    ii) Places of Interest
         
-    iii) Weather Forecast (Daily, 5 day & 16 day)
+    iii) Weather Forecasts (Daily, 5 day & 16 day)
 
     <h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
 
@@ -248,16 +248,24 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
 
+    7. To the right of the place-container, the user will find the weather forecasts for the address they have entered. The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. The five day forecast comes next and once again can be assessed in 3 hour increments. Lastly, the 16 day forecast just gives a daily average for each day.
+
+    <h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
+
+
     ## 2) *Safety Page*
 
+    The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook)
+
     ## 3) *Weather Page*
+
+    The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/)
 
     # Structural Irregularities
 
     <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
     
     
-
     -   The website includes a few structural irregularities & console errors:
 
         ### CORS WARNING
