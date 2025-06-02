@@ -226,8 +226,6 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         
     2. The map will populate itself with hotels.
 
-    <h3 align="center"><img src="assets/readme/map-hotels.png"></h3>
-
     3. The following information fades in below the map:
         
     i) List of Hotels
@@ -236,15 +234,15 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         
     iii) Weather Forecast (Daily, 5 day & 16 day)
 
-    <h3 align="center"><img src="assets/readme/table-hotels.png"></h3>
+    <h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
 
     4. If you click on the map emoji for one of the hotels populated in the table, the actual map will zoom in on the hotel in question.
 
-    <h3 align="center"><img src="assets/readme/table-hotels.png"></h3>
+    <h3 align="center"><img src="assets/readme/hotel-zoom.png"></h3>
 
     5. There is then the option to choose from different amenity buttons within the place-container besides the hotel container
 
-    <h3 align="center"><img src="assets/readme/amenity-buttons-places.png"></h3>
+    <h3 align="center"><img src="assets/readme/amenity-buttons-table.png"></h3>
     
     6. Click on any amenity button and the map will be populated with markers for their respective amenities.
 
