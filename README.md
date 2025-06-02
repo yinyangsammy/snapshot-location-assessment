@@ -158,11 +158,13 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         When clicking on a hotel or amenity on the map, a popup marker will display with relevant information (icon, name, address, phone number & website). At the bottom, the user will find a pin button, entailing them to pin the respective hotel or amenity to the map, while they look at other potential places of interest.
 
-        <h3 align="center"><img src="assets/readme/pin-button.png"></h3>
+        <h3 align="center"><img src="assets/readme/pin-button.jpeg"></h3>
 
         #### Map Emoji 🗺️
 
         Among the information populated in the table results for both hotels and amenities, the user will find a map emoji. On clicking this map emoji, the map itself will zoom in on the respective amenity or hotel.
+
+        <h3 align="center"><img src="assets/readme/map-emoji.png"></h3>
 
 
     -   ## Font Awesome Icons
