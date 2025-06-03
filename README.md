@@ -159,13 +159,13 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         When clicking on a hotel or amenity on the map, a popup marker will display with relevant information (icon, name, address, phone number & website). At the bottom, the user will find a pin button, entailing them to pin the respective hotel or amenity to the map, while they look at other potential places of interest.
 
-        <h3 align="center"><img src="assets/readme/pin-button.jpeg"></h3>
+        <h3 align="center"><img src="assets/readme/pin-button.jpg"></h3>
 
         #### Map Emoji 🗺️
 
         Among the information populated in the table results for both hotels and amenities, the user will find a map emoji. On clicking this map emoji, the map itself will zoom in on the respective amenity or hotel.
 
-        <h3 align="center"><img src="assets/readme/map-emoji.png"></h3>
+        <h3 align="center"><img src="assets/readme/map-emoji.jpg"></h3>
 
 
     -   ## Font Awesome Icons
@@ -245,11 +245,14 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     <h3 align="center"><img src="assets/readme/amenity-buttons-table.png"></h3>
     
-    6) Click on any amenity button and the map will be populated with markers for their respective amenities.
+    6) Click on any amenity button and the map will be populated with markers for any found addresses appertaining to that amenity.
 
     <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
 
-    7) To the right of the place-container, the user will find the weather forecasts for the address they have entered. The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. The five day forecast comes next and once again can be assessed in 3 hour increments. Lastly, the 16 day forecast just gives a daily average for each day.
+    7) To the right of the place-container, the user will find the weather forecasts for the address they have entered. 
+    -   The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. 
+    -   The five day forecast comes next and once again can be assessed in 3 hour increments. 
+    -   The 16 day forecast just gives a daily average for each day.
 
     <h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
 
@@ -283,13 +286,13 @@ The website includes a few structural irregularities & console errors:
 
         -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
 
-        2)    ### Quota Errors
+1)    ### Quota Errors
 
-        As I am using many API services on their free pricing plan while in the developmental stage, occasionally the user will experience errors such as the following:
+        As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
-        400 Bad Request 
-        403 Forbidden
-        426 Upgrade Required
+        -   400 Bad Request 
+        -   403 Forbidden
+        -   426 Upgrade Required
 
         or the likes of
 
@@ -304,7 +307,7 @@ The website includes a few structural irregularities & console errors:
 
         ### Embedded Javascript
 
-        -   I have kept the script inline for the Pexels picture carousel, as its functionality seems to work much more smoothly that way. At some point I will try to deduct why. More on this in bugs.
+        -   I have kept the script inline for the PEXELS picture carousel, as its functionality seems to work much more smoothly that way. At some point I will try to deduct why. More on this in bugs.
 
     
 -   # Features
@@ -313,7 +316,7 @@ The website includes a few structural irregularities & console errors:
 
         -   Responsive on all device sizes.
 
-        -   Content-packed pages, full of colourful and inspiring imagery and media including the background images.
+        -   Content-packed pages, full of colourful and inspiring imagery and media.
 
         -   Interactive elements such as fully-controllable video iframes and internal links to different media.
         
