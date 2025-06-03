@@ -393,7 +393,8 @@ The website includes a few structural irregularities & console errors:
     - CodeBeautify was used to help beautify the code.
 13. [Coolors:](https://coolors.co/?home)
     - Coolors was used to create the colour palette for this README.
-14. [Icons8](https://icons8.com/icons/set/arrow)
+14. [Icons8:](https://icons8.com/icons/set/arrow)
+    - Icons8 was used to acquire arrows for my scroll buttons and scroll arrows.
 15. [Git:](https://git-scm.com/)
     - Git was used for version control by utilizing the Gitpod terminal to commit to Git and Push to GitHub.
 16. [GitHub:](https://github.com/)
