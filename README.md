@@ -181,23 +181,23 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     The Home & Landing page features 2 interactive maps and a photo carousel separating the two:
 
-    ### Top Half
+### Top Half
         
-    ### Map 1 - Countries
+### Map 1 - Countries
 
-    The SVG Map of the world features clickable countries, the names of which appear when the user hovers over that region of the globe.
+The SVG Map of the world features clickable countries, the names of which appear when the user hovers over that region of the globe.
 
-    <h3 align="center"><img src="assets/readme/hover-name.png"></h3>
+<h3 align="center"><img src="assets/readme/hover-name.png"></h3>
 
-    When the user clicks on any country, the following information fades in below:
+When the user clicks on any country, the following information fades in below:
  
-    i) Country Time & Timezone
+i) Country Time & Timezone
         
-    ii) Country Name
+ii) Country Name
         
-    iii) Country Currency
+iii) Country Currency
 
-    <h3 align="center"><img src="assets/readme/boxes.png"></h3>
+<h3 align="center"><img src="assets/readme/boxes.png"></h3>
 
     iv) News Headlines
 
@@ -205,29 +205,29 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
     vi) Exchange Rates
 
-    <h3 align="center"><img src="assets/readme/info.png"></h3>
+<h3 align="center"><img src="assets/readme/info.png"></h3>
 
-    ### Pexels Photo Carousel for Countries
+### Pexels Photo Carousel for Countries
 
-    The photo carousel separates the top half and the bottom half of the page, displaying photos of the country that the user has clicked in a striking carousel.
+The photo carousel separates the top half and the bottom half of the page, displaying photos of the country that the user has clicked in a striking carousel.
 
-    <h3 align="center"><img src="assets/readme/snapshot-colombia.png"></h3>
+<h3 align="center"><img src="assets/readme/snapshot-colombia.png"></h3>
 
     
-    ### Bottom Half
+### Bottom Half
 
-    ### Map 2 - Cities / Addresses
+### Map 2 - Cities / Addresses
 
-    The OpenStreetMaps Map of the world features a search bar just above, where the user can input an address or city name. On clicking enter:
+The OpenStreetMaps Map of the world features a search bar just above, where the user can input an address or city name. On clicking enter:
         
-    1) The map will zoom into that address.
+#### 1) The map will zoom into that address.
 
-    <h3 align="center"><img src="assets/readme/openstreetsmap.png"></h3>
+<h3 align="center"><img src="assets/readme/openstreetsmap.png"></h3>
 
         
-    2) The map will populate itself with hotels.
+#### 2) The map will populate itself with hotels.
 
-    3) The following information fades in below the map:
+#### 3) The following information fades in below the map:
         
     i) Hotel Details
         
@@ -235,35 +235,36 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         
     iii) Weather Forecasts (Daily, 5 day & 16 day)
 
-    <h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
+<h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
 
-    4) If you click on the map emoji for one of the hotels populated in the table, the actual map will zoom in on the hotel in question.
+#### 4) If you click on the map emoji for one of the hotels populated in the table, the actual map will zoom in on the hotel in question.
 
-    <h3 align="center"><img src="assets/readme/hotel-zoom.png"></h3>
+<h3 align="center"><img src="assets/readme/hotel-zoom.png"></h3>
 
-    5) There is then the option to choose from different amenity buttons within the place-container besides the hotel container
+#### 5) There is then the option to choose from different amenity buttons within the place-container besides the hotel container
 
-    <h3 align="center"><img src="assets/readme/amenity-buttons-table.png"></h3>
+<h3 align="center"><img src="assets/readme/amenity-buttons-table.png"></h3>
     
-    6) Click on any amenity button and the map will be populated with markers for any found addresses appertaining to that amenity.
+#### 6) Click on any amenity button and the map will be populated with markers for any found addresses appertaining to that amenity.
 
-    <h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
+<h3 align="center"><img src="assets/readme/map-amenities.png"></h3>
 
-    7) To the right of the place-container, the user will find the weather forecasts for the address they have entered. 
+#### 7) To the right of the place-container, the user will find the weather forecasts for the address they have entered.
+
     -   The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. 
     -   The five day forecast comes next and once again can be assessed in 3 hour increments. 
     -   The 16 day forecast just gives a daily average for each day.
 
-    <h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
+<h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
 
 
-    ## 2) *Safety Page*
+## 2) *Safety Page*
 
-    The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook).
+The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook).
 
-    ## 3) *Weather Page*
+## 3) *Weather Page*
 
-    The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/).
+The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/).
 
  -   # Irregular Structure
 
@@ -298,7 +299,7 @@ The website includes a few structural irregularities & console errors:
 
         GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
 
-        which is an analytics call trying to send data back to Wise’s servers, informing which site is using their widget.
+        which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
 
         ### Embedded CSS 
@@ -314,97 +315,45 @@ The website includes a few structural irregularities & console errors:
 
     -   ## General Features:
 
-        -   Responsive on all device sizes.
+-   A nav bar, enabling the user to easily navigate from safety map to weather map to homepage.
+-   A clickable SVG map with interactive country tiles that fill with colour on hover and fades out on scroll down.
+-   A name modal that pops up on hover and fades out on scroll down.
+-   A black instruction modal that pops up on map click, informing the user to 'Scroll down for a snapshot of {location}', and fades out on scroll down.
+-   Fade in containers which only appear once the user has clicked a country.
+-   The name of each country.
+-   The time and timezone for each country.
+-   The currency of each country.
+-   News headlines for each country.
+-   General Information for each country.
+-   Exchange rates for each country.
+-   A photo carousel, displaying images of each country.
+-   An OpenStreetsMap & search bar.
+-   Fade in containers which only appear once the user has entered a city name or address into the search bar.
+-   A list of hotels and their details for the entered city or address.
+-   Amenity buttons, which can generate lists of different amenities within that city or address region.
+-   A weather forecast (daily, 5 day and 16 day) for the entered city or address region.
+-   An interactive contact section with links to click in order to email or telephone us for more information or to ost an advert. A map modal which pops up when they click on the postcode for our company.
+-   A safety map.
+-   A weather map.
+-   Responsive on all device sizes.
+-   Content-packed pages, full of colourful and engaging imagery and media.
+-   Interactive elements such as clickable maps. 
+-   Scroll buttons to navigate news headlines and amenity / hotel lists.
+-   Scroll arrows to navigate weather forecasts
+-   Search bars with map zoom.  
+-   An interactive exchange rate widget.
+-   Easy offsite navigation to social media accounts.
+-   A 404 page for users who direct to a non-existent page or resource are able to return to the main page without having to use browser navigation buttons.
 
-        -   Content-packed pages, full of colourful and inspiring imagery and media.
+  <h2 align="center"><img src="assets/readme/404.png"></h2>
 
-        -   Interactive elements such as fully-controllable video iframes and internal links to different media.
-        
-        -   Forms to make requests or get a quote.
+### Additional features which might be implemented
 
-        -   Easy offsite navigation to social media accounts and artists' portfolios.
-
-    -   ## Navigation Bar
-
-        - The Homepage, Market and Contact pages feature a navigation bar, with easy access buttons to each page, allowing the user to easily navigate between them without needing to go back to the homepage.
-        - The Navigation bar appears as a horizontal list of buttons at the top of the page on desktop and mobile.
-        - The colours of the background and the text change when hovered over. This further emphasises that this is a clickable link, making for a very intuitive user experience.
-        - Aria-Labels have been used to make it clear to Screen Readers.
-        - The Navigation Bar & Footer match on each page, to make for an intuitive UX.
-
-
-    <h2 align="center"><img src="assets/readme/navbar-normal.jpg"></h2>
-    <h2 align="center"><img src="assets/readme/navbar-hover.jpg"></h2>
-            
-    -   ## Buttons
-
-        - Buttons are used for navigation, for links to social media and for the contact form.
-        - Buttons change colour (both background and text) when hovered over. 
-        - Button text is legible both in its normal and hover state.
-
-        <h2 align="center"><img src="assets/readme/send-button.jpg"></h2>
-        <h2 align="center"><img src="assets/readme/send-button-hover.jpg"></h2>
-
-    -   ## Links
-
-        - Links are used for navigation within the about section, giving users immediate access to what is being highlighted. The links take them to:
-            1. Cartoonists' Portfolios
-            2. Illustrators' Portfolios
-            3. Animators' Portfolios
-            4. Request & Contact Form
-            5. 2D Toons
-            6. 3D Toons
-            7. Comics & Storyboards
-            8. Animations
-            9. Merchandise
-            10. Request & Contact Form
-        
-        - Links are underlined, to make the user aware they are clickable.
-        - Links change colour (both background and text) when hovered over to further ensure the user knows that they are distinct from the other text.    
-        - Links' text is legible both in its normal and hover state.
-        - Aria-Labels have been used to make it clear to Screen Readers.
-
-
-        <h2 align="center"><img src="assets/readme/links-normal.jpg"></h2>
-        <h2 align="center"><img src="assets/readme/links-hover.jpg"></h2>
-
-    -   ## Footer
-
-        -   The Footer remains consistent on each page.
-        -   The Footer appears as a horizontal list of buttons at the bottom of the page on desktop and mobile.
-        -   The Footer includes social media buttons.
-        -   The social media buttons change colour (both background and text) when hovered over. 
-        -   Social Media links open in a new page.
-        -   Pleasant looking Social Media icons make each one evident to the user. 
-        -   Aria-Labels have been used to make it clear to Screen Readers.
-        - The Footer & Navigation Bar match on each page, to make for an intuitive UX.
-
-    <h2 align="center"><img src="assets/readme/footer-normal.jpg"></h2>
-    <h2 align="center"><img src="assets/readme/footer-hover.jpg"></h2>
-    
-
-    -   ### 404 Page
-   
-        -   I added a custom 404 error page to help the user navigate back to the homepage if they enter an incorrect URL.  The 404 page features the site's header, navigation bar and footer plus an image of a cartoon wolf spray-painting the numbers "404", an explanation that they're lost and a button back to the Homepage. The back button is there in case the user hasn't realised they can use the navigation bar to get back to each of the web pages. I created the 404.html page on my repository by following this [Github Documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/creating-a-custom-404-page-for-your-github-pages-site).
-  
-    <h2 align="center"><img src="assets/readme/404.png"></h2>
-
-    -  ## Future Features
-
-    -   ###  Popup Infinite Slider Gallery Modal (HTML, CSS, JavaScript) 
-        
-        - When a user clicks on a piece of artwork (be it an image or a video) a new frame will pop up in the foreground, allowing the user to view the art in a larger frame with greater detail. Then they will be able to scroll horizontally through the different pieces of art. More details here: 
-        [https://www.youtube.com/watch?v=H5zTYYOX1to] | 
-        [https://codinginpublic.dev/projects/popup-image-slider/]
-
-
-    -   ### Onsite Artist Portfolios
-
-        - Ideally in a future update, all the artist portfolios will be onsite and available via internal links.
-
-    -   ### Academy Page
-
-        - I would like to add a page with tutorials (text & video) and the ability to be tutored online by the user's artist of choice.
+-  A review container - using a Trip Advisor or Expedia API.
+-  A booking container - using an Air BnB or Booking API, or, if possible, both APIs jointly.
+-  A tour & events container - using APIS to list all tours or events available to the user in the entered city or address region.
+-  A table generated from all the hotels and amenities th user has pinned on the map.
+-  A game for children to memorize information about each country.
 
 # Wireframes
 
@@ -436,25 +385,18 @@ The website includes a few structural irregularities & console errors:
     - Flexbox was used throughout the project to make rows and columns responsive on all devices.
 5. [Media Queries](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Media_queries): 
     - Media Queries was used throughout the project to make the web site responsive on all devices.
-6. [iframe](https://developer.mozilla.org/en-US/docs/Web/HTML/Element/iframe): 
-    - The IFrame player API was used to embed a YouTube video player on the website and control the player using JavaScript.
-7. [Illustrator:](https://www.adobe.com/ie/products/illustrator.html)
-    - Illustrator was used to create the vector artwork with the aid of a tablet and pen.
 8. [Photoshop:](https://www.adobe.com/ie/products/photoshop.html)
     - Photoshop was used to paint, resize, retouch and edit images for the website.
 9. [Balsamiq:](https://balsamiq.com/)
     - Balsamiq was used to create the [wireframes](https://github.com/) during the design process.
-10. [Pencil:](https://pencil.evolus.vn/)
-    - Pencil was used to create the [wireframes](https://github.com/) during the design process.
 11. [CodeBeautify:](https://codebeautify.org/css-beautify-minify#)
     - CodeBeautify was used to help beautify the code.
-12. [NightCafeStudio:](https://creator.nightcafe.studio/)
-    - NightCafeStudio was used in tandem with my own artwork to create the backgrounds and the 3D cartoons characters.
 13. [Coolors:](https://coolors.co/?home)
     - Coolors was used to create the colour palette for this README.
-14. [Git:](https://git-scm.com/)
+14. [Icons8](https://icons8.com/icons/set/arrow)
+15. [Git:](https://git-scm.com/)
     - Git was used for version control by utilizing the Gitpod terminal to commit to Git and Push to GitHub.
-15. [GitHub:](https://github.com/)
+16. [GitHub:](https://github.com/)
     - GitHub is used to store the projects code after being pushed from Git.
 
 # Testing
@@ -464,10 +406,9 @@ The Snapshot Location website has been tested using the following methods:
 - [Code Validation](#code-validation)
     - [W3C HTML Validator](#w3c-html-validator)
         - [Homepage](#homepage)
-        - [Market Page](#market-page)
-        - [Contact Page](#contact-page)
+        - [Market Page](#safety-page)
+        - [Contact Page](#weather-page)
     - [W3C CSS Validator](#w3c-css-validator)
-
     - [JSLint Javascript Validator](#jslint-js-validator)
 
 
@@ -506,15 +447,15 @@ The W3C Markup Validator and W3C CSS Validator Services were used to validate ev
 
 The Snapshot Location website passed all tests using the W3C HTML Validator tool
 
--   ### Homepage 
+-   ### Homepage / Location
 
 <h2 align="right"><img src="assets/readme/homepage.png"></h2> 
 
--   ### Market Page 
+-   ### Safety Page 
 
 <h2 align="right"><img src="assets/readme/safety.png"></h2> 
 
--   ### Contact Page 
+-   ### Weather Page 
 
 <h2 align="right"><img src="assets/readme/weather.png"></h2> 
 
@@ -524,6 +465,12 @@ The Snapshot Location website passed all tests using the W3C HTML Validator tool
 
 The Snapshot Location website passed all tests using the W3C CSS Validator tool
 <h2 align="center"><img src="assets/readme/css.png"></h2>
+
+## JSHint Javascript Validator
+
+The Snapshot Location website passed all tests using the JSHint JS Validator, with only warnings and no errors reported.
+
+<h2 align="center"><img src="assets/readme/javascript.png"></h2>
 
 ## Lighthouse
 
