@@ -199,11 +199,11 @@ iii) Country Currency
 
 <h3 align="center"><img src="assets/readme/boxes.png"></h3>
 
-    iv) News Headlines
+iv) News Headlines
 
-    v) Country Information
+v) Country Information
 
-    vi) Exchange Rates
+vi) Exchange Rates
 
 <h3 align="center"><img src="assets/readme/info.png"></h3>
 
@@ -229,11 +229,11 @@ The OpenStreetMaps Map of the world features a search bar just above, where the 
 
 #### 3) The following information fades in below the map:
         
-    i) Hotel Details
+i) Hotel Details
         
-    ii) Places of Interest
+ii) Places of Interest
         
-    iii) Weather Forecasts (Daily, 5 day & 16 day)
+iii) Weather Forecasts (Daily, 5 day & 16 day)
 
 <h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
 
@@ -308,7 +308,7 @@ The website includes a few structural irregularities & console errors:
 
         ### Embedded Javascript
 
-        -   I have kept the script inline for the PEXELS picture carousel, as its functionality seems to work much more smoothly that way. At some point I will try to deduct why. More on this in bugs.
+        -   I have kept the script inline for the PEXELS picture carousel, as its functionality seems to work much more smoothly that way. At some point, I will try to deduce why. More on this in bugs.
 
     
 -   # Features
@@ -436,6 +436,12 @@ The Snapshot Location website has been tested using the following methods:
 - [Manual Javascript Test Case](manual-js-testing)
 
 
+### Automated testing (TDD)
+We can use code to test our code. which has several advantages over the manual testing method. Many hundreds of tests can be run against a project in a short space of time, and as tests are usually written by the  programmer during development, errors are picked up early. 
+
+However, tests are only as good as the questions we ask & tests can end up as purely decorative giving a false impression. Automated tests don't test the User Experience either, so the best testing strategy is a combination of both automated and manual user tests. 
+
+
 The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
 
 -   [W3C Markup Validator](https://validator.w3.org/#validate_by_input)
@@ -461,17 +467,28 @@ The Snapshot Location website passed all tests using the W3C HTML Validator tool
 <h2 align="right"><img src="assets/readme/weather.png"></h2> 
 
 
-
 ## W3C CSS Validator
 
 The Snapshot Location website passed all tests using the W3C CSS Validator tool
 <h2 align="center"><img src="assets/readme/css.png"></h2>
+
 
 ## JSHint Javascript Validator
 
 The Snapshot Location website passed all tests using the JSHint JS Validator, with only warnings and no errors reported.
 
 <h2 align="center"><img src="assets/readme/javascript.png"></h2>
+
+
+## Manual Javascript Testing
+
+In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. Please see the two examples below: 
+
+Test if container elements exist and are interactive
+Run this in the browser console (F12 → Console tab):
+
+
+
 
 ## Lighthouse
 
@@ -591,7 +608,7 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
       3. Removing javascript iframes
       4. Eliminating render-blocking resources
 
-# Browser Compatibility
+## Browser Compatibility
 
 The site was tested in Brave, Google Chrome, Microsoft Edge and Mozilla Firefox on Desktop.
 
@@ -601,7 +618,7 @@ No issues arose during browser testing.
 
 Appearance, functionality and responsiveness were largely consistent across browsers and devices, adapting fluidly when changing from portrait to landscape mode.
 
-# Responsiveness
+## Responsiveness
 
 Responsivity tests were carried out using Google Chrome DevTools & Microsoft Edge DevTools. Device screen sizes covered include:
 
@@ -620,25 +637,25 @@ Responsivity tests were carried out using Google Chrome DevTools & Microsoft Edg
 - Nest Hub
 - Nest Hub Max
 
-#### Iphone 
+### Iphone 
 <h2 align="center"><img src="assets/readme/iphone.png"></h2>
 
-#### Ipad 
+### Ipad 
 <h2 align="center"><img src="assets/readme/ipad.png"></h2>
 
-#### Nest Hub Max 
+### Nest Hub Max 
 <h2 align="center"><img src="assets/readme/nest-hub-max.png"></h2>
 
 I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 2160) screens to verify the web pages would work across monitor sizes. 
 
-#### FHD (1920x1080) 
-<h2 align="center"><img src="assets/readme/snapshot-location-fhd.jpg"></h2>
+### FHD (1920x1080) 
+<h2 align="center"><img src="assets/readme/snapshot-location-fhd.png"></h2>
 
-#### 2k (2560x1440)
-<h2 align="center"><img src="assets/readme/snapshot-location-2k.jpg"></h2>
+### 2k (2560x1440)
+<h2 align="center"><img src="assets/readme/snapshot-location-2k.png"></h2>
 
-#### 4K (3840 x 2160)
-<h2 align="center"><img src="assets/readme/snapshot-location-4k.jpg"></h2>
+### 4K (3840 x 2160)
+<h2 align="center"><img src="assets/readme/snapshot-location-4k.png"></h2>
 
 # Testing User Experience
 
@@ -698,109 +715,7 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
        + At the bottom of the Contact Page, underneath the request form text area, there is a checkbox (already checked - but which can be unchecked by the user) signing them up with the email address they had to input at the top of the form.
 
-     
-    -   ### Testing Client Goals
-
-    1) *As a Potential Client, I want to check to see if there are any newly added cartoons, comics, illustrations and animations while browsing their daily exhibits of different artists.*
-
-        <h2 align="center"><img src="assets/readme/market-row-merch.png"></h2>
-        
-       + Each page features a background created by our artists and each page is filled with work by our community of artists.
-  
-       + Each row on the Market Page is a gallery of different media, ranging from short animations to illustrations to comics and merchandise.
-  
-       + The artwork on the Homepage and Market Page is updated every 24-48 hours, to give visitors and clients alike a reason to come back and sample more of our artists' fantastic work.
-
-    2)  *"As a Potential Client, I want to find community links and links to all the artists' portfolios."*
-
-        <h2 align="center"><img src="assets/readme/toon-bazaar-community.png"></h2>
    
-        + In the Homepage's about us section, there are links to example artwork of various mediums, external links to artists' portfolios and links to the contact form.
-
-        + At the bottom of each page, there are social media buttons. Each of these buttons will open its respective social media account in a new window.
-
-    3) *As a Potential Client, I want to check to see if there are any new artists or any new services on offer.*
-
-       + In the Homepage's about us section, there are internal links to example artwork and external links to artists' portfolios. The user will be able to filter the portfolios according to medium, style and the date added.
-   
-       + The artwork  is updated every 24-48 hours, to give visitors and clients alike a reason to come back and sample more of our artists' fantastic work.
-  
-       + In a very near future update, Snapshot Location will host its own portfolio pages, with rankings and recommendations based on prior user interactions and searches.
-
-       + Any new services will be highlighted in the about section on the Homepage.
-        
-    4) *As a Potential Client, I want to find the best way to get in contact with the organisation with any questions I may have or to get a quote.*
-   
-       + At the top of each page, underneath the header, there is a navigation bar with buttons to navigate to each page. The button for the Contact Page is clear to see on the right-hand side.
-
-        <h2 align="center"><img src="assets/readme/toon-bazaar-contact.png"></h2> 
-    
-       + On the Homepage, in the about section, there are two links which direct the user straight to the contact form on the Contact Page.
-
-    5)  *As a Potential Client, I want to detail what I am looking to create with artwork as well as text.*
-
-        <h2 align="center"><img src="assets/readme/form-file-upload-button.png"></h2>
-        
-        + On the Contact Page, under the text area of the form, there is a file upload button for potential artists or potential clients to add artwork of their own to their request.  
-  
-    6)  *As a Potential Client, I want to sign up to the Newsletter so that I am emailed any major news, updates or offers, like the 15% off signup offer.*
-
-        <h2 align="center"><img src="assets/readme/form-signup.png"></h2>
-   
-        + At the bottom of the Contact Page, underneath the request form text area, there is a checkbox (already checked - but which can be unchecked by the user) signing them up with the email address they had to input at the top of the form.  
-
-    -   ### Testing Artist Goals
-
-    1. *As a Potential Artist, I want to easily understand the main purpose of the site, learn more about the collective and get a feeling for who they are and what they have to offer.*
-     
-       <h2 align="center"><img src="assets/readme/artist-about.png"></h2>
-
-       + In the about section, we spell out where we are located (everywhere) and how we can help them. There are also links to the contact form wherein they can make requests or get a quote. That's the ''WHO?', 'WHERE?' & 'HOW?' sorted.
-  
-       + The user can then navigate via the links in the about section to examples of our artwork adorning the Homepage & Market Page. That's the 'WHAT?' sorted.
-
-    2. *As a Potential Artist, I want to see whether my work might suit that of the Snapshot Location collective and whether it might be a community I would like to join.*
-
-       + Each page features a background created by our artists and each page is filled with work by our community of artists.
-  
-       + In the Homepage's about us section, there are internal links to example artwork and external links to artists' portfolios.
-  
-       + Each row on the Market Page is a gallery of different media, ranging from short animations to illustrations to comics and merchandise.
-    
-       + On the Contact Page, under the text area of the form, there is a file upload button for potential artists or potential clients to add artwork of their own to their request.
-
-    3.  *As a Potential Artist, I want to find community links, social media links and links to all the artists' portfolios to further my knowledge and understanding of the collective.*
-
-        <h2 align="center"><img src="assets/readme/toon-bazaar-community.png"></h2>
-   
-        + In the Homepage's about us section, there are links to example artwork of various mediums, external links to artists' portfolios and links to the contact form.
-
-        + At the bottom of each page, there are social media buttons. Each of these buttons will open its respective social media account in a new window.
-
-    4.  *As a Potential Artist, I want to find the best way to get in contact with the organisation with any questions I may have about applying and the job particulars.*
-
-        + At the top of each page, underneath the header, there is a navigation bar with buttons to navigate to each page. The button for the Contact Page is clear to see on the right-hand side.
-        
-        + On the Homepage, in the about section, there are two links which direct the user straight to the contact form on the Contact Page.
-
-        + On the Contact Page, there is a text area to ask any questions an artist might want answered.
-    
-    5.  *As a Potential Artist, I want to sign up to the Newsletter so that I am emailed any major news or updates.*  
-   
-        +  At the bottom of the Contact Page, underneath the request form text area, there is a checkbox (already checked - but which can be unchecked by the user) signing them up with the email address they had to input at the top of the form. 
-
-    6. *As a Potential Artist, I want the option to send in a sample of my artwork to gauge their interest in my work.*  
-   
-       + On the Contact Page, under the text area of the form, there is a file upload button for potential artists to add samples of their work as a preliminary to making a full application.
-
-        <h2 align="center"><img src="assets/readme/form-file-upload-button.png"></h2>
-    
-## Further Testing
-
--   The Website was tested on Brave, Google Chrome, Internet Explorer, Microsoft Edge and Safari browsers.
--   The website was viewed on a variety of devices, including a desktop, a laptop & a variety of different-sized S Series Samsung phones.
--   A large amount of testing was done to ensure that all pages were linking correctly for both internal and external links.
-
 ## Bugs
 
 ### Resolved
@@ -828,31 +743,56 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
     - Eliminate render-blocking resources (Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles)
     - Minify CSS
 
-. Media Queries & Flexbox achieve the same results and align my design exactly as desired on Brave, Google Chrome & Microsoft Edge Browsers. Unfortunately, Firefox renders my design slightly differently, meaning that the image and my text-boxes don't quite align.
-
-## Manual Javascript Test Case
-
-JavaScript Manual Test for Console
-
-Test if container elements exist and are interactive
-Run this in the browser console (F12 → Console tab):
+. Media Queries & Flexbox achieve the same results and align my design exactly as desired on Brave, Firefox, Google Chrome & Microsoft Edge Browsers.
 
 
 
 
 # Deployment
 
+## Cloudfare Pages
+
+As I wanted to keep my repository private, I decided to deploy with Cloudfare Pages, as Github wouldn't allow me to keep me repository private when deploying to Github Pages, unless I purchased a pro subscription.
+
+The project was deployed to Cloudfare Pages using the following steps...
+
+Log into Cloudflare Pages
+
+Go to: 
+1.	Log in to [Cloudfare Pages](https://pages.cloudflare.com/)
+2.	Authorize Cloudflare to access your GitHub account.
+3.	Select the snapshot-location repository.
+4.	Choose the main branch.
+5.	When prompted:
+    -	Framework preset: None
+    -	Build command: (leave blank if static)
+    -   Output directory: ./ or dist (if you have one).
+6.  Deploy and obtain a link.
+
+
+https://snapshot-location.pages.dev
+
+Ordinarily, if I didn't want to keep my repository private, I would deploy to Github Pages, using the following protocol:
+
 ## GitHub Pages
 
 The project was deployed to GitHub Pages using the following steps...
 
-1. Log in to GitHub and locate the [GitHub Repository](https://github.com/)
+1. Log in to GitHub and locate the [GitHub Repository](https://github.com/).
 2. At the top of the Repository (not top of page), locate the "Settings" Button on the menu.
-    - Alternatively Click [Here](https://raw.githubusercontent.com/) for a GIF demonstrating the process starting from Step 2.
+- Alternatively Click [Here](https://raw.githubusercontent.com/) for a GIF demonstrating the process starting from Step 2.
 3. Scroll down the Settings page until you locate the "GitHub Pages" Section.
 4. Under "Source", click the dropdown called "None" and select "Master Branch".
 5. The page will automatically refresh.
 6. Scroll back down through the page to locate the now published site [link](https://github.com) in the "GitHub Pages" section.
+
+## Forking the GitHub Repository
+
+By forking the GitHub Repository we make a copy of the original repository on our GitHub account to view and/or make changes without affecting the original repository by using the following steps...
+
+1. Log in to GitHub and locate the [GitHub Repository](https://github.com/).
+2. At the top of the Repository (not top of page) just above the "Settings" Button on the menu, locate the "Fork" Button.
+3. You should now have a copy of the original repository in your GitHub account.
 
 
 # Credits
@@ -864,21 +804,31 @@ The project was deployed to GitHub Pages using the following steps...
     -   I referred to the code from Code Institute's example projects for inspiration, before going away and sourcing more specific tutorials, such as those listed below.
     -   Code from the Love Running project formed the basis of the Media Queries css used in my website.
 
--   [YouTube](https://youtube.com/): I referred back to tutorial videos and my notes taken throughout the process of developing this website:  
+-   [YouTube](https://youtube.com/): I used the following tutorials to build various sections of this site and learn more about using APIs:
+
+[SVG Map + Name & Time](https://www.youtube.com/watch?v=WtoyIiOp5Aw)
+
+[Country Information from REST COUNTRIES](https://www.youtube.com/watch?v=THZyM2z8s-o)
+
+[News App](https://www.youtube.com/watch?v=ZGLKTQVyT0U)
+
+[Weather App](https://www.youtube.com/watch?v=74IOjtVvExY)
+
+[5 Day Forecast](https://www.youtube.com/watch?v=31Z0Z2Qn8NE)
+
+[OpenStreetMaps + Leaflet](https://www.youtube.com/watch?v=vOPr5k_SGVA)
 
 -   [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Media_queries): I also had to do a little more research via Mozilla Developer to achieve the exact level of responsiveness I wanted from Media Queries.
 
--   [W3 Schools](https://www.w3schools.com/css/css3_gradients.asp): W3 Schools gave me the knowledge to create backgrounds featuring different gradients of colour.
-
 -   [W3 Docs](https://www.w3docs.com/snippets/html/how-to-create-an-anchor-link-to-jump-to-a-specific-part-of-a-page.html): W3 Docs gave me the knowledge to link to a specific section of the same page on another page.
 
--   [Google's IFrame Player API](https://developers.google.com/youtube/iframe_api_reference): It was through Google's own page that I learnt how to insert and resize their IFrame Player API.
+-   [Google's IFrame Player API](https://developers.google.com/youtube/iframe_api_reference): It was through Google's own page that I learnt how to insert and resize their IFrame Player.
 
 -   [Free Code Camp](https://www.freecodecamp.org/news/git-revert-commit-how-to-undo-the-last-commit/): Free Code Camp gave me the knowledge to reset or revert the changes of a recent git commit.
 
 -   [Stack Overflow](https://stackoverflow.com/questions/12991351/how-to-force-image-resize-and-keep-aspect-ratio): Stack Overflow gave me the knowledge to force an image to resize but retain the aspect ratio.
 
--   [Stack Overflow](https://stackoverflow.com/questions/300220/how-to-prevent-text-in-a-table-cell-from-wrapping): Stack Overflow gave me the knowledge to prevent my h3 heading from wrapping. 
+-   [Stack Overflow](https://stackoverflow.com/questions/300220/how-to-prevent-text-in-a-table-cell-from-wrapping): Stack Overflow gave me the knowledge to prevent my table text from overflowing. 
 
 -   [CSS-TRICKS](https://css-tricks.com/almanac/properties/t/text-underline-position/): CSS-TRICKS gave me the knowledge to set the placement of the underline so it wasn't broken by the text when using the Jomhuria font on the Contact Page.
 
@@ -893,11 +843,15 @@ The project was deployed to GitHub Pages using the following steps...
 
 -  All Country Information was kindly provided by REST COUNTRIES [REST COUNTRIES](https://restcountries.com/).
 
+-  All City Information was kindly provided by [OpenStreetMap](https://www.openstreetmap.org/), [Overpass](https://wiki.openstreetmap.org/wiki/Overpass_API) & [Leaflet](https://leafletjs.com/).
+
+-  All hotel & amenity information was kindly provided by [OpenStreetMap](https://www.openstreetmap.org/), [Overpass](https://wiki.openstreetmap.org/wiki/Overpass_API) & [Leaflet](https://leafletjs.com/).
+
 -   All Photos were kindly provided by [PEXELS](https://www.pexels.com/).
 
 -   All News Stories were kindly provided by [NEWS API](https://newsapi.org/), [World News API ](https://worldnewsapi.com/), [GNews](https://gnews.io/) &[NewsData](https://newsdata.io/).
 
--  All hotel & amenity information was kindly provided by [OpenStreetMap](https://www.openstreetmap.org/), [Overpass](https://wiki.openstreetmap.org/wiki/Overpass_API) & [Leaflet](https://leafletjs.com/).
+-   The currency exchange widget was kindly provided by [Wise](https://wise.com/gb/business-tools/fx-widget)
 
 -   All Weather forecasts were kindly provided by [OpenWeather](https://openweathermap.org/api).
 
@@ -915,6 +869,10 @@ The project was deployed to GitHub Pages using the following steps...
 -   Thank you to the tutors and staff at Code Institute for all their support.
 
 -   Thank you to the Code Institute Slack Community.
+
+-   Thank you to the YouTube community.
+
+-   Thank you to the Reddit community.
 
 -   Thank you to all the representatives at Google Cloud, who very kindly walked me through their product range and helped me with unexpected errors and charges. While the services proved prohibitively expensive at this stage of development, the representatives who helped me were some of the most lovely, friendly and articulate mentors I've had the pleasure of meeting.
 
