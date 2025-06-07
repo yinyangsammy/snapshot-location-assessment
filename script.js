@@ -4220,8 +4220,3 @@ window.initMap = initMap;
 if (!window.L) { // Leaflet failed to load
   document.getElementById('map-wrapper').classList.add('hidden');
 }
-
-// Make sure initMap is exposed globally before Google tries to call it
-window.initMap = function () {
-  console.log("✅ Google Maps initMap() was called. Ignored for OpenStreetMap.");
-};
