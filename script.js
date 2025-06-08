@@ -2940,35 +2940,41 @@ const amenityCache = {
 	bicycle_rental: [],
 };
 
-function initMap() {
-	// Set up Leaflet map
-	map = L.map('map').setView([0, 0], 2);
-	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-		attribution: '&copy; OpenStreetMap contributors'
-	}).addTo(map);
+function initLeafletMap() {
+    // Set up Leaflet map
+    map = L.map('map').setView([0, 0], 2);
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '&copy; OpenStreetMap contributors'
+    }).addTo(map);
 
-	// Add marker layer
-	markersLayer = L.layerGroup().addTo(map);
-	markerCluster.addTo(map);
+    // Add marker layer
+    markersLayer = L.layerGroup().addTo(map);
+    markerCluster.addTo(map);
 
-	// Create a draggable marker
-	marker = L.marker([0, 0], {
-		draggable: true
-	}).addTo(map);
-	marker.on("dragend", () => reverseGeocode(marker.getLatLng()));
+    // Create a draggable marker
+    marker = L.marker([0, 0], { draggable: true }).addTo(map);
+    marker.on("dragend", () => reverseGeocode(marker.getLatLng()));
 
-	// Event listener for Enter key in search input
-	document.getElementById("city-search").addEventListener("keypress", function(e) {
-		if (e.key === 'Enter') fetchCityData();
-	});
+    // Event listener for Enter key in search input
+    document.getElementById("city-search").addEventListener("keypress", function (e) {
+        if (e.key === 'Enter') fetchCityData();
+    });
 
-	// Hide containers initially
-	document.querySelectorAll("#hotel-container, #place-container, #weather-container")
-		.forEach(container => container.style.display = "none");
+    // Optional: Hide map wrapper on tile load failure
+    map.on('tileerror', function () {
+        console.warn("🧯 Leaflet failed to load tiles — hiding map.");
+        document.getElementById('map-wrapper').classList.add('hidden');
+    });
 
-	// Initialize amenity buttons
-	initAmenityButtons();
+    // ✅ Scrollbar glitch patch: lock body height until map settles
+    const originalOverflow = document.body.style.overflow;
+    document.body.style.overflow = "hidden";
+
+    setTimeout(() => {
+        document.body.style.overflow = originalOverflow || "auto";
+    }, 500); // Let Leaflet settle before re-enabling scroll
 }
+
 
 // Initialize Amenity Buttons with Icons
 function initAmenityButtons() {
