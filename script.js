@@ -3210,7 +3210,11 @@ async function fetchWeather(lat, lon) {
 
 // === Display Weather Data ===
 function displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData) {
-	const weatherContainer = document.getElementById("weather-container");
+    const weatherContainer = document.getElementById("weather-container");
+
+    // ✅ Reveal the container now that we’re ready to populate it
+    weatherContainer.style.display = "block";
+
 
 	// === DAILY (Today) Forecast ===
 	const currentWeather = weatherData.list[0];
