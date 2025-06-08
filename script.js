@@ -3213,7 +3213,8 @@ function displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData) 
     const weatherContainer = document.getElementById("weather-container");
 
     // ✅ Reveal the container now that we’re ready to populate it
-    weatherContainer.style.display = "block";
+    weatherContainer.classList.remove("hidden");
+
 
 
 	// === DAILY (Today) Forecast ===
