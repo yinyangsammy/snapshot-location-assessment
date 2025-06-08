@@ -1,5 +1,21 @@
 let liveClockInterval; // For managing time updates
 
+
+// Hide Weather Containers Until Loaded
+document.addEventListener("DOMContentLoaded", () => {
+  const weatherContainer = document.getElementById("weather-container");
+  if (weatherContainer) {
+    weatherContainer.classList.add("hidden"); // Hide until ready
+  }
+
+  // Your existing scroll button setup (if not already present)
+  setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
+  setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
+  setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
+});
+
+
+// Country ISO Code Conversion for Public Holidays
 document.addEventListener("DOMContentLoaded", () => {
 	const countryNameToCode = {
 		"Afghanistan": "af",
@@ -4220,3 +4236,4 @@ window.initMap = initMap;
 if (!window.L) { // Leaflet failed to load
   document.getElementById('map-wrapper').classList.add('hidden');
 }
+
