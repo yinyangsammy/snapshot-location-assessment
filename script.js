@@ -2966,14 +2966,27 @@ function initLeafletMap() {
         document.getElementById('map-wrapper').classList.add('hidden');
     });
 
-    // ✅ Scrollbar glitch patch: lock body height until map settles
+      // ✅ Scrollbar glitch patch: lock body height until map settles
     const originalOverflow = document.body.style.overflow;
     document.body.style.overflow = "hidden";
-
-    setTimeout(() => {
-        document.body.style.overflow = originalOverflow || "auto";
-    }, 500); // Let Leaflet settle before re-enabling scroll
 }
+
+// Call this when the DOM is ready
+document.addEventListener('DOMContentLoaded', () => {
+    initLeafletMap();
+});
+
+// Dummy Google Maps initMap() to prevent errors
+window.initMap = function () {
+    console.log("🧼 Google Maps callback initMap() triggered, but Leaflet is being used.");
+};
+
+    // Hide containers initially
+    document.querySelectorAll("#hotel-container, #place-container, #weather-container")
+        .forEach(container => container.style.display = "none");
+
+    // Initialize amenity buttons
+    initAmenityButtons();
 
 
 // Initialize Amenity Buttons with Icons
