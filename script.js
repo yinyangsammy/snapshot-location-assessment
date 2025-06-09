@@ -1,21 +1,21 @@
-let liveClockInterval; // For managing time updates
+// jshint esversion: 11
 
+let liveClockInterval; // For managing time updates
 
 // Hide Weather Containers Until Loaded
 document.addEventListener("DOMContentLoaded", () => {
-  const weatherContainer = document.getElementById("weather-container");
-  if (weatherContainer) {
-    weatherContainer.classList.add("hidden"); // Hide until ready
-  }
+	const weatherContainer = document.getElementById("weather-container");
+	if (weatherContainer) {
+		weatherContainer.classList.add("hidden"); // Hide until ready
+	}
 
-  // Your existing scroll button setup (if not already present)
-  setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
-  setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
-  setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
+	// Your existing scroll button setup (if not already present)
+	setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
+	setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
+	setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
 });
 
 
-// Country ISO Code Conversion for Public Holidays
 document.addEventListener("DOMContentLoaded", () => {
 	const countryNameToCode = {
 		"Afghanistan": "af",
@@ -2750,9 +2750,7 @@ function generatePopupContent(markerID, name, type, address, phone, website, ico
 	const isPinned = pinnedMarkers.has(markerID);
 	const pinLabel = isPinned ? "❌ Unpin" : "📌 Pin";
 
-	const iconHTML = iconUrl ?
-		iconUrl.startsWith("http") ?
-		`<div style="margin-bottom: 5px;">
+	const iconHTML = iconUrl ? iconUrl.startsWith("http") ? `<div style="margin-bottom: 5px;">
              <img src="${iconUrl}" alt="${type} icon" style="width: 40px; height: 40px;"><br>
          </div>` :
 		`<div style="margin-bottom: 5px;"><div style="font-size: 24px;">${iconUrl}</div></div>` :
@@ -2941,53 +2939,54 @@ const amenityCache = {
 };
 
 function initLeafletMap() {
-    // Set up Leaflet map
-    map = L.map('map').setView([0, 0], 2);
-    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-        attribution: '&copy; OpenStreetMap contributors'
-    }).addTo(map);
+	// Set up Leaflet map
+	map = L.map('map').setView([0, 0], 2);
+	L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+		attribution: '&copy; OpenStreetMap contributors'
+	}).addTo(map);
 
-    // Add marker layer
-    markersLayer = L.layerGroup().addTo(map);
-    markerCluster.addTo(map);
+	// Add marker layer
+	markersLayer = L.layerGroup().addTo(map);
+	markerCluster.addTo(map);
 
-    // Create a draggable marker
-    marker = L.marker([0, 0], { draggable: true }).addTo(map);
-    marker.on("dragend", () => reverseGeocode(marker.getLatLng()));
+	// Create a draggable marker
+	marker = L.marker([0, 0], {
+		draggable: true
+	}).addTo(map);
+	marker.on("dragend", () => reverseGeocode(marker.getLatLng()));
 
-    // Event listener for Enter key in search input
-    document.getElementById("city-search").addEventListener("keypress", function (e) {
-        if (e.key === 'Enter') fetchCityData();
-    });
+	// Event listener for Enter key in search input
+	document.getElementById("city-search").addEventListener("keypress", function(e) {
+		if (e.key === 'Enter') fetchCityData();
+	});
 
-    // Optional: Hide map wrapper on tile load failure
-    map.on('tileerror', function () {
-        console.warn("🧯 Leaflet failed to load tiles — hiding map.");
-        document.getElementById('map-wrapper').classList.add('hidden');
-    });
+	// Optional: Hide map wrapper on tile load failure
+	map.on('tileerror', function() {
+		console.warn("🧯 Leaflet failed to load tiles — hiding map.");
+		document.getElementById('map-wrapper').classList.add('hidden');
+	});
 
-      // ✅ Scrollbar glitch patch: lock body height until map settles
-    const originalOverflow = document.body.style.overflow;
-    document.body.style.overflow = "hidden";
+	// ✅ Scrollbar glitch patch: lock body height until map settles
+	const originalOverflow = document.body.style.overflow;
+	document.body.style.overflow = "hidden";
 }
 
 // Call this when the DOM is ready
 document.addEventListener('DOMContentLoaded', () => {
-    initLeafletMap();
+	initLeafletMap();
 });
 
 // Dummy Google Maps initMap() to prevent errors
-window.initMap = function () {
-    console.log("🧼 Google Maps callback initMap() triggered, but Leaflet is being used.");
+window.initMap = function() {
+	console.log("🧼 Google Maps callback initMap() triggered, but Leaflet is being used.");
 };
 
-    // Hide containers initially
-    document.querySelectorAll("#hotel-container, #place-container, #weather-container")
-        .forEach(container => container.style.display = "none");
+// Hide containers initially
+document.querySelectorAll("#hotel-container, #place-container, #weather-container")
+	.forEach(container => container.style.display = "none");
 
-    // Initialize amenity buttons
-    initAmenityButtons();
-
+// Initialize amenity buttons
+initAmenityButtons();
 
 // Initialize Amenity Buttons with Icons
 function initAmenityButtons() {
@@ -3210,12 +3209,7 @@ async function fetchWeather(lat, lon) {
 
 // === Display Weather Data ===
 function displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData) {
-    const weatherContainer = document.getElementById("weather-container");
-
-    // ✅ Reveal the container now that we’re ready to populate it
-    weatherContainer.classList.remove("hidden");
-
-
+	const weatherContainer = document.getElementById("weather-container");
 
 	// === DAILY (Today) Forecast ===
 	const currentWeather = weatherData.list[0];
@@ -3305,6 +3299,9 @@ function displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData) 
                 <button id="long-term-scroll-right">⟹</button>
             </div>
         </div>`;
+
+	// ✅ Reveal container *after* injecting content
+	weatherContainer.classList.remove("hidden");
 
 	// === Add Hourly Timelines to Each 5-Day Forecast Card ===
 	function enhanceFiveDayForecastCards(hourlyList) {
@@ -3695,8 +3692,7 @@ function displayHotelData(hotels) {
 
 		const tdAddress = document.createElement("td");
 		const mapIcon = `<span style="cursor:pointer; margin-left: 8px;" title="View on map">🗺️</span>`;
-		tdAddress.innerHTML = fullAddress === "N/A" ?
-			`${mapIcon}` :
+		tdAddress.innerHTML = fullAddress === "N/A" ? `${mapIcon}` :
 			`${fullAddress} ${mapIcon}`;
 		tdAddress.style.textAlign = "center";
 		tdAddress.style.padding = "5px";
@@ -3799,11 +3795,7 @@ function displayAmenitiesData(amenities) {
 		const phone = amenity.tags["contact:phone"] || amenity.tags["phone"] || "";
 		const website = amenity.tags.website ? `<a href="${amenity.tags.website}" target="_blank">🌐 Visit Website</a>` : "";
 
-		const amenityType = amenity.tags.amenity ||
-			amenity.tags.tourism ||
-			amenity.tags.leisure ||
-			amenity.tags.historic ||
-			"default";
+		const amenityType = amenity.tags.amenity || amenity.tags.tourism || amenity.tags.leisure || amenity.tags.historic || "default";
 
 		const amenityIcons = {
 			museum: "🏺",
@@ -3967,11 +3959,7 @@ function plotMarkers(data, type) {
 		if (type === "hotel") {
 			itemType = "hotel";
 		} else {
-			itemType = item.tags?.amenity ||
-				item.tags?.tourism ||
-				item.tags?.leisure ||
-				item.tags?.historic ||
-				"unknown";
+			itemType = item.tags?.amenity || item.tags?.tourism || item.tags?.leisure || item.tags?.historic || "unknown";
 		}
 
 		// Force standard "landmark" classification if tagged as historic or attraction
@@ -3995,8 +3983,7 @@ function plotMarkers(data, type) {
 
 		const isPinned = pinnedMarkers.has(markerID);
 
-		const iconUrl = (itemType === "hotel") ?
-			"🏨" // Let generatePopupContent show hotel emoji directly
+		const iconUrl = (itemType === "hotel") ? "🏨" // Let generatePopupContent show hotel emoji directly
 			:
 			amenityEmojiMap[itemType] || null;
 
@@ -4016,9 +4003,7 @@ function plotMarkers(data, type) {
 				popupAnchor: [0, -30]
 			});
 
-			const iconHTML = iconUrl ?
-				iconUrl.startsWith("http") ?
-				`<div style="margin-bottom: 5px;"><img src="${iconUrl}" alt="Icon" style="width: 40px; height: 40px; display: inline-block;"><br></div>` :
+			const iconHTML = iconUrl ? iconUrl.startsWith("http") ? `<div style="margin-bottom: 5px;"><img src="${iconUrl}" alt="Icon" style="width: 40px; height: 40px; display: inline-block;"><br></div>` :
 				`<div style="margin-bottom: 5px;"><div style="font-size: 24px;">${iconUrl}</div></div>` :
 				`<div style="margin-bottom: 5px;"><div style="font-size: 24px;">📍</div></div>`;
 
@@ -4094,8 +4079,7 @@ function updateMarkerPopups() {
 		let type = row.getAttribute("data-type") || "Unknown";
 		let address = row.getAttribute("data-address") || "Address not available";
 		let phone = row.getAttribute("data-phone") || "Phone not available";
-		let website = row.getAttribute("data-website") ?
-			`<a href="${row.getAttribute("data-website")}" target="_blank">Visit Website</a>` :
+		let website = row.getAttribute("data-website") ? `<a href="${row.getAttribute("data-website")}" target="_blank">Visit Website</a>` :
 			"No website";
 
 		let iconElement = row.querySelector("img.amenity-icon");
@@ -4145,9 +4129,6 @@ function fadeInContainers() {
 		container.classList.add("fade-in");
 	});
 }
-
-// Call it immediately to ensure it's applied correctly
-fadeInContainers();
 
 
 // Scrolling for hotels and places modals
@@ -4252,12 +4233,10 @@ style.textContent = `
     max-width: 30px;
 }
 `;
-
 document.head.appendChild(style);
 
 window.initMap = initMap;
 
 if (!window.L) { // Leaflet failed to load
-  document.getElementById('map-wrapper').classList.add('hidden');
+	document.getElementById('map-wrapper').classList.add('hidden');
 }
-
