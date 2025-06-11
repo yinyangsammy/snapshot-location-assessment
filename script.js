@@ -2976,11 +2976,6 @@ document.addEventListener('DOMContentLoaded', () => {
 	initLeafletMap();
 });
 
-// Dummy Google Maps initMap() to prevent errors
-window.initMap = function() {
-	console.log("🧼 Google Maps callback initMap() triggered, but Leaflet is being used.");
-};
-
 // Hide containers initially
 document.querySelectorAll("#hotel-container, #place-container, #weather-container")
 	.forEach(container => container.style.display = "none");
@@ -4234,8 +4229,6 @@ style.textContent = `
 }
 `;
 document.head.appendChild(style);
-
-window.initMap = initMap;
 
 if (!window.L) { // Leaflet failed to load
 	document.getElementById('map-wrapper').classList.add('hidden');
