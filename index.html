@@ -30,14 +30,27 @@
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <style>
+  @import url('https://fonts.googleapis.com/css2?family=Merienda+One&display=swap');
+  #header::before {
+    content: "";
+    position: absolute;
+    inset: 0;
+    background-image: url("assets/img/map_banner_4k.avif");
+    background-size: cover;
+    background-position: center;
+    background-repeat: no-repeat;
+    filter: blur(1px) brightness(0.6);
+    z-index: -1;
+  }
+  </style>
 </head>
-<!-- Head End -->
-<!-- Body -->
+  <!-- Head End -->
+  <!-- Body -->
 
 <body>
   <!-- Header -->
-  <header class="text-center page-header" id="header">
-    <img src="assets/img/map_banner_4k.avif" alt="Hero map banner" id="hero-img" fetchpriority="high"/>
+  <header class="text-center page-header" id="header">in
     <div class="vertical-center">
       <h1 id="brand">Snapshot Location</h1>
       <p id="tagline">A snapshot of locations worldwide!</p>
