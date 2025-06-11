@@ -10,7 +10,7 @@ body {
 
 body {
   font-family: "Open Sans", Arial, sans-serif;
-  font-weight: 500;
+  font-weight: 800;
   margin: 0;
   background: rgb(45, 221, 216);
   background: linear-gradient(
@@ -165,7 +165,7 @@ nav > a {
   text-decoration: none;
   color: rgb(248, 174, 128);
   font-size: 1.5em;
-  font-weight: 500;
+  font-weight: 875;
   text-shadow: 1px 1px rgb(98, 97, 97);
   letter-spacing: 0.25rem;
   margin: 1rem 3rem 1rem 3rem;
