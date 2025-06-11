@@ -77,6 +77,8 @@ header {
   object-fit: cover;
   filter: blur(1px) brightness(0.6);
   z-index: -1;
+  margin: 0 auto;
+  margin-left: 0;
 }
 
 /* Logo / Brand */
