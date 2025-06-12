@@ -3097,80 +3097,90 @@ async function fetchAmenityData(type) {
 }
 
 
-// Fetch City Data using Nominatim API
+// Fetch City Data using Nominatim API (with cache + CORS proxy)
 async function fetchCityData() {
 	const cityName = document.getElementById('city-search').value.trim();
 	if (!cityName) return;
 
-	const nominatimURL = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}`;
+	const cacheKey = `nominatim_${cityName.toLowerCase()}`;
+	const cachedData = sessionStorage.getItem(cacheKey);
 
-	try {
-		const response = await fetch(nominatimURL);
-		const data = await response.json();
-		if (data.length === 0) return alert("City not found. Try again.");
+	let data;
 
-		const {
-			lat,
-			lon,
-			display_name
-		} = data[0];
+	if (cachedData) {
+		console.log("✅ Using cached Nominatim result for:", cityName);
+		data = JSON.parse(cachedData);
+	} else {
+		const nominatimURL = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}`;
+		const proxiedURL = `https://api.allorigins.win/raw?url=${encodeURIComponent(nominatimURL)}`;
 
-		// Update map view and marker position
-		map.setView([lat, lon], 12);
-		marker.setLatLng([lat, lon]);
+		try {
+			const response = await fetch(proxiedURL);
+			data = await response.json();
 
-		// Show place name in popup
-		// Show place name in popup
-		marker.bindPopup(`<strong>${display_name}</strong>`).openPopup();
+			if (!data.length) return alert("City not found. Try again.");
 
-		marker.on("popupopen", (e) => {
-			const popupEl = e.popup.getElement();
-			if (!popupEl) return;
-
-			setTimeout(() => {
-				const markerID = `${lat}-${lon}`;
-
-				const isPinned = pinnedMarkers.has(markerID);
-
-				const pinBtn = document.createElement("button");
-				pinBtn.textContent = isPinned ? "Unpin 📌" : "Pin 📍";
-				pinBtn.style.cursor = "pointer";
-				pinBtn.style.marginTop = "6px";
-				pinBtn.style.background = "#f0f0f0";
-				pinBtn.style.border = "1px solid #ccc";
-				pinBtn.style.padding = "4px 8px";
-				pinBtn.style.borderRadius = "4px";
-				pinBtn.style.fontSize = "0.9em";
-
-				pinBtn.addEventListener("click", () => {
-					if (pinnedMarkers.has(markerID)) {
-						pinnedMarkers.delete(markerID);
-						pinBtn.textContent = "Pin 📍";
-					} else {
-						pinnedMarkers.add(markerID);
-						pinBtn.textContent = "Unpin 📌";
-					}
-				});
-
-
-				// Prevent duplicate buttons
-				if (!popupEl.querySelector("button")) {
-					popupEl.appendChild(pinBtn);
-				}
-			}, 50); // Delay ensures popup is fully rendered even on high zoom
-		});
-
-
-
-		// Fetch hotels and amenities
-		fetchWeather(lat, lon); // Fetch weather data for the selected city
-		fetchHotels(lat, lon);
-		fetchNearbyAmenities(lat, lon);
-		fadeInContainers();
-	} catch (error) {
-		console.error('Nominatim API Error:', error);
+			sessionStorage.setItem(cacheKey, JSON.stringify(data));
+			console.log("📦 Cached Nominatim result for:", cityName);
+		} catch (error) {
+			console.error('Nominatim API Error:', error);
+			alert("City search failed. Please try again later.");
+			return;
+		}
 	}
+
+	const { lat, lon, display_name } = data[0];
+
+	// Update map view and marker position
+	map.setView([lat, lon], 12);
+	marker.setLatLng([lat, lon]);
+
+	// Show place name in popup
+	marker.bindPopup(`<strong>${display_name}</strong>`).openPopup();
+
+	marker.on("popupopen", (e) => {
+		const popupEl = e.popup.getElement();
+		if (!popupEl) return;
+
+		setTimeout(() => {
+			const markerID = `${lat}-${lon}`;
+			const isPinned = pinnedMarkers.has(markerID);
+
+			const pinBtn = document.createElement("button");
+			pinBtn.textContent = isPinned ? "Unpin 📌" : "Pin 📍";
+			Object.assign(pinBtn.style, {
+				cursor: "pointer",
+				marginTop: "6px",
+				background: "#f0f0f0",
+				border: "1px solid #ccc",
+				padding: "4px 8px",
+				borderRadius: "4px",
+				fontSize: "0.9em"
+			});
+
+			pinBtn.addEventListener("click", () => {
+				if (pinnedMarkers.has(markerID)) {
+					pinnedMarkers.delete(markerID);
+					pinBtn.textContent = "Pin 📍";
+				} else {
+					pinnedMarkers.add(markerID);
+					pinBtn.textContent = "Unpin 📌";
+				}
+			});
+
+			if (!popupEl.querySelector("button")) {
+				popupEl.appendChild(pinBtn);
+			}
+		}, 50);
+	});
+
+	// 🎯 Fetch dynamic city content
+	fetchWeather(lat, lon);          // Weather
+	fetchHotels(lat, lon);           // Hotel results
+	fetchNearbyAmenities(lat, lon);  // Amenities table
+	fadeInContainers();              // Animate containers
 }
+
 
 
 // Fetch Weather Data using OpenWeatherMap API
