@@ -36,7 +36,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         + [Links](#links)
         + [Footer](#footer)
         + [404 Page](#404-page)
-  + [Future Features](#future-features)
+- [Future Features](#future-features)
 - [Wireframes](#wireframes)
 - [Technologies](#technologies)
   + [Languages](#languages)
@@ -82,7 +82,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 - :x: *offers for deals and promotions when booking accommodation, travel or tours*.
 
 
--   # Design
+# Design
 
 -   ## Colour Scheme
 
@@ -173,13 +173,13 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         - I used icons from Font Awesome for social media links in the footer, to improve clarity and efficiency for my users.
 
 
--   # Structure
+# Structure
 
-    The website has 3 pages:
+-   The website has 3 pages:
 
--   ## 1) *Homepage aka Location*
+## 1) *Homepage aka Location*
 
-    The Home & Landing page features 2 interactive maps and a photo carousel separating the two:
+-   The Home & Landing page features 2 interactive maps and a photo carousel separating the two:
 
 ### Top Half
         
@@ -311,11 +311,11 @@ The website includes a few structural irregularities & console errors:
         -   I have kept the script inline for the PEXELS picture carousel, as its functionality seems to work much more smoothly that way. At some point, I will try to deduce why. More on this in bugs.
 
     
--   # Features
+# Features
 
-    -   ## General Features:
+-   ## General Features:
 
--   A nav bar, enabling the user to easily navigate from safety map to weather map to homepage.
+-   A nav bar, enabling the user to easily navigate from safety map to  weather map to homepage.
 -   A clickable SVG map with interactive country tiles that fill with colour on hover and fades out on scroll down.
 -   A name modal that pops up on hover and fades out on scroll down.
 -   A black instruction modal that pops up on map click, informing the user to 'Scroll down for a snapshot of {location}', and fades out on scroll down.
@@ -347,7 +347,7 @@ The website includes a few structural irregularities & console errors:
 
   <h2 align="center"><img src="assets/readme/404.png"></h2>
 
-### Additional features which might be implemented
+# Future Features
 
 -  A review container - using a Trip Advisor or Expedia API.
 -  A booking container - using an Air BnB or Booking API, or, if possible, both APIs jointly.
@@ -398,7 +398,9 @@ The website includes a few structural irregularities & console errors:
 15. [Git:](https://git-scm.com/)
     - Git was used for version control by utilizing the Gitpod terminal to commit to Git and Push to GitHub.
 16. [GitHub:](https://github.com/)
-    - GitHub is used to store the projects code after being pushed from Git.
+    - GitHub is used to store the projects code in a repository after being pushed from Git.
+17. [Cloudfare:](https://dash.cloudflare.com/login)
+    - Cloudfare is used to deploy the project and acquire a link.
 
 # Testing
 
@@ -407,10 +409,10 @@ The Snapshot Location website has been tested using the following methods:
 - [Code Validation](#code-validation)
     - [W3C HTML Validator](#w3c-html-validator)
         - [Homepage](#homepage)
-        - [Market Page](#safety-page)
-        - [Contact Page](#weather-page)
+        - [Safety](#safety-page)
+        - [Weather Page](#weather-page)
     - [W3C CSS Validator](#w3c-css-validator)
-    - [JSLint Javascript Validator](#jslint-js-validator)
+    - [JSHint Javascript Validator](#jslint-js-validator)
 
 
 - [Lighthouse](#lighthouse)
@@ -497,22 +499,12 @@ Run this in the browser console (F12 → Console tab):
   -  ### Lighthouse Report for Homepage (Desktop)
     <h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
 
-  - ### Lighthouse Report for Market Page (Desktop)
-    <h2 align="center"><img src="assets/readme/lighthouse-market-desktop.png"></h2>
-
-  - ### Lighthouse Report for Contact Page (Desktop)
-    <h2 align="center"><img src="assets/readme/lighthouse-contact-desktop.png"></h2>
 
 - ## Mobile
 
   - ### Lighthouse Report for Homepage (Mobile)
     <h2 align="center"><img src="assets/readme/lighthouse-homepage-mobile.png"></h2>
 
-  - ### Lighthouse Report for Market Page (Mobile)
-    <h2 align="center"><img src="assets/readme/lighthouse-market-mobile.png"></h2>
-
-  - ### Lighthouse Report for Contact Page (Mobile)
-    <h2 align="center"><img src="assets/readme/lighthouse-contact-mobile.png"></h2>
 
 I used the Lighthouse reports in Google Developer Tools to examine the pages of the website for the following:
 
@@ -524,56 +516,36 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
 * ### For Desktop:
 
 - Homepage scored:
-    - Performance - 97
+    - Performance - 98
     - Accessibility -100
-    - Best Practices -100
-    - SEO - 100
-
-- Market Page scored:
-    - Performance - 94
-    - Accessibility -100
-    - Best Practices - 96
-    - SEO - 100
-
-- Contact Page scored:
-    - Performance - 100
-    - Accessibility -100
-    - Best Practices -100
+    - Best Practices -75
     - SEO - 100
 
 * ### For Mobile:
 
 - Homepage scored:
-    - Performance - 97
-    - Accessibility -100
-    - Best Practices -100
-    - SEO - 88
-
-- Market Page scored:
-    - Performance - 66
-    - Accessibility -100
-    - Best Practices - 96
+    - Performance - 74
+    - Accessibility -98
+    - Best Practices -75
     - SEO - 100
 
-- Contact Page scored:
-    - Performance - 99
-    - Accessibility -100
-    - Best Practices -100
-    - SEO - 100
+I didn't do Lighthouse for the other pages, i.e. Safety & Weather because there is so much third party javascript that I cannot change, there was very little point, having improved the header, navbar, contact section and footer as best I could for all pages.
+
+Overall, I am happy with the speed the site runs on every device I've tried (Various Lenovo laptops, Samsung S23 Ultra, Samsung S10 Plus, Samsung S9 Plus).
 
 - ## Future Improvements
 
 - ### Desktop Improvements
 
-    - ### Market Page Improvements
+    - ### Homepage Improvements for Desktop & Mobile:
   
       - **Best Practices**
 
-      - If I want to improve my *Best Practices* score for the Market Page, I need to correct the aspect ratio for the images, as per:
+      - If I want to improve my *Best Practices* score for the Homepage, I need to rely less on the the third-party Wise fx exchange widget I am using and use one I have developed myself. The reasons for using the Wise one for now are as follows:
 
-      - https://developer.chrome.com/docs/lighthouse/best-practices/image-aspect-ratio/?utm_source=lighthouse&utm_medium=devtools
+      - The design is pleasing and it is fast.
 
-      - I will weigh up the pros and cons at a future instance.
+      - I c
 
       - Otherwise, I am satisfied with all of my Desktop results.
 
