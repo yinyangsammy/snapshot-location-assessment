@@ -931,41 +931,6 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 });
 
 
-document.addEventListener("DOMContentLoaded", () => {
-  const currencyContainer = document.getElementById("currency-container");
-
-  // Create a container for the iframe (if it doesn't already exist)
-  const wiseFrameContainer = document.createElement("div");
-  wiseFrameContainer.id = "wise-frame-container";
-  wiseFrameContainer.style.width = "100%";
-  wiseFrameContainer.style.height = "600px";
-  wiseFrameContainer.innerHTML = "<p>Loading exchange rates...</p>";
-
-  currencyContainer.appendChild(wiseFrameContainer);
-
-  const observer = new IntersectionObserver((entries, observer) => {
-    entries.forEach(entry => {
-      if (entry.isIntersecting) {
-        const iframe = document.createElement("iframe");
-        iframe.src = "https://wise.com/gb/currency-converter/fx-widget/table?sourceCurrency=USD&targetCurrencies=USD%2CEUR%2CGBP%2CAUD%2CCAD%2CJPY%2CCNY%2CCHF%2CHKD%2CSGD%2CKRW%2CILS%2CNZD%2CSEK%2CNOK%2CDKK%2CPLN%2CMXN%2CZAR%2CAED%2CBRL%2CTHB%2CCZK%2CRUB%2CPHP%2CTRY%2CIDR%2CHUF%2CSAR";
-        iframe.title = "fx";
-        iframe.style = "width: 100%; height: 100%; border: none; overflow: hidden;";
-        iframe.loading = "lazy";
-        iframe.sandbox = "allow-scripts allow-same-origin";
-        iframe.referrerPolicy = "no-referrer";
-
-        wiseFrameContainer.innerHTML = ""; // Clear loading text
-        wiseFrameContainer.appendChild(iframe);
-        observer.unobserve(wiseFrameContainer);
-      }
-    });
-  });
-
-  observer.observe(wiseFrameContainer);
-});
-
-
-
 // Weather Container
 
 /**
