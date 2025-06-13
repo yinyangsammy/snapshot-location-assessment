@@ -10,8 +10,10 @@
     content="location, destination, travel, traveling, holiday, weather, news, global news, headlines, time, safety, population, information">
   <meta name="author" content="Snapshot Location">
   <!-- Page Title Start -->
-  <title>Snapshot Location</title>
+  <title>Snapshot Location/Weather</title>
   <!-- Page Title End -->
+ <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+ <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="preload" as="image" href="assets/img/map_banner_4k.avif" fetchpriority="high"/>
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -23,19 +25,13 @@
   <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
   <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
-  <script
-    src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhutVcVh7xpi9Gmf-nzPYwFpmiDMPcbYI&loading=async&libraries=places&callback=initMap"
-    async defer></script>
-  <script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css">
-  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js"></script>
+  <script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous" defer></script>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" defer>
+  <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-  <style>
-  @import url('https://fonts.googleapis.com/css2?family=Merienda+One&display=swap');
-  </style>
 </head>
-  <!-- Head End -->
-  <!-- Body -->
+<!-- Head End -->
+<!-- Body -->
 
 <body>
   <!-- Header -->
@@ -47,15 +43,17 @@
     </div>
   </header>
   <!-- Header End -->
-    <!-- Nav Bar -->
-    <nav class="black-background text-center text-uppercase">
-      <a href="safety.html#safety" aria-label="See the safety of the location">Safety</a>
-      <a href="index.html#location" aria-label="See the name of the location">Location</a>
-      <a href="weather.html#weather" aria-label="See the weather of all locations">Weather</a>
-    </nav>
-    <!-- Nav Bar End -->
+  <!-- Nav Bar -->
+  <nav class="black-background text-center text-uppercase">
+    <a href="safety.html#safety" aria-label="See the safety of the location">Safety</a>
+    <a href="index.html#location" aria-label="See the name of the location">Location</a>
+    <a href="weather.html#weather" aria-label="See the weather of all locations">Weather</a>
+  </nav>
+  <!-- Nav Bar End -->
     <!-- Weather Map -->
-    <iframe title="weather-map" id="weather-map" src="https://map.worldweatheronline.com/"></iframe>
+    <iframe title="weather-map" id="weather-map" src="https://map.worldweatheronline.com/"  referrerpolicy="no-referrer"
+  sandbox="allow-scripts allow-same-origin"
+  loading="lazy"></iframe>
     <!-- Weather Map End -->
     <!-- Contact Details -->
     <section id="contact">
