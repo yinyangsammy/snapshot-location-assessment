@@ -537,13 +537,13 @@ Overall, I am happy with the speed the site runs on every device I've tried (Var
 
 - ### Desktop Improvements
 
-    - ### Homepage Improvements for Desktop & Mobile:
+    - ### Improvements for Desktop:
   
       - **Best Practices**
 
-      - If I want to improve my *Best Practices* score for the Homepage, I need to rely less on the the third-party Wise fx exchange widget I am using and use one I have developed myself. The reasons for using the Wise one for now are as follows:
+      - If I want to improve my *Best Practices* score for the Homepage, I need to rely less on the the third-party Wise fx exchange widget I am using and use one I have developed myself. I have actually developed my own. The reasons for using the Wise one for now are as follows:
 
-      - The design is pleasing and it is fast.
+      - Their design is more pleasing on the eye and it is faster to load, as it's not relying .
 
       - I c
 
@@ -559,26 +559,6 @@ Overall, I am happy with the speed the site runs on every device I've tried (Var
 
       - Increasing text-size on the Homepage for mobile devices.
    
-    - ### Market Page Improvements
-
-       1. **Best Practices**
-    
-      - If I want to improve my *Best Practices* score for the Market Page, I need to correct the aspect ratio for the images, as per:
-
-      - https://developer.chrome.com/docs/lighthouse/best-practices/image-aspect-ratio/?utm_source=lighthouse&utm_medium=devtools
-
-      - I will weigh up the pros and cons at a future instance.
-
-      2. **Performance**
-
-      - The Market Page loads slowly on Mobile and the *Performance* needs to be improved:
-
-      - Lighthouse recommends the following:
-
-      1. Removing external fonts or embedding them in the HTML
-      2. Saving images in next-gen formats
-      3. Removing javascript iframes
-      4. Eliminating render-blocking resources
 
 ## Browser Compatibility
 
@@ -692,7 +672,14 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
 ### Resolved
 
-1. Images inside my Flexbox code would resize but change aspect ratio. I learnt that by entering max-width and max-height values and setting width and height to auto, this bug could be prevented.
+1. It's not really a bug, but the biggest obstacle I faced to completing this site was the monthly charge I kept incurring for using Google Cloud Services with the Maps Javascript API & Places API: 
+    -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further twenty odd city searches. 
+    -   To my horror, two days later I received a bill for £1800. This was owing to my not having restricted which APIs were being triggered during searches and having not set quotas around my potential budget. 
+    -   I would recommend any other devs signing up for Google Cloud Services ensure that they have restricted which APIs / SKUs they are using and set quota limits for each day. 
+    -   I would also recommend that Google Cloud Services create a much a more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap.
+    -   Luckily the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my best bill as a goodwill gesture. Hence my thanks to them later in this README. 
+    
+I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and 
 
 2. On smaller devices, my h3 heading would wrap over into the next line or some text would disappear and be replaced with an ellipsis. I learnt that by using the 'white-space: nowrap' css code, I could avoid this happening to my headings.  
 
@@ -707,15 +694,7 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
 1. I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
-2. 
-
-1. Improve Lighthouse Performance score for Market Page on Mobile by making changes including:
-    - Serve images in next-gen formats (Image formats like WebP and AVIF often provide better compression than PNG or JPEG, which means faster downloads and less data consumption.)
-    - Minimize main-thread to reduce the time spent parsing, compiling and executing JS. Delivering smaller JS payloads helps with this
-    - Eliminate render-blocking resources (Resources are blocking the first paint of your page. Consider delivering critical JS/CSS inline and deferring all non-critical JS/styles)
-    - Minify CSS
-
-. Media Queries & Flexbox achieve the same results and align my design exactly as desired on Brave, Firefox, Google Chrome & Microsoft Edge Browsers.
+2. All my APIs are
 
 
 
@@ -790,19 +769,23 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 [OpenStreetMaps + Leaflet](https://www.youtube.com/watch?v=vOPr5k_SGVA)
 
--   [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Media_queries): I also had to do a little more research via Mozilla Developer to achieve the exact level of responsiveness I wanted from Media Queries.
+[Javascript Chaining](https://www.youtube.com/@SteveGriffith-Prof3ssorSt3v3): Professor Steve Griffith's tutorials on chaining Javascript functions helped me greatly in understanding how to chain all the different APIs I was using together.
 
--   [W3 Docs](https://www.w3docs.com/snippets/html/how-to-create-an-anchor-link-to-jump-to-a-specific-part-of-a-page.html): W3 Docs gave me the knowledge to link to a specific section of the same page on another page.
+-   [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Media_queries): Mozilla Developer helped me achieve the exact level of responsiveness I wanted from Media Queries.
 
--   [Google's IFrame Player API](https://developers.google.com/youtube/iframe_api_reference): It was through Google's own page that I learnt how to insert and resize their IFrame Player.
+-   [CODECONVEY](https://codeconvey.com/pure-css-coverflow-slider/): I learnt how to create a Pure CSS 3D Coverflow Image Slider at CodeConvey.
 
--   [Free Code Camp](https://www.freecodecamp.org/news/git-revert-commit-how-to-undo-the-last-commit/): Free Code Camp gave me the knowledge to reset or revert the changes of a recent git commit.
+-   [Wise](https://wise.com/gb/business-tools/fx-widget) Wise provided their own widget for the fx exchange, which I have found very easy to implement and use.
 
--   [Stack Overflow](https://stackoverflow.com/questions/12991351/how-to-force-image-resize-and-keep-aspect-ratio): Stack Overflow gave me the knowledge to force an image to resize but retain the aspect ratio.
+-   [Free Code Camp](https://www.freecodecamp.org/news/how-to-build-a-modal-with-javascript/): Free Code Camp gave me the knowledge to create a basic javascript modal.
+
+-   [Stack Overflow](https://stackoverflow.com/questions/27583937/how-can-i-make-a-css-glass-blur-effect-work-for-an-overlay): Stack Overflow gave me the knowledge to create a blurred / frosted glass effect overlay.
 
 -   [Stack Overflow](https://stackoverflow.com/questions/300220/how-to-prevent-text-in-a-table-cell-from-wrapping): Stack Overflow gave me the knowledge to prevent my table text from overflowing. 
 
--   [CSS-TRICKS](https://css-tricks.com/almanac/properties/t/text-underline-position/): CSS-TRICKS gave me the knowledge to set the placement of the underline so it wasn't broken by the text when using the Jomhuria font on the Contact Page.
+-   [CSS-TRICKS](https://css-tricks.com/almanac/properties/t/text-underline-position/): CSS-TRICKS gave me the knowledge to set the placement of the underline so it wasn't obscuring my text in the headlines section.
+
+-   [CSS Script](https://www.cssscript.com/drag-resize-minimize-maximize-close-interactive/): gave me the foundations for incorporating minimize and maximize buttons within a container.
 
 
 ## Content
@@ -815,7 +798,7 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -  All Country Information was kindly provided by REST COUNTRIES [REST COUNTRIES](https://restcountries.com/).
 
--  All City Information was kindly provided by [OpenStreetMap](https://www.openstreetmap.org/), [Overpass](https://wiki.openstreetmap.org/wiki/Overpass_API) & [Leaflet](https://leafletjs.com/).
+-  All City Information was kindly provided by [OpenStreetMap](https://www.openstreetmap.org/), [Overpass](https://wiki.openstreetmap.org/wiki/Overpass_API) [Nominatim](https://nominatim.org/) & [Leaflet](https://leafletjs.com/).
 
 -  All hotel & amenity information was kindly provided by [OpenStreetMap](https://www.openstreetmap.org/), [Overpass](https://wiki.openstreetmap.org/wiki/Overpass_API) & [Leaflet](https://leafletjs.com/).
 
@@ -846,7 +829,7 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -   Thank you to the Reddit community.
 
--   Thank you to all the representatives at Google Cloud, who very kindly walked me through their product range and helped me with unexpected errors and charges. While the services proved prohibitively expensive at this stage of development, the representatives who helped me were some of the most lovely, friendly and articulate mentors I've had the pleasure of meeting.
+-   Thank you to all the representatives at Google Cloud Services, who very kindly walked me through their product range, guided me through restricting APIs, as well as setting quotas, and helped me with the unexpected charges. While the services proved prohibitively expensive at this stage of development, the representatives who helped me were some of the most lovely, friendly and articulate mentors I've had the pleasure of meeting.
 
 
 
