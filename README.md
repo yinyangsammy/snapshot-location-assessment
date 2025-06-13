@@ -191,19 +191,19 @@ The SVG Map of the world features clickable countries, the names of which appear
 
 When the user clicks on any country, the following information fades in below:
  
-i) Country Time & Timezone
+-   i) Country Time & Timezone
         
-ii) Country Name
+-   ii) Country Name
         
-iii) Country Currency
+-   iii) Country Currency
 
 <h3 align="center"><img src="assets/readme/boxes.png"></h3>
 
-iv) News Headlines
+-   iv) News Headlines
 
-v) Country Information
+-   v) Country Information
 
-vi) Exchange Rates
+-   vi) Exchange Rates
 
 <h3 align="center"><img src="assets/readme/info.png"></h3>
 
@@ -229,11 +229,11 @@ The OpenStreetMaps Map of the world features a search bar just above, where the 
 
 #### 3) The following information fades in below the map:
         
-i) Hotel Details
+-   i) Hotel Details
         
-ii) Places of Interest
+-   ii) Places of Interest
         
-iii) Weather Forecasts (Daily, 5 day & 16 day)
+-   iii) Weather Forecasts (Daily, 5 day & 16 day)
 
 <h3 align="center"><img src="assets/readme/hotels-places-weather.png"></h3>
 
@@ -251,9 +251,9 @@ iii) Weather Forecasts (Daily, 5 day & 16 day)
 
 #### 7) To the right of the place-container, the user will find the weather forecasts for the address they have entered.
 
-    -   The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. 
-    -   The five day forecast comes next and once again can be assessed in 3 hour increments. 
-    -   The 16 day forecast just gives a daily average for each day.
+*   The daily forecast sits at the top and gives the next fifteen hours of weather in 3 hour increments. 
+*   The five day forecast comes next and once again can be assessed in 3 hour increments. 
+*   The 16 day forecast just gives a daily average for each day.
 
 <h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
 
@@ -266,49 +266,22 @@ The safety page features a safety map as provided by [International SOS](https:/
 
 The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/).
 
- -   # Irregular Structure
+# Irregular Structure
 
-<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
-    
-    
-The website includes a few structural irregularities & console errors:
 
-1)    ### CORS WARNING
+-   ## Embedded CSS 
         
-        - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
+-   The wise fx currency widget came with inline styling which I have preserved, adding lazy loading and referrerpolicy to further improve the website's best practices.
+
+-   ## Embedded Javascript
+
+####   I have kept the script inline for:
         
-        -  This is a harmless connectivity check used by Google's Maps API and does not affect functionality or performance. 
-        
-        -   Google Places API proved prohibitively expensive (£1000+ for the first month of use, for 2-3 city searches/day), so I had to exchange Google Cloud Services for OpenStreetMaps & Leaflet.
-        
-        -   Removing Google Maps would remove helpful features like search autocomplete and timezone fetching.
+* The PEXELS picture carousel.
 
-        -   Therefore I've left it for now.
+* The postcode-link modal.
 
-        -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
-
-1)    ### Quota Errors
-
-        As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
-
-        -   400 Bad Request 
-        -   403 Forbidden
-        -   426 Upgrade Required
-
-        or the likes of
-
-        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
-
-        which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
-
-
-        ### Embedded CSS 
-        
-        -   The wise fx currency widget came with inline styling.
-
-        ### Embedded Javascript
-
-        -   I have kept the script inline for the PEXELS picture carousel, as its functionality seems to work much more smoothly that way. At some point, I will try to deduce why. More on this in bugs.
+The functionality of both seem to work much more smoothly that way. At some point, I will try to deduce why. More on both in the Bugs section below.
 
     
 # Features
@@ -430,10 +403,9 @@ The Snapshot Location website has been tested using the following methods:
     - [Testing Visitor Goals](#testing-visitor-goals)
     - [Testing Client Goals](#testing-client-goals)
     - [Testing Artist Goals](#testing-artist-goals)
-- [Further Testing](#further-testing)
-  - [Debugging](#debugging)
-    + [Resolved Bugs](#bugs)    
-    + [Unresolved Bugs](#bugs)
+    - [Debugging](#debugging)
+        + [Resolved Bugs](#bugs)    
+        + [Unresolved Bugs](#bugs)
 
 - [Manual Javascript Test Case](manual-js-testing)
 
@@ -611,7 +583,7 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
 # Testing User Experience
 
--   ## Testing User Stories
+## Testing User Stories
 
     -   ### Testing Visitor Goals
 
@@ -667,7 +639,11 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
        + At the bottom of the Contact Page, underneath the request form text area, there is a checkbox (already checked - but which can be unchecked by the user) signing them up with the email address they had to input at the top of the form.
 
-   
+## Debugging
+
+<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+    
+    
 ## Bugs
 
 ### Resolved
@@ -694,7 +670,35 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and
 
 1. I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
-2. All my APIs are
+
+1)    ### CORS WARNING
+        
+        - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
+        
+        -  This is a harmless connectivity check used by Google's Maps API and does not affect functionality or performance. 
+        
+        -   Google Places API proved prohibitively expensive (£1000+ for the first month of use, for 2-3 city searches/day), so I had to exchange Google Cloud Services for OpenStreetMaps & Leaflet.
+        
+        -   Removing Google Maps would remove helpful features like search autocomplete and timezone fetching.
+
+        -   Therefore I've left it for now.
+
+        -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
+
+1)    ### Quota Errors
+
+        As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
+
+        -   400 Bad Request 
+        -   403 Forbidden
+        -   426 Upgrade Required
+
+        or the likes of
+
+        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
+
+        which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
+
 
 
 
