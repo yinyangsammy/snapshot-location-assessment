@@ -615,13 +615,13 @@ Users can click the Get in Touch link in the footer to access the contact form. 
     -   I would also recommend that Google Cloud Services create a much a more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap.
     -   Luckily the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my best bill as a goodwill gesture. Hence my thanks to them later in this README. 
     
-I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
+    -   I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
 2. My #name modal, which appears above a country when the user hovers above it, caused me the following problem:
 
-* It would disappear off the screen for countries to the far right of the map.
+    -   It would disappear off the screen for countries to the far right of the map.
 
- * This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen.
+    -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen.
 	// Scale based on screen width
 	if (width >= 3300) {
 		modal.style.transform = "scale(2.5)";
@@ -632,21 +632,30 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 		modal.style.transform = "scale(1)";
 	}
 
-3. My PEXELS Image Carousel would only take up part of the screen. I solved this by cloning the first and last slides as below:
+3. My PEXELS Image Carousel would only take up part of the screen. 
+
+    -   I solved this by cloning the first and last slides as below:
     // Clone first and last slides for seamless looping effect
     const firstClone = carouselContainer.firstElementChild.cloneNode(true);
     const lastClone = carouselContainer.lastElementChild.cloneNode(true);
     carouselContainer.appendChild(firstClone);
     carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
 
-4. I couldn't get my background not to change size (zoom) when changing the sizes of my foreground flex elements, until I did some reading and discovered that by applying the css code 'no-repeat', 'center' and 'fixed', my background-image would be unaffected.
+4. ??????
 
-5. The HTML validator flagged that there was an issue on my Market Page, where I'd tried to use a div as a child of a span when trying to line up the images side by side for the image border I'd created. I removed this and used 'display: inline-flex' css code instead and everything worked accordingly.
+5. My favicon kept triggering an error message on all browsers when I used the standard:
 
-<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+    -   <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
 
+    -   So, instead, I used teh workaround, using a .png image instead:
+
+    -   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+
+    -   This luckily solved my problem.
 
 ## Unresolved
+
+<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
 
 1.  ###  Limited SVG Map
 
