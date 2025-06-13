@@ -319,7 +319,7 @@ The functionality of both seem to work much more smoothly that way. At some poin
 -  A booking container - using an Air BnB or Booking API, or, if possible, both APIs jointly.
 -  A tour & events container - using APIS to list all tours or events available to the user in the entered city or address region.
 -  A table generated from all the hotels and amenities the user has pinned on the map.
--  A game for children to memorize information, such as capital cities, about each country.
+-  A game for children to memorize information about each country, such as capital cities, currencies etc.
 
 # Wireframes
 
@@ -648,10 +648,12 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
 ## Unresolved
 
-1. I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
+1.  ###  Limited SVG Map
+
+I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
 
-2.    ### CORS WARNING
+2.   ### CORS WARNING
         
         - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
         
@@ -665,7 +667,7 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
         -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
 
-3.    ### Quota Errors
+3.   ### Quota Errors
 
         As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
@@ -681,7 +683,8 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
 4.  ### OpenStreetMaps Map Occasionally Needs Reload Before A New Search
 
-        After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
+
+    -   After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
 
         I believe this is owing to the fact I have prohibited people using the search bar and map before clicking on a country.
 
