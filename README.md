@@ -26,23 +26,14 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 - [Irregular Structure](#irregular-structure)
 - [Features](#features)
     + [Current Features](#current-features)
-        + [Navigation Bar](#navigation-bar)
-        + [SVG Map](#svgmap)
-        + [Search Bar](#searchbar)
-        + [Openstreets Map + Leaflet](#map)
-        + [Navigation Buttons](#nav-buttons)
-        + [Amenity Buttons](#amenity-buttons)
-        + [Scroll Arrows](#scroll-arrow)
-        + [Links](#links)
-        + [Footer](#footer)
-        + [404 Page](#404-page)
-- [Future Features](#future-features)
+    + [Future Features](#future-features)
 - [Wireframes](#wireframes)
 - [Technologies](#technologies)
   + [Languages](#languages)
   + [Frameworks Libraries Programs](#frameworks-libraries-programs)
 - [Testing](#testing)
 - [Deployment](#deployment)
+  + [Cloudfare Pages](#cloudfare-pages)
   + [GitHub Pages](#github-pages)
 - [Credits](#credits)
   + [Code](#code)
@@ -286,7 +277,7 @@ The functionality of both seem to work much more smoothly that way. At some poin
     
 # Features
 
--   ## General Features:
+-   ## Current Features:
 
 -   A nav bar, enabling the user to easily navigate from safety map to  weather map to homepage.
 -   A clickable SVG map with interactive country tiles that fill with colour on hover and fades out on scroll down.
@@ -300,33 +291,35 @@ The functionality of both seem to work much more smoothly that way. At some poin
 -   General Information for each country.
 -   Exchange rates for each country.
 -   A photo carousel, displaying images of each country.
--   An OpenStreetsMap & search bar.
+-   A map & search bar.
 -   Fade in containers which only appear once the user has entered a city name or address into the search bar.
 -   A list of hotels and their details for the entered city or address.
 -   Amenity buttons, which can generate lists of different amenities within that city or address region.
 -   A weather forecast (daily, 5 day and 16 day) for the entered city or address region.
--   An interactive contact section with links to click in order to email or telephone us for more information or to ost an advert. A map modal which pops up when they click on the postcode for our company.
--   A safety map.
--   A weather map.
+-   An interactive contact section with links to click in order to email or telephone us for more information or to ost an advert. 
+-   A map modal which pops up when they click on the postcode for our company.
+-   A global safety map.
+-   A global weather map.
 -   Responsive on all device sizes.
 -   Content-packed pages, full of colourful and engaging imagery and media.
--   Interactive elements such as clickable maps. 
--   Scroll buttons to navigate news headlines and amenity / hotel lists.
--   Scroll arrows to navigate weather forecasts
--   Search bars with map zoom.  
--   An interactive exchange rate widget.
+-   Interactive elements such a:
+    -   Clickable maps 
+    -   Scroll buttons to navigate news headlines and amenity / hotel lists
+    -   Scroll arrows to navigate weather forecasts
+    -   Search bars with map zoom  
+    -   An interactive exchange rate widget
 -   Easy offsite navigation to social media accounts.
 -   A 404 page for users who direct to a non-existent page or resource are able to return to the main page without having to use browser navigation buttons.
 
   <h2 align="center"><img src="assets/readme/404.png"></h2>
 
-# Future Features
+-   ## Future Features:
 
 -  A review container - using a Trip Advisor or Expedia API.
 -  A booking container - using an Air BnB or Booking API, or, if possible, both APIs jointly.
 -  A tour & events container - using APIS to list all tours or events available to the user in the entered city or address region.
--  A table generated from all the hotels and amenities th user has pinned on the map.
--  A game for children to memorize information about each country.
+-  A table generated from all the hotels and amenities the user has pinned on the map.
+-  A game for children to memorize information, such as capital cities, about each country.
 
 # Wireframes
 
@@ -379,6 +372,7 @@ The functionality of both seem to work much more smoothly that way. At some poin
 
 The Snapshot Location website has been tested using the following methods:
 - [Testing](#testing)
+- [Automated Testing](#automated-testing)
 - [Code Validation](#code-validation)
     - [W3C HTML Validator](#w3c-html-validator)
         - [Homepage](#homepage)
@@ -386,8 +380,6 @@ The Snapshot Location website has been tested using the following methods:
         - [Weather Page](#weather-page)
     - [W3C CSS Validator](#w3c-css-validator)
     - [JSHint Javascript Validator](#jslint-js-validator)
-
-
 - [Lighthouse](#lighthouse)
     - [Desktop](#desktop)
     - [Mobile](#mobile)
@@ -401,19 +393,27 @@ The Snapshot Location website has been tested using the following methods:
     - [4K (3840 x 2160)](#4k-3840-x-2160)
 - [Testing User Experience](#testing-user-experience)
     - [Testing Visitor Goals](#testing-visitor-goals)
-    - [Testing Client Goals](#testing-client-goals)
-    - [Testing Artist Goals](#testing-artist-goals)
-    - [Debugging](#debugging)
-        + [Resolved Bugs](#bugs)    
-        + [Unresolved Bugs](#bugs)
-
-- [Manual Javascript Test Case](manual-js-testing)
+- [Debugging](#debugging)
+    - [Resolved](#resolved)    
+    - [Unresolved](#unresolved)
+    - [Manual Testing](#manual-testing)
 
 
-### Automated testing (TDD)
-We can use code to test our code. which has several advantages over the manual testing method. Many hundreds of tests can be run against a project in a short space of time, and as tests are usually written by the  programmer during development, errors are picked up early. 
 
-However, tests are only as good as the questions we ask & tests can end up as purely decorative giving a false impression. Automated tests don't test the User Experience either, so the best testing strategy is a combination of both automated and manual user tests. 
+Using code to test code has several advantages over manual testing:
+
+* Multiple tests can be run against a project in a short space of time.
+
+* Tests can be written while programming, so that errors can be picked up earlier on in development.
+
+* Tests can remain within our code, so that if ever future developments conflict with our current functionality, the programmer can be alerted with immediate effect.
+
+However, tests are only as good as the tester(s), and can end up being purely decorative, or even manipulated.
+
+Automated tests don't test the User Experience either, so the best strategy is a combination of both automated and manual testing.
+
+
+## Automated Testing
 
 
 The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
@@ -453,17 +453,6 @@ The Snapshot Location website passed all tests using the JSHint JS Validator, wi
 
 <h2 align="center"><img src="assets/readme/javascript.png"></h2>
 
-
-## Manual Javascript Testing
-
-In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. Please see the two examples below: 
-
-Test if container elements exist and are interactive
-Run this in the browser console (F12 → Console tab):
-
-
-
-
 ## Lighthouse
 
 - ## Desktop
@@ -489,8 +478,8 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
 
 - Homepage scored:
     - Performance - 98
-    - Accessibility -100
-    - Best Practices -75
+    - Accessibility - 100
+    - Best Practices - 100
     - SEO - 100
 
 * ### For Mobile:
@@ -501,35 +490,33 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
     - Best Practices -75
     - SEO - 100
 
-I didn't do Lighthouse for the other pages, i.e. Safety & Weather because there is so much third party javascript that I cannot change, there was very little point, having improved the header, navbar, contact section and footer as best I could for all pages.
+I didn't use Lighthouse for the other pages, i.e. Safety & Weather, on account of the third party scripts attached to those maps which I cannot change unless I approach their respective developers. (*Please see below for future improvements.*)
 
-Overall, I am happy with the speed the site runs on every device I've tried (Various Lenovo laptops, Samsung S23 Ultra, Samsung S10 Plus, Samsung S9 Plus).
+I have improved the header, navbar, contact section and footer to the best of my abilities for all pages.
 
-- ## Future Improvements
+Overall, I am happy with the speed the site runs on every device I've tried (Various Lenovo laptops, Samsung S23 Ultra, Samsung S10 Plus, Samsung S9 Plus). The pages load fast and all the functions run smoothly.
 
-- ### Desktop Improvements
+I am also inclined to develop an app for tablets and mobile devices.
 
-    - ### Improvements for Desktop:
+## Future Improvements
+
+-   ### Desktop Improvements
+
+    - #### Safety & Weather Pages
   
-      - **Best Practices**
+      -  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
 
-      - If I want to improve my *Best Practices* score for the Homepage, I need to rely less on the the third-party Wise fx exchange widget I am using and use one I have developed myself. I have actually developed my own. The reasons for using the Wise one for now are as follows:
-
-      - Their design is more pleasing on the eye and it is faster to load, as it's not relying .
-
-      - I c
-
-      - Otherwise, I am satisfied with all of my Desktop results.
-
-- ### Mobile Improvements
+-   ### Mobile Improvements
   
-    - ### Homepage Improvements
+    - #### Homepage
   
-      - **SEO**
-  
-      - The Homepage *SEO* score could be improved by:
+      - The Homepage ***Performance*** score could be improved by decreasing the *Largest contentful paint element*.
 
-      - Increasing text-size on the Homepage for mobile devices.
+      - The Homepage ***Best Practices*** score could be improved by better integrating the wise widget and its trackers and third party cookies.
+
+    - #### Safety & Weather Pages
+  
+      -  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
    
 
 ## Browser Compatibility
@@ -544,7 +531,7 @@ Appearance, functionality and responsiveness were largely consistent across brow
 
 ## Responsiveness
 
-Responsivity tests were carried out using Google Chrome DevTools & Microsoft Edge DevTools. Device screen sizes covered include:
+Responsiveness tests were carried out using Google Chrome DevTools & Microsoft Edge DevTools. Device screen sizes covered include:
 
 - iPhone SE
 - iPhone XR
@@ -585,68 +572,41 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
 ## Testing User Stories
 
-    -   ### Testing Visitor Goals
+"**_As a visiting user, I would like to_** _______________"
 
-    1. *As a Visitor, I want to easily understand the main purpose of the site, learn more about the collective and get a feeling for who they are, where they are, what they have to offer and how they intend to deliver.*
+- play a memory game that is visually engaging and educational:
+I have created a set of insect robot images designed to make the game appealing and fun for children to use. The images can be viewed in the folder [here](/assets/img/).
 
-       + Upon entering the site, users are greeted with a 3D comic strip explaining in four frames why they might need or want our help. That's the 'WHY?' sorted.
+- easily understand how to play the game:
+Instructions on how to play the game are included above the grid of images.
 
-        <h2 align="center"><img src="assets/readme/toon-bazaar-comic-strip-welcome.png"></h2>
-  
-       + Once they have read the comic strip, they arrive at the about section, where we spell out where we are located (everywhere) and how we can help them. There are also links to the contact form wherein they can make requests or get a quote. That's the ''WHO?', 'WHERE?' & 'HOW?' sorted.
-  
-       + The user can then navigate via the links in the about section to examples of our artwork adorning the Homepage & Market Page. That's the 'WHAT?' sorted.
+![View](/docs/manual-testing/userstories-start.png)
 
-       <h2 align="center"><img src="assets/readme/home-about.png"></h2>
+- see progress:
+The scoreboard rewards the user with a point every time there is a match.
 
-    2. *As a Visitor, I want to be able to easily navigate throughout the site to find content.*
+![View](/docs/manual-testing/userstories-end.png)
 
-        <h2 align="center"><img src="assets/readme/toon-bazaar-navbar.png"></h2>
+- reset the game at any point:
+The game has a reset button to allow the user to restart the game from the beginning at any point during the game.The reset button will only appear once the game has started and the game is in progress.
 
-       + The navigation bar sits directly beneath the header on each page, with three clearly labelled buttons to take them to whichever page they wish. The buttons change colour if the user hovers over them for the sake of clarity.
-  
-       + In the Homepage's about us section, there are links to example artwork of various mediums, external links to artists' portfolios and links to the contact form.
-  
-       + At the bottom of each page, there are social media buttons, which match the page buttons in the navigation bar, making for an intuitive UX. Each of these buttons will open its respective social media page in a new window, so the user will not lose their position on the Snapshot Location website.
+- as a parent, observe that the game develops my child's focus and concentration skills:
+The game displayes the images in a random order each time so the child cannot predict where the matching images are. The user gets 60 seconds to complete the game and receive a 'Success' message if completed in time or a 'Try again' message if not. The game can be easily reset to have another go.
 
-        <h2 align="center"><img src="assets/readme/toon-bazaar-social.png"></h2>
+- as a parent connect with the game developer via email:
+Users can click the Get in Touch link in the footer to access the contact form. The contact form utilises the JavaScript library, EmailJS. EmailJS is a JavaScript library that helps send emails using only client-side technologies, enabling a connection to a chosen email service (Gmail is used in this project), build an email template, and send without any server code. The input fields are required and the users are prompted to fill them if any input field is left empty. When the user has sent the form, they receive a pop-up message to reasure them the email has been sent and the developer will reply soon.
 
-    3. *As a Visitor, I want to see some samples of the artistic services they provide.*
-   
-       + Each page features a background created by our artists and each page is filled with work by our community of artists.
-   
-       + In the Homepage's about us section, there are internal links to example artwork and external links to artists' portfolios.
-  
-       + Each row on the Market Page is a gallery of different media, ranging from short animations to illustrations to comics and merchandise.
+![View](/docs/manual-testing/modal.png)
 
-        <h2 align="center"><img src="assets/readme/market-row-samples.png"></h2>
-       
-    4. *As a Visitor, I want to locate their social media links to see their followings on social media and determine how trusted and known they are.*
-   
-       + At the bottom of each page, there are social media buttons. Each of these buttons will open its respective social media account in a new window.
-  
-       + The user can scroll to the bottom of any page on the site to locate social media links in the footer.
-  
-      
-    5. *As a Visitor, I want to find the best way to get in contact with the organisation with any questions I may have or to get a quote.*
-   
-       + At the top of each page, underneath the header, there is a navigation bar with buttons to navigate to each page. The button for the Contact Page is clear to see on the right-hand side.
-    
-       + On the Homepage, in the about section, there are two links which direct the user straight to the contact form on the Contact Page.
+## Example message received using template fields in Email JS
 
+![View](/docs/manual-testing/email-message.png)
 
-    6. *As a Visitor, I want to sign up to a newsletter so that I am emailed any major news, updates or offers, like the 15% off signup offer.*
-
-       + At the bottom of the Contact Page, underneath the request form text area, there is a checkbox (already checked - but which can be unchecked by the user) signing them up with the email address they had to input at the top of the form.
 
 ## Debugging
-
-<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
     
     
-## Bugs
-
-### Resolved
+## Resolved
 
 1. It's not really a bug, but the biggest obstacle I faced to completing this site was the monthly charge I kept incurring for using Google Cloud Services with the Maps Javascript API & Places API: 
     -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further twenty odd city searches. 
@@ -655,23 +615,43 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
     -   I would also recommend that Google Cloud Services create a much a more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap.
     -   Luckily the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my best bill as a goodwill gesture. Hence my thanks to them later in this README. 
     
-I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and 
+I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
-2. On smaller devices, my h3 heading would wrap over into the next line or some text would disappear and be replaced with an ellipsis. I learnt that by using the 'white-space: nowrap' css code, I could avoid this happening to my headings.  
+2. My #name modal, which appears above a country when the user hovers above it, caused me the following problem:
 
-3. Jomhuria font's underline-formatting ordinarily breaks up for the lower part of low-hanging letters such as 'j' or 'y'. This looked unsightly and made legibility worse on the form of the Contact Page. I resolved this by using 'text-underline-position: under' css code to offset the underline-formatting to a lower position.
+* It would disappear off the screen for countries to the far right of the map.
+
+ * This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen.
+	// Scale based on screen width
+	if (width >= 3300) {
+		modal.style.transform = "scale(2.5)";
+	} else if (width >= 2600) {
+		modal.style.transform = "scale(1.8)";
+    ...
+	} else {
+		modal.style.transform = "scale(1)";
+	}
+
+3. My PEXELS Image Carousel would only take up part of the screen. I solved this by cloning the first and last slides as below:
+    // Clone first and last slides for seamless looping effect
+    const firstClone = carouselContainer.firstElementChild.cloneNode(true);
+    const lastClone = carouselContainer.lastElementChild.cloneNode(true);
+    carouselContainer.appendChild(firstClone);
+    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
 
 4. I couldn't get my background not to change size (zoom) when changing the sizes of my foreground flex elements, until I did some reading and discovered that by applying the css code 'no-repeat', 'center' and 'fixed', my background-image would be unaffected.
 
 5. The HTML validator flagged that there was an issue on my Market Page, where I'd tried to use a div as a child of a span when trying to line up the images side by side for the image border I'd created. I removed this and used 'display: inline-flex' css code instead and everything worked accordingly.
 
+<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
 
-### Unresolved
+
+## Unresolved
 
 1. I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
 
-1)    ### CORS WARNING
+2.    ### CORS WARNING
         
         - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
         
@@ -685,7 +665,7 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and
 
         -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
 
-1)    ### Quota Errors
+3.    ### Quota Errors
 
         As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
@@ -699,8 +679,63 @@ I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and
 
         which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
+4.  ### OpenStreetMaps Map Occasionally Needs Reload Before A New Search
+
+        After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
+
+        I believe this is owing to the fact I have prohibited people using the search bar and map before clicking on a country.
+
+        This should be fixed in the next version.
 
 
+## Manual Testing 
+
+### Manual Testing (Console)
+
+In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. Please see the two examples below:
+
+- ### Testing for API Fetch Functionality
+
+Test if the APIs fetch functionality is working.
+
+Run this in the browser console (F12 → Console tab):
+
+
+console.log(`✅ You have ${window.fetch ? "active API calls using fetch" : "no fetch API calls detected"}`);
+
+
+<h3 align="center"><img src="assets/readme/manual-console-javascript-fetch-test.png"></h3>
+
+- ### Testing for Specific HTML Elements:
+
+Test if hotel and amenity tables exist.
+
+Run this in the browser console (F12 → Console tab): 
+
+const hotelTable = document.getElementById("hotel-results");
+const placesTable = document.getElementById("places-results");
+
+console.log("🏨 Hotel table exists:", !!hotelTable);
+console.log("📍 Amenity table exists:", !!placesTable);
+
+
+<h3 align="center"><img src="assets/readme/manual-console-javascript-element-test.png"></h3>
+
+
+### Manual testing (BDD)
+
+Behaviour-Driven Development is based on  the expected outcome of an action, to see if an app behaves as expected. BDD builds on the user stories, extending this by adding Given, Then, and When  - so given (a specific context), when (a specific action is carried out), then (a particular set of observable consequences should occur). The behaviour is now testable and repeatable.
+ 
+### BDD - Snapshot Location
+
+As a user, when I arrive at the webpage. 
+- I want to be able to hover over each country, so that each country tile displays the name of the country.
+- When I click on the country, I want to know that my clicking the country has had an impact.
+- When I scroll down, I want to find all the information about the clicked country waiting for me.
+- When I enter a city name or address into the search bar, I want the map to zoom in on that city or address.
+- If I enter an incorrect result, I want to be notified that I have made a mistake.
+- When I click on a map in the table of hotel and place results, I want the map to zoom in on that hotel or place.
+- When I click on an amenity button, I want those amenities populated on the map.
 
 
 # Deployment
@@ -722,8 +757,7 @@ Go to:
     -	Framework preset: None
     -	Build command: (leave blank if static)
     -   Output directory: ./ or dist (if you have one).
-6.  Deploy and obtain a link.
-
+6.  Deploy and obtain a link:
 
 https://snapshot-location.pages.dev
 
@@ -761,19 +795,19 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -   [YouTube](https://youtube.com/): I used the following tutorials to build various sections of this site and learn more about using APIs:
 
-[SVG Map + Name & Time](https://www.youtube.com/watch?v=WtoyIiOp5Aw)
+*   [SVG Map + Name & Time](https://www.youtube.com/watch?v=WtoyIiOp5Aw)
 
-[Country Information from REST COUNTRIES](https://www.youtube.com/watch?v=THZyM2z8s-o)
+*   [Country Information from REST COUNTRIES](https://www.youtube.com/watch?v=THZyM2z8s-o)
 
-[News App](https://www.youtube.com/watch?v=ZGLKTQVyT0U)
+*   [News App](https://www.youtube.com/watch?v=ZGLKTQVyT0U)
 
-[Weather App](https://www.youtube.com/watch?v=74IOjtVvExY)
+*   [Weather App](https://www.youtube.com/watch?v=74IOjtVvExY)
 
-[5 Day Forecast](https://www.youtube.com/watch?v=31Z0Z2Qn8NE)
+*   [5 Day Forecast](https://www.youtube.com/watch?v=31Z0Z2Qn8NE)
 
-[OpenStreetMaps + Leaflet](https://www.youtube.com/watch?v=vOPr5k_SGVA)
+*   [OpenStreetMaps + Leaflet](https://www.youtube.com/watch?v=vOPr5k_SGVA)
 
-[Javascript Chaining](https://www.youtube.com/@SteveGriffith-Prof3ssorSt3v3): Professor Steve Griffith's tutorials on chaining Javascript functions helped me greatly in understanding how to chain all the different APIs I was using together.
+*   [Javascript Chaining](https://www.youtube.com/@SteveGriffith-Prof3ssorSt3v3): Professor Steve Griffith's tutorials on chaining Javascript functions helped me greatly in understanding how to chain all the different APIs I was using together.
 
 -   [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Media_queries): Mozilla Developer helped me achieve the exact level of responsiveness I wanted from Media Queries.
 
