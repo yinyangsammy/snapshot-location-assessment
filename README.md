@@ -608,18 +608,19 @@ Users can click the Get in Touch link in the footer to access the contact form. 
     
 ## Resolved
 
-1. It's not really a bug, but the biggest obstacle I faced to completing this site was the monthly charge I kept incurring for using Google Cloud Services with the Maps Javascript API & Places API: 
+1. It's not really a bug, but the biggest obstacle I faced to completing this site was the monthly charge I kept incurring for using Google Cloud Services: 
     -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further twenty odd city searches. 
     -   To my horror, two days later I received a bill for £1800. This was owing to my not having restricted which APIs were being triggered during searches and having not set quotas around my potential budget. 
-    -   I would recommend any other devs signing up for Google Cloud Services ensure that they have restricted which APIs / SKUs they are using and set quota limits for each day. 
-    -   I would also recommend that Google Cloud Services create a much a more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap.
-    -   Luckily the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my best bill as a goodwill gesture. Hence my thanks to them later in this README. 
+    -   I would recommend any other devs signing up for Google Cloud Services ensure, they have restricted which APIs / SKUs they are using and set quota limits for each day. 
+    -   I would also recommend that Google Cloud Services create a much more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap.
+    -   Luckily, the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my first bill as a goodwill gesture. Hence my thanks to them later in this README.
+    -   Setting it to Maps Javascript API & Places API only and restricting the daily quota fixed my problem, but unfortunately, even doing five plus city searches per day would have proved prohibitively expensive.
     
-    -   I solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
+    -   I ultimately solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
 2. My #name modal, which appears above a country when the user hovers above it, caused me the following problem:
 
-    -   It would disappear off the screen for countries to the far right of the map.
+    -   It would either disappear off the screen or expand the viewport beyond my body width for countries to the far right of the map.
 
     -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen.
 	// Scale based on screen width
@@ -641,17 +642,51 @@ Users can click the Get in Touch link in the footer to access the contact form. 
     carouselContainer.appendChild(firstClone);
     carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
 
-4. ??????
+4. At first, three of my amenity buttons (park, landmark and museum) would not fetch and display the places of interest assigned to them. I came to realize that all three or not listed as amenities, per se, but as tourism nodes:
+
+	let queryType;
+
+	switch (type) {
+		case "museum":
+			queryType = `
+                (
+                    node["tourism"="museum"](around:5000,${lat},${lng});
+                    way["tourism"="museum"](around:5000,${lat},${lng});
+                    relation["tourism"="museum"](around:5000,${lat},${lng});
+                );`;
+			break;
+		case "park":
+			queryType = `
+                (
+                    node["leisure"="park"](around:5000,${lat},${lng});
+                    way["leisure"="park"](around:5000,${lat},${lng});
+                    relation["leisure"="park"](around:5000,${lat},${lng});
+                );`;
+			break;
+		case "landmark":
+			queryType = `
+                (
+                    node["tourism"="attraction"](around:5000,${lat},${lng});
+                    way["tourism"="attraction"](around:5000,${lat},${lng});
+                    node["historic"](around:5000,${lat},${lng});
+                    way["historic"](around:5000,${lat},${lng});
+                    relation["historic"](around:5000,${lat},${lng});
+                );`;
+			break;
+		default:
+			queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
+			break;
+	}
 
 5. My favicon kept triggering an error message on all browsers when I used the standard:
 
-    -   <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
 
-    -   So, instead, I used teh workaround, using a .png image instead:
+    -   So, I used the backup workaround instead, replacing the .ico image with a .png image instead:
 
-    -   <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
 
-    -   This luckily solved my problem.
+    -   This solved my problem.
 
 ## Unresolved
 
