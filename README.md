@@ -842,19 +842,19 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -   [YouTube](https://youtube.com/): I used the following tutorials to build various sections of this site and learn more about using APIs:
 
-*   [SVG Map + Name & Time](https://www.youtube.com/watch?v=WtoyIiOp5Aw)
+    *   [SVG Map + Name & Time](https://www.youtube.com/watch?v=WtoyIiOp5Aw)
 
-*   [Country Information from REST COUNTRIES](https://www.youtube.com/watch?v=THZyM2z8s-o)
+    *   [Country Information from REST COUNTRIES](https://www.youtube.com/watch?v=THZyM2z8s-o)
 
-*   [News App](https://www.youtube.com/watch?v=ZGLKTQVyT0U)
+    *   [News App](https://www.youtube.com/watch?v=ZGLKTQVyT0U)
 
-*   [Weather App](https://www.youtube.com/watch?v=74IOjtVvExY)
+    *   [Weather App](https://www.youtube.com/watch?v=74IOjtVvExY)
 
-*   [5 Day Forecast](https://www.youtube.com/watch?v=31Z0Z2Qn8NE)
+    *   [5 Day Forecast](https://www.youtube.com/watch?v=31Z0Z2Qn8NE)
 
-*   [OpenStreetMaps + Leaflet](https://www.youtube.com/watch?v=vOPr5k_SGVA)
+    *   [OpenStreetMaps + Leaflet](https://www.youtube.com/watch?v=vOPr5k_SGVA)
 
-*   [Javascript Chaining](https://www.youtube.com/@SteveGriffith-Prof3ssorSt3v3): Professor Steve Griffith's tutorials on chaining Javascript functions helped me greatly in understanding how to chain all the different APIs I was using together.
+    *   [Javascript Chaining](https://www.youtube.com/@SteveGriffith-Prof3ssorSt3v3/search?query=javascript%20chain): 
 
 -   [Mozilla Developer](https://developer.mozilla.org/en-US/docs/Learn/CSS/CSS_layout/Media_queries): Mozilla Developer helped me achieve the exact level of responsiveness I wanted from Media Queries.
 
@@ -918,7 +918,7 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 
 
-## Root
+# Root
 
 Snapshot Location has been created as part of the developer's portfolio but will be further developed into a website in the near future.
 
