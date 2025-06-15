@@ -399,6 +399,7 @@ The Snapshot Location website has been tested using the following methods:
     - [Manual Testing](#manual-testing)
 
 
+## Testing
 
 Using code to test code has several advantages over manual testing:
 
@@ -474,17 +475,17 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
 - Best Practices 
 - SEO
 
-* ### For Desktop:
+### For Desktop:
 
-- Homepage scored:
+Homepage scored:
     - Performance - 98
     - Accessibility - 100
     - Best Practices - 100
     - SEO - 100
 
-* ### For Mobile:
+### For Mobile:
 
-- Homepage scored:
+Homepage scored:
     - Performance - 74
     - Accessibility -98
     - Best Practices -75
@@ -500,23 +501,23 @@ I am also inclined to develop an app for tablets and mobile devices.
 
 ## Future Improvements
 
--   ### Desktop Improvements
+### Desktop Improvements
 
-    - #### Safety & Weather Pages
+#### Safety & Weather Pages
   
-      -  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
+-  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
 
--   ### Mobile Improvements
+### Mobile Improvements
   
-    - #### Homepage
+#### Homepage
   
-      - The Homepage ***Performance*** score could be improved by decreasing the *Largest contentful paint element*.
+- The Homepage ***Performance*** score could be improved by decreasing the *Largest contentful paint element*.
 
-      - The Homepage ***Best Practices*** score could be improved by better integrating the wise widget and its trackers and third party cookies.
+- The Homepage ***Best Practices*** score could be improved by better integrating the wise widget and its trackers and third party cookies.
 
-    - #### Safety & Weather Pages
+#### Safety & Weather Pages
   
-      -  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
+-  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
    
 
 ## Browser Compatibility
