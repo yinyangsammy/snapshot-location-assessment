@@ -159,7 +159,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
         <h3 align="center"><img src="assets/readme/map-emoji.jpg"></h3>
 
 
-    -   ## Font Awesome Icons
+        ## Font Awesome Icons
         
         - I used icons from Font Awesome for social media links in the footer, to improve clarity and efficiency for my users.
 
@@ -260,24 +260,24 @@ The weather page features a weather map as provided by [World Weather Online](ht
 # Irregular Structure
 
 
--   ## Embedded CSS 
+## Embedded CSS 
         
--   The wise fx currency widget came with inline styling which I have preserved, adding lazy loading and referrerpolicy to further improve the website's best practices.
+-   The wise fx currency widget came with its own inline styling, which I have preserved, also adding lazy loading and a referrerpolicy to further improve the website's best practices.
 
--   ## Embedded Javascript
+## Embedded Javascript
 
-####   I have kept the script inline for:
+I have kept the script inline for:
         
 * The PEXELS picture carousel.
 
 * The postcode-link modal.
 
-The functionality of both seem to work much more smoothly that way. At some point, I will try to deduce why. More on both in the Bugs section below.
+The functionality of both seem to work much more efficiently that way. At some point, I will try to deduce why. More on both in the Bugs section below.
 
     
 # Features
 
--   ## Current Features:
+## Current Features:
 
 -   A nav bar, enabling the user to easily navigate from safety map to  weather map to homepage.
 -   A clickable SVG map with interactive country tiles that fill with colour on hover and fades out on scroll down.
@@ -313,7 +313,7 @@ The functionality of both seem to work much more smoothly that way. At some poin
 
   <h2 align="center"><img src="assets/readme/404.png"></h2>
 
--   ## Future Features:
+## Future Features:
 
 -  A review container - using a Trip Advisor or Expedia API.
 -  A booking container - using an Air BnB or Booking API, or, if possible, both APIs jointly.
