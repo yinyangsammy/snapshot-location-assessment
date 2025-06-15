@@ -14,8 +14,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
 ## Contents
 
-- [User experience](#user-experience)
-  * [User Stories](#user-stories)
+- [User Stories](#user-stories)
     - [Visitor Goals](#visitor-goals)
 - [Design](#design)
   + [Colour Scheme](#colour-scheme)
@@ -42,11 +41,9 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
   + [Acknowledgements](#acknowledgements)
 
 
-# User Experience
+# User Stories
 
 ## Visitor Goals
-
-### User Stories:
 
 "**_As a user of Snapshot Location, I would like ** _______________"
 
@@ -161,16 +158,16 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 
         ## Font Awesome Icons
         
-        - I used icons from Font Awesome for social media links in the footer, to improve clarity and efficiency for my users.
+        I used icons from Font Awesome for social media links in the footer, to improve clarity and efficiency for my users.
 
 
 # Structure
 
--   The website has 3 pages:
+The website has 3 pages:
 
 ## 1) *Homepage aka Location*
 
--   The Home & Landing page features 2 interactive maps and a photo carousel separating the two:
+The Home & Landing page features 2 interactive maps and a photo carousel separating the two:
 
 ### Top Half
         
@@ -262,7 +259,7 @@ The weather page features a weather map as provided by [World Weather Online](ht
 
 ## Embedded CSS 
         
--   The wise fx currency widget came with its own inline styling, which I have preserved, also adding lazy loading and a referrerpolicy to further improve the website's best practices.
+The wise fx currency widget came with its own inline styling, which I have preserved, also adding lazy loading and a referrerpolicy to further improve the website's best practices.
 
 ## Embedded Javascript
 
@@ -399,23 +396,36 @@ The Snapshot Location website has been tested using the following methods:
     - [Manual Testing](#manual-testing)
 
 
-## Testing
+## Importance of Automated & Manual Testing
 
-Using code to test code has several advantages over manual testing:
+### Automated
 
-* Multiple tests can be run against a project in a short space of time.
+**Using automated testing to test code has several advantages over manual testing:**
 
-* Tests can be written while programming, so that errors can be picked up earlier on in development.
+* Quicker - Multiple tests can be run against a project in a short space of time.
 
-* Tests can remain within our code, so that if ever future developments conflict with our current functionality, the programmer can be alerted with immediate effect.
+* More Holistic - The ability to very quickly establish how the site will perform as a whole.
 
-However, tests are only as good as the tester(s), and can end up being purely decorative, or even manipulated.
+* More Exact - The ability to find more bugs, including unknown bugs.
 
-Automated tests don't test the User Experience either, so the best strategy is a combination of both automated and manual testing.
+* More Accurate - Less room for human error -- tests are only as good as the tester(s), and can therefore end up being purely decorative
+
+* More Honest - aka less prone to manipulation or corruption.
+
+### Manual
+
+**Using manual testing to test code has several advantages over automated testing:**
+
+* More Precise - No waiting for other tests to finish - one specific piece can be perfected.
+
+* More Initiative - Tests can be written while programming, so that errors can be picked up earlier on in development.
+
+* More Adaptive / Flexible - Tests can remain within our code for the future (*regressive testing*), so that if ever future developments conflict with our current functionality, the programmer can be alerted with immediate effect.
+
+* More Organic - Automated tests don't test the User Experience beyond the performative, so manual testing is essential to get a full understanding of the user experience.
 
 
 ## Automated Testing
-
 
 The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
 
@@ -495,9 +505,9 @@ I didn't use Lighthouse for the other pages, i.e. Safety & Weather, on account o
 
 I have improved the header, navbar, contact section and footer to the best of my abilities for all pages.
 
-Overall, I am happy with the speed the site runs on every device I've tried (Various Lenovo laptops, Samsung S23 Ultra, Samsung S10 Plus, Samsung S9 Plus). The pages load fast and all the functions run smoothly.
+Overall, I am happy with the speed the site runs on every device I've tried (Various laptops, desktops, tablets and mobile phones). The pages load fast and all the functions run smoothly.
 
-I am also inclined to develop an app for tablets and mobile devices.
+I am also more inclined to develop an app for tablets and mobile devices.
 
 ## Future Improvements
 
@@ -505,7 +515,7 @@ I am also inclined to develop an app for tablets and mobile devices.
 
 #### Safety & Weather Pages
   
--  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
+-  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. I will know more after I have spoken to the developers.
 
 ### Mobile Improvements
   
