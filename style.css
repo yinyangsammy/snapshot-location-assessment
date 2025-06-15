@@ -42,6 +42,49 @@ h3 {
   font-family: "Merienda One", "Dancing Script", cursive;
 }
 
+/* Tagline */
+#tagline {
+  font-family: "Merienda One", "Dancing Script", cursive;
+  font-size: clamp(1rem, 2.5vw, 1.8rem);
+  font-weight: 900;
+  color: whitesmoke;
+  letter-spacing: 0.3rem;
+  word-spacing: 0.2rem;
+  padding: 0.35rem 1rem;
+  border-top: 2px solid beige;
+  border-bottom: 2px solid beige;
+  border-radius: 45%;
+  background: radial-gradient(
+    circle,
+    rgba(242, 130, 105, 1) 20%,
+    rgba(245, 104, 137, 1) 80%,
+    rgba(255, 148, 148, 1) 100%
+  );
+  text-align: center;
+  margin: 0 auto;
+  margin-bottom: 4%;
+  max-width: 95%;
+}
+header h1 {
+  font-size: 6rem;
+  color: rgba(255, 148, 148, 1);
+  font-weight: 1000;
+  text-shadow: 2px 0 #fff, -2px 0 #fff, 0 2px #fff, 0 -2px #fff, 1px 1px #fff,
+    -1px -1px #fff, 1px -1px #fff, -1px 1px #fff, 3px 3px beige;
+  letter-spacing: 1rem;
+  margin: 0 auto;
+  text-align: center;
+  width: 100%;
+}
+h2 {
+  font-size: xx-large;
+  color: whitesmoke;
+}
+header > p {
+  color: white;
+  max-height: fit-content;
+}
+
 /* Nav Bar */
 
 nav {
