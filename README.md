@@ -258,8 +258,6 @@ The weather page features a weather map as provided by [World Weather Online](ht
 ## Embedded CSS
 
 I have kept the css styling inline for:
-
-*  My header styling, to further improve the website's mobile performance. It shaved off about 
         
 * The wise fx currency widget came with its own inline styling, which I have preserved, also adding lazy loading and a referrerpolicy to further improve the website's best practices.
 
@@ -399,7 +397,7 @@ The Snapshot Location website has been tested using the following methods:
 - [Debugging](#debugging)
     - [Resolved](#resolved)    
     - [Unresolved](#unresolved)
-    - [Manual Testing](#manual-testing)
+- [Manual Testing](#manual-testing)
 
 
 ## Importance of Automated & Manual Testing
@@ -471,13 +469,6 @@ The Snapshot Location website passed all tests using the JSHint JS Validator, wi
 
 ## Lighthouse
 
-- ## Desktop
-
-
-
-
-- ## Mobile
-
 I used the Lighthouse reports in Google Developer Tools to examine the pages of the website for the following:
 
 - Performance
@@ -485,7 +476,7 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
 - Best Practices 
 - SEO
 
-### For Desktop:
+### Desktop:
 
 Homepage scored:
     - Performance - 98
@@ -496,10 +487,10 @@ Homepage scored:
 -  ### Lighthouse Report for Homepage (Desktop)
     <h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
 
-### For Mobile:
+### Mobile:
 
 Homepage scored:
-    - Performance - 74
+    - Performance - 81
     - Accessibility -98
     - Best Practices -75
     - SEO - 100
@@ -766,6 +757,7 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
     -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen:
 
+    ```javascript
 	**// Scale based on screen width
 	if (width >= 3300) {
 		modal.style.transform = "scale(2.5)";
@@ -780,35 +772,37 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 
     -   I solved this by cloning the first and last slides as below to create a lopping effect:
 
-    **// Clone first and last slides for seamless looping effect
+    ```javascript
+    // Clone first and last slides for seamless looping effect
     const firstClone = carouselContainer.firstElementChild.cloneNode(true);
     const lastClone = carouselContainer.lastElementChild.cloneNode(true);
     carouselContainer.appendChild(firstClone);
-    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);**
+    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
 
-4. At first, three of my amenity buttons (park, landmark and museum) would not fetch and display the places of interest assigned to them. I came to realize that all three or not listed as amenities, per se, but as tourism nodes:
+4. At first, three of my amenity buttons (park, landmark and museum) would not fetch and display the places of interest assigned to them. I came to realize that all three are not listed as amenities, but as tourism nodes:
 
-	**let queryType;
+    ```javascript
+    let queryType;
 
-	switch (type) {
-		case "museum":
-			queryType = `
+    switch (type) {
+        case "museum":
+            queryType = `
                 (
                     node["tourism"="museum"](around:5000,${lat},${lng});
                     way["tourism"="museum"](around:5000,${lat},${lng});
                     relation["tourism"="museum"](around:5000,${lat},${lng});
                 );`;
-			break;
-		case "park":
-			queryType = `
+            break;
+        case "park":
+            queryType = `
                 (
                     node["leisure"="park"](around:5000,${lat},${lng});
                     way["leisure"="park"](around:5000,${lat},${lng});
                     relation["leisure"="park"](around:5000,${lat},${lng});
                 );`;
-			break;
-		case "landmark":
-			queryType = `
+            break;
+        case "landmark":
+            queryType = `
                 (
                     node["tourism"="attraction"](around:5000,${lat},${lng});
                     way["tourism"="attraction"](around:5000,${lat},${lng});
@@ -816,21 +810,27 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
                     way["historic"](around:5000,${lat},${lng});
                     relation["historic"](around:5000,${lat},${lng});
                 );`;
-			break;
-		default:
-			queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
-			break;
-	}**
+            break;
+        default:
+            queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
+            break;
+    }
+    ```
 
 5. My favicon kept triggering an error message on all browsers when I used the standard:
 
+    ```html
     <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+    ```
 
-    -   So, I used the backup workaround instead, replacing the .ico image with a .png image instead:
+    - So, I used the backup workaround instead, replacing the `.ico` image with a `.png` image instead:
 
+    ```html
     <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    ```
 
-    -   This solved my problem.
+    - This solved my problem.
+
 
 ## Unresolved
 
@@ -844,18 +844,13 @@ I have used the free SVG World Map download from Simple Maps (https://simplemaps
 
         As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
-        **-   400 Bad Request 
+        -   400 Bad Request 
         -   403 Forbidden
-        -   426 Upgrade Required**
+        -   426 Upgrade Required
 
         or the likes of
 
-        **GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED**
-
-        or
-
-        **gtm.wise.com/wisetag?id=GTM-M7V2XH:1 
-        Failed to load resource: net::ERR_BLOCKED_BY_CLIENT**
+        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
 
         which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
@@ -876,7 +871,7 @@ In order to ensure that my javascript was working correctly, I would add manual 
 
 ### Testing for API Fetch Functionality
 
-Test if the APIs fetch functionality is working.
+Test if API fetch functionality is working correctly.
 
 - Run this in the browser console (F12 → Console tab):
 
@@ -891,6 +886,7 @@ Test if hotel and amenity tables exist.
 
 - Run this in the browser console (F12 → Console tab): 
 
+```javascript
 const hotelTable = document.getElementById("hotel-results");
 const placesTable = document.getElementById("places-results");
 
