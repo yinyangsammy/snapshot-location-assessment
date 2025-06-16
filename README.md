@@ -31,6 +31,8 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
   + [Languages](#languages)
   + [Frameworks Libraries Programs](#frameworks-libraries-programs)
 - [Testing](#testing)
+- [Testing User Stories](#testing-user-stories)
+    - [Testing Visitor Goals](#testing-visitor-goals)
 - [Deployment](#deployment)
   + [Cloudfare Pages](#cloudfare-pages)
   + [GitHub Pages](#github-pages)
@@ -396,7 +398,7 @@ The Snapshot Location website has been tested using the following methods:
 - [Debugging](#debugging)
     - [Resolved](#resolved)    
     - [Unresolved](#unresolved)
-- [Testing User Experience](#testing-user-experience)
+- [Testing User Stories](#testing-user-stories)
     - [Testing Visitor Goals](#testing-visitor-goals)
 
 
