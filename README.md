@@ -211,7 +211,6 @@ The OpenStreetMaps Map of the world features a search bar just above, where the 
 #### 1) The map will zoom into that address.
 
 <h3 align="center"><img src="assets/readme/openstreetsmap.png"></h3>
-
         
 #### 2) The map will populate itself with hotels.
 
@@ -229,7 +228,7 @@ The OpenStreetMaps Map of the world features a search bar just above, where the 
 
 <h3 align="center"><img src="assets/readme/hotel-zoom.png"></h3>
 
-#### 5) There is then the option to choose from different amenity buttons within the place-container besides the hotel container
+#### 5) There is then the option to choose from different amenity buttons within the place-container besides the hotel container.
 
 <h3 align="center"><img src="assets/readme/amenity-buttons-table.png"></h3>
     
@@ -245,7 +244,6 @@ The OpenStreetMaps Map of the world features a search bar just above, where the 
 
 <h3 align="center"><img src="assets/readme/weather-forecasts.png"></h3>
 
-
 ## 2) *Safety Page*
 
 The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook).
@@ -257,13 +255,17 @@ The weather page features a weather map as provided by [World Weather Online](ht
 # Irregular Structure
 
 
-## Embedded CSS 
+## Embedded CSS
+
+I have kept the css styling inline for:
+
+*  My header styling, to further improve the website's mobile performance. It shaved off about 
         
-The wise fx currency widget came with its own inline styling, which I have preserved, also adding lazy loading and a referrerpolicy to further improve the website's best practices.
+* The wise fx currency widget came with its own inline styling, which I have preserved, also adding lazy loading and a referrerpolicy to further improve the website's best practices.
 
 ## Embedded Javascript
 
-I have kept the script inline for:
+I have kept the javascript functions inline for:
         
 * The PEXELS picture carousel.
 
@@ -271,13 +273,13 @@ I have kept the script inline for:
 
 The functionality of both seem to work much more efficiently that way. At some point, I will try to deduce why. More on both in the Bugs section below.
 
-    
+
 # Features
 
 ## Current Features:
 
 -   A nav bar, enabling the user to easily navigate from safety map to  weather map to homepage.
--   A clickable SVG map with interactive country tiles that fill with colour on hover and fades out on scroll down.
+-   A clickable SVG map with interactive country tiles that fill with colour on hover and generate information on click.
 -   A name modal that pops up on hover and fades out on scroll down.
 -   A black instruction modal that pops up on map click, informing the user to 'Scroll down for a snapshot of {location}', and fades out on scroll down.
 -   Fade in containers which only appear once the user has clicked a country.
@@ -306,7 +308,7 @@ The functionality of both seem to work much more efficiently that way. At some p
     -   Search bars with map zoom  
     -   An interactive exchange rate widget
 -   Easy offsite navigation to social media accounts.
--   A 404 page for users who direct to a non-existent page or resource are able to return to the main page without having to use browser navigation buttons.
+-   A 404 page, so users who direct to a non-existent page or resource are able to return to the main page without having to use browser navigation buttons.
 
   <h2 align="center"><img src="assets/readme/404.png"></h2>
 
@@ -327,7 +329,6 @@ The functionality of both seem to work much more efficiently that way. At some p
 -   ## Weather Page Wireframe - <h2 align="right"><img src="assets/readme/snapshot-location-weather-page-wireframe.png"></h2> 
 
 
-
 # Technologies
 
 -   ## Languages
@@ -339,7 +340,7 @@ The functionality of both seem to work much more efficiently that way. At some p
 -   ## Frameworks Libraries Programs
 
 1. [Hover.css:](https://ianlunn.github.io/Hover/)
-    - Hover.css was used on the Social Media icons in the footer and all buttons to make clear to the user that clicking would have an effect. 
+    - Hover.css was used on the SVG map, social media icons in the footer and all buttons to make clear to the user that clicking would have an effect. 
 2. [Google Fonts:](https://fonts.google.com/)
     - Google fonts were used to import various fonts into the style.css file, which were then used on different pages.
 3. [Font Awesome:](https://fontawesome.com/)
@@ -364,10 +365,15 @@ The functionality of both seem to work much more efficiently that way. At some p
     - GitHub is used to store the projects code in a repository after being pushed from Git.
 17. [Cloudfare:](https://dash.cloudflare.com/login)
     - Cloudfare is used to deploy the project and acquire a link.
+18. [Gitpod](https://www.gitpod.io/)
+    - Gitpod was used as a cloud IDE.
+19. [VS Code](https://code.visualstudio.com/)
+    - VS Code is always used as my local IDE.
 
 # Testing
 
 The Snapshot Location website has been tested using the following methods:
+
 - [Testing](#testing)
 - [Automated Testing](#automated-testing)
 - [Code Validation](#code-validation)
@@ -402,13 +408,13 @@ The Snapshot Location website has been tested using the following methods:
 
 **Using automated testing to test code has several advantages over manual testing:**
 
-* Quicker - Multiple tests can be run against a project in a short space of time.
+* Quicker - Multiple tests can be run on the same piece of code concurrently, and in a short space of time.
 
 * More Holistic - The ability to very quickly establish how the site will perform as a whole.
 
 * More Exact - The ability to find more bugs, including unknown bugs.
 
-* More Accurate - Less room for human error -- tests are only as good as the tester(s), and can therefore end up being purely decorative
+* More Accurate - Less room for human error -- tests are only as good as the tester(s), and can therefore end up being purely decorative.
 
 * More Honest - aka less prone to manipulation or corruption.
 
@@ -418,12 +424,11 @@ The Snapshot Location website has been tested using the following methods:
 
 * More Precise - No waiting for other tests to finish - one specific piece can be perfected.
 
-* More Initiative - Tests can be written while programming, so that errors can be picked up earlier on in development.
+* More Initiative - Tests can be written while programming, so that errors can be picked up as early as possible during development.
 
 * More Adaptive / Flexible - Tests can remain within our code for the future (*regressive testing*), so that if ever future developments conflict with our current functionality, the programmer can be alerted with immediate effect.
 
-* More Organic - Automated tests don't test the User Experience beyond the performative, so manual testing is essential to get a full understanding of the user experience.
-
+* More Organic - Automated tests don't test the User Experience beyond the performative, so manual testing is essential to get a full understanding of the user experience (UX).
 
 ## Automated Testing
 
@@ -468,15 +473,10 @@ The Snapshot Location website passed all tests using the JSHint JS Validator, wi
 
 - ## Desktop
 
-  -  ### Lighthouse Report for Homepage (Desktop)
-    <h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
+
 
 
 - ## Mobile
-
-  - ### Lighthouse Report for Homepage (Mobile)
-    <h2 align="center"><img src="assets/readme/lighthouse-homepage-mobile.png"></h2>
-
 
 I used the Lighthouse reports in Google Developer Tools to examine the pages of the website for the following:
 
@@ -493,6 +493,9 @@ Homepage scored:
     - Best Practices - 100
     - SEO - 100
 
+-  ### Lighthouse Report for Homepage (Desktop)
+    <h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
+
 ### For Mobile:
 
 Homepage scored:
@@ -500,6 +503,9 @@ Homepage scored:
     - Accessibility -98
     - Best Practices -75
     - SEO - 100
+
+- ### Lighthouse Report for Homepage (Mobile)
+    <h2 align="center"><img src="assets/readme/lighthouse-homepage-mobile.png"></h2>
 
 I didn't use Lighthouse for the other pages, i.e. Safety & Weather, on account of the third party scripts attached to those maps which I cannot change unless I approach their respective developers. (*Please see below for future improvements.*)
 
@@ -529,7 +535,6 @@ I am also more inclined to develop an app for tablets and mobile devices.
   
 -  I will work to improve the Safety & Weather pages by implementing better practices, such as lazy loading and referrerpolicy, and by better integrating third party cookies and functions. 
    
-
 ## Browser Compatibility
 
 The site was tested in Brave, Google Chrome, Microsoft Edge and Mozilla Firefox on Desktop.
@@ -579,53 +584,179 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 ### 4K (3840 x 2160)
 <h2 align="center"><img src="assets/readme/snapshot-location-4k.png"></h2>
 
-# Testing User Experience
 
-## Testing User Stories
+# Testing User Stories
 
-"**_As a visiting user, I would like to_** _______________"
+## Testing Visitor Goals
 
-- play a memory game that is visually engaging and educational:
-I have created a set of insect robot images designed to make the game appealing and fun for children to use. The images can be viewed in the folder [here](/assets/img/).
+### ✅ As a user of Snapshot Location, I would like an interface layout that can be immediately understood, irrespective of age and nationality, without the need for complicated instructions or a key.
 
-- easily understand how to play the game:
-Instructions on how to play the game are included above the grid of images.
+**Implemented with:**
+- Clean, intuitive layout using consistent UI design principles  
+- A clickable SVG map with hover states for interactive discovery  
+- Instructional black modal that appears on map click and fades on scroll  
 
-![View](/docs/manual-testing/userstories-start.png)
+📸 *Add screenshot of homepage and instruction modal here*
 
-- see progress:
-The scoreboard rewards the user with a point every time there is a match.
+---
 
-![View](/docs/manual-testing/userstories-end.png)
+### ✅ As a user of Snapshot Location, I would like an easy-to-navigate platform to find different locations and get a snapshot of life living there.
 
-- reset the game at any point:
-The game has a reset button to allow the user to restart the game from the beginning at any point during the game.The reset button will only appear once the game has started and the game is in progress.
+**Implemented with:**
+- Navbar linking to homepage, weather map, and safety map  
+- Interactive SVG map and map search bar  
+- Country data containers fade in dynamically upon selection  
 
-- as a parent, observe that the game develops my child's focus and concentration skills:
-The game displayes the images in a random order each time so the child cannot predict where the matching images are. The user gets 60 seconds to complete the game and receive a 'Success' message if completed in time or a 'Try again' message if not. The game can be easily reset to have another go.
+📸 *Add screenshot of interactive map and data snapshot sections here*
 
-- as a parent connect with the game developer via email:
-Users can click the Get in Touch link in the footer to access the contact form. The contact form utilises the JavaScript library, EmailJS. EmailJS is a JavaScript library that helps send emails using only client-side technologies, enabling a connection to a chosen email service (Gmail is used in this project), build an email template, and send without any server code. The input fields are required and the users are prompted to fill them if any input field is left empty. When the user has sent the form, they receive a pop-up message to reasure them the email has been sent and the developer will reply soon.
+---
 
-![View](/docs/manual-testing/modal.png)
+### ✅ As a user of Snapshot Location, I would like clearly marked locations I can easily navigate and choose from.
 
-## Example message received using template fields in Email JS
+**Implemented with:**
+- Highlightable countries on the SVG map (hover and click interactions)  
+- Country name modals with fade effects  
+- Search bar with real-time results  
 
-![View](/docs/manual-testing/email-message.png)
+📸 *Add screenshot of SVG map with country tiles hovered or selected*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like clear and relevant information provided for each location with each distinct parameter clearly marked.
+
+**Implemented with:**
+- Country name, general info, and exchange rate sections  
+- Weather forecasts and photo carousel  
+- Safety and amenities info clearly structured in responsive containers  
+
+📸 *Add screenshot of info sections per country*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like the time and timezone of the location.
+
+**Implemented with:**
+- Real-time timezone display per country in the location snapshot section  
+
+📸 *Add screenshot of timezone feature*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like the name and general information about the location, such as languages spoken, the capital city, the dialling code and population size.
+
+**Implemented with:**
+- A General Information panel for every country including key stats  
+
+📸 *Add screenshot of General Information box*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like the principal currency used in the location with exchange rates for other locations I might be traveling from.
+
+**Implemented with:**
+- Currency and exchange rate section  
+- Interactive exchange rate widget  
+
+📸 *Add screenshot of currency/exchange rate area*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like to know how safe or dangerous the location happens to be.
+
+**Implemented with:**
+- Global safety map with visual markers  
+- Safety index information per country  
+
+📸 *Add screenshot of global safety map or safety data*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like places to stay in the location.
+
+**Implemented with:**
+- Search bar generating list of hotels with details and amenities  
+- Map markers and scrollable list of results  
+
+📸 *Add screenshot of hotel results and map interaction*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like places of interest in the location.
+
+**Implemented with:**
+- Amenity buttons for tourist attractions, museums, cafés, etc.  
+- Interactive amenity markers on map with info popups  
+
+📸 *Add screenshot of amenity buttons or POIs*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like to know what the weather is like in the location.
+
+**Implemented with:**
+- Weather forecast widget (daily, 5-day, and 16-day)  
+- Weather map view for global context  
+
+📸 *Add screenshot of weather forecast section or weather map*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like easily-accessible contact information to get in touch with any questions or to place an advert.
+
+**Implemented with:**
+- Interactive contact form with mail and phone buttons  
+- Map modal with clickable postcode and directions  
+
+📸 *Add screenshot of contact section*
+
+---
+
+### ✅ As a user of Snapshot Location, I would like clearly-located social media links to see what else the site has to offer me.
+
+**Implemented with:**
+- Footer and contact section with external links to social media platforms  
+
+📸 *Add screenshot of social links*
+
+---
+
+### ❌ As a user of Snapshot Location, I would like reviews for different places to stay and visit within the location.
+
+*Not yet implemented*
+
+---
+
+### ❌ As a user of Snapshot Location, I would like a means to book places to stay and visit or tours within the location.
+
+*Not yet implemented*
+
+---
+
+### ❌ As a user of Snapshot Location, I would like offers for deals and promotions when booking accommodation, travel or tours.
+
+*Not yet implemented*
+
+---
+
+## 🏁 Summary
+
+🟢 **14 features implemented**  
+🔴 **3 features pending**
+
+
 
 
 ## Debugging
     
-    
 ## Resolved
 
-1. It's not really a bug, but the biggest obstacle I faced to completing this site was the monthly charge I kept incurring for using Google Cloud Services: 
-    -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further twenty odd city searches. 
+1. Not technically a bug, but the biggest obstacle I faced to developing this site was the monthly charge I kept incurring for using Google Cloud Services: 
+    -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further 10-15 city searches. 
     -   To my horror, two days later I received a bill for £1800. This was owing to my not having restricted which APIs were being triggered during searches and having not set quotas around my potential budget. 
-    -   I would recommend any other devs signing up for Google Cloud Services ensure, they have restricted which APIs / SKUs they are using and set quota limits for each day. 
-    -   I would also recommend that Google Cloud Services create a much more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap.
-    -   Luckily, the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my first bill as a goodwill gesture. Hence my thanks to them later in this README.
-    -   Setting it to Maps Javascript API & Places API only and restricting the daily quota fixed my problem, but unfortunately, even doing five plus city searches per day would have proved prohibitively expensive.
+    -   I would recommend any other devs signing up for Google Cloud Services ensure that they i) have restricted which APIs / SKUs they are using and ii) set quota limits for each day. 
+    -   I would also recommend that Google Cloud Services create a much more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap I did.
+    -   Fortunately, the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my first bill as a goodwill gesture. Hence my thanks to them later in this README.
+    -   Setting my API key to Maps Javascript API & Places API only and restricting the daily quota fixed my problem, but even doing five plus city searches per day with those checks in place would have proved prohibitively expensive.
     
     -   I ultimately solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
 
@@ -633,8 +764,9 @@ Users can click the Get in Touch link in the footer to access the contact form. 
 
     -   It would either disappear off the screen or expand the viewport beyond my body width for countries to the far right of the map.
 
-    -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen.
-	// Scale based on screen width
+    -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen:
+
+	**// Scale based on screen width
 	if (width >= 3300) {
 		modal.style.transform = "scale(2.5)";
 	} else if (width >= 2600) {
@@ -642,20 +774,21 @@ Users can click the Get in Touch link in the footer to access the contact form. 
     ...
 	} else {
 		modal.style.transform = "scale(1)";
-	}
+	}**
 
 3. My PEXELS Image Carousel would only take up part of the screen. 
 
-    -   I solved this by cloning the first and last slides as below:
-    // Clone first and last slides for seamless looping effect
+    -   I solved this by cloning the first and last slides as below to create a lopping effect:
+
+    **// Clone first and last slides for seamless looping effect
     const firstClone = carouselContainer.firstElementChild.cloneNode(true);
     const lastClone = carouselContainer.lastElementChild.cloneNode(true);
     carouselContainer.appendChild(firstClone);
-    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
+    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);**
 
 4. At first, three of my amenity buttons (park, landmark and museum) would not fetch and display the places of interest assigned to them. I came to realize that all three or not listed as amenities, per se, but as tourism nodes:
 
-	let queryType;
+	**let queryType;
 
 	switch (type) {
 		case "museum":
@@ -687,7 +820,7 @@ Users can click the Get in Touch link in the footer to access the contact form. 
 		default:
 			queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
 			break;
-	}
+	}**
 
 5. My favicon kept triggering an error message on all browsers when I used the standard:
 
@@ -707,36 +840,26 @@ Users can click the Get in Touch link in the footer to access the contact form. 
 
 I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
-
-2.   ### CORS WARNING
-        
-        - The site may trigger a CORS warning from maps.googleapis.com/maps/api/mapsjs/gen_204. 
-        
-        -  This is a harmless connectivity check used by Google's Maps API and does not affect functionality or performance. 
-        
-        -   Google Places API proved prohibitively expensive (£1000+ for the first month of use, for 2-3 city searches/day), so I had to exchange Google Cloud Services for OpenStreetMaps & Leaflet.
-        
-        -   Removing Google Maps would remove helpful features like search autocomplete and timezone fetching.
-
-        -   Therefore I've left it for now.
-
-        -   I'm looking at potentially using Stadia Maps for my map tiles, if there is demand for the site.
-
-3.   ### Quota Errors
+2.   ### Quota Errors
 
         As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
-        -   400 Bad Request 
+        **-   400 Bad Request 
         -   403 Forbidden
-        -   426 Upgrade Required
+        -   426 Upgrade Required**
 
         or the likes of
 
-        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
+        **GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED**
+
+        or
+
+        **gtm.wise.com/wisetag?id=GTM-M7V2XH:1 
+        Failed to load resource: net::ERR_BLOCKED_BY_CLIENT**
 
         which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
-4.  ### OpenStreetMaps Map Occasionally Needs Reload Before A New Search
+3.  ### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
 
 
     -   After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
@@ -745,30 +868,28 @@ I have used the free SVG World Map download from Simple Maps (https://simplemaps
 
         This should be fixed in the next version.
 
+# Manual Testing 
 
-## Manual Testing 
+## Manual Testing (Console)
 
-### Manual Testing (Console)
+In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. In certain situations, where I felt regressive testing might be useful later, I left them in place. Please see the two examples below:
 
-In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. Please see the two examples below:
-
-- ### Testing for API Fetch Functionality
+### Testing for API Fetch Functionality
 
 Test if the APIs fetch functionality is working.
 
-Run this in the browser console (F12 → Console tab):
+- Run this in the browser console (F12 → Console tab):
 
 
 console.log(`✅ You have ${window.fetch ? "active API calls using fetch" : "no fetch API calls detected"}`);
 
-
 <h3 align="center"><img src="assets/readme/manual-console-javascript-fetch-test.png"></h3>
 
-- ### Testing for Specific HTML Elements:
+### Testing for Specific HTML Elements:
 
 Test if hotel and amenity tables exist.
 
-Run this in the browser console (F12 → Console tab): 
+- Run this in the browser console (F12 → Console tab): 
 
 const hotelTable = document.getElementById("hotel-results");
 const placesTable = document.getElementById("places-results");
@@ -779,8 +900,7 @@ console.log("📍 Amenity table exists:", !!placesTable);
 
 <h3 align="center"><img src="assets/readme/manual-console-javascript-element-test.png"></h3>
 
-
-### Manual testing (BDD)
+### Manual Testing (BDD)
 
 Behaviour-Driven Development is based on  the expected outcome of an action, to see if an app behaves as expected. BDD builds on the user stories, extending this by adding Given, Then, and When  - so given (a specific context), when (a specific action is carried out), then (a particular set of observable consequences should occur). The behaviour is now testable and repeatable.
  
@@ -794,7 +914,6 @@ As a user, when I arrive at the webpage.
 - If I enter an incorrect result, I want to be notified that I have made a mistake.
 - When I click on a map in the table of hotel and place results, I want the map to zoom in on that hotel or place.
 - When I click on an amenity button, I want those amenities populated on the map.
-
 
 # Deployment
 
@@ -911,9 +1030,9 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 ## Acknowledgements
 
--   My Academic Supervisor and Lecturer, Rachel Furlong, for the great lessons, encouragement, kind guidance, helpful feedback and recommended tools.
+-   Rachel Furlong, my Academic Supervisor and Lecturer, for the great lessons, inspirational pep talks, kind guidance, helpful feedback and recommended tools.
 
--   My Mentor, Marcel Mulders, for all the kind advice, encouragement,  helpful feedback and recommended tools.
+-   My mentor, Marcel Mulders, for all the kind advice, encouragement, helpful feedback and recommended tools.
 
 -   Thank you to my fellow students for their friendly tips and guidance.
 
@@ -926,8 +1045,6 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 -   Thank you to the Reddit community.
 
 -   Thank you to all the representatives at Google Cloud Services, who very kindly walked me through their product range, guided me through restricting APIs, as well as setting quotas, and helped me with the unexpected charges. While the services proved prohibitively expensive at this stage of development, the representatives who helped me were some of the most lovely, friendly and articulate mentors I've had the pleasure of meeting.
-
-
 
 # Root
 
