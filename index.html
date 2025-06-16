@@ -1762,85 +1762,81 @@
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
   <script src="https://unpkg.com/leaflet.markercluster/dist/leaflet.markercluster.js"></script>
   <!-- Searchable Map End -->
-  <!-- Contact Details -->
-  <section id="contact">
-    <h2 class="text-center">Contact</h2>
-    <br>
-    <div class="contact-boxes-container">
-      <div class="text-left contact-box-left">
-        <h3 class="text-left">Place an Advert</h3>
-        <div>
-          <span>Email:</span>
-          <br>
-          <br>
-          <div class="contact-link">
-            <a href="mailto:advert@snapshotlocation.com">advert@snapshotlocation.com</a>
+    <!-- Contact Details -->
+    <section id="contact">
+      <h2 class="text-center">Contact</h2>
+      <br>
+      <div class="contact-boxes-container">
+        <div class="text-left contact-box-left">
+          <h3 class="text-left">Place an Advert</h3>
+          <div>
+            <span>Email:</span>
+            <br>
+            <br>
+            <div class="contact-link">
+              <a href="mailto:advert@snapshotlocation.com">advert@snapshotlocation.com</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="text-right contact-box-right">
-        <h3>Get in Touch</h3>
-        <div>
-          <span>Email:</span>
-          <br>
-          <br>
-          <div class="contact-link">
-            <a href="mailto:hello@snapshotlocation.com">hello@snapshotlocation.com</a>
+        <div class="text-right contact-box-right">
+          <h3>Get in Touch</h3>
+          <div>
+            <span>Email:</span>
+            <br>
+            <br>
+            <div class="contact-link">
+              <a href="mailto:hello@snapshotlocation.com">hello@snapshotlocation.com</a>
+            </div>
           </div>
         </div>
-      </div>
-      <div class="contact-box-center">
-        <h3>Address</h3>
-        <p>Snapshot Location <br>1 Brook Street <br>London <br>
-          <b>
-            <a id="postcode-link" role="button">
-              <span style="color: beige;">→</span> W1S 1JD <span style="color: beige;">←</span>
-            </a>
-          </b>
-          <br>UK
-        </p>
-        <br>
-        <h3>Phone</h3>
-        <div>UK Dial Code: +44</div>
-        <br>
-        <div id="contact-number" class="contact-link">
-          <a href="tel:+442012345678">02012345678</a>
+        <div class="contact-box-center">
+          <h3>Address</h3>
+          <p>Snapshot Location <br>1 Brook Street <br>London <br>
+            <b>
+              <a id="postcode-link" role="button">
+                <span style="color: beige;">→</span> W1S 1JD <span style="color: beige;">←</span>
+              </a>
+            </b>
+            <br>UK
+          </p>
+          <br>
+          <h3>Phone</h3>
+          <div>Dial Code: +44</div>
+          <br>
+          <div id="contact-number" class="contact-link">
+            <a href="tel:+442035671980">020700000000</a>
+          </div>
+          <br>
         </div>
-        <br>
+      </div>
+    </section>
+    <!-- Modal -->
+    <div id="map-modal" class="mapmodal">
+      <div class="mapmodal-content">
+        <div class="close" id="close-map-modal">&times;</div>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
-  </section>
-  <!-- Postcode Modal -->
-  <div id="map-modal" class="mapmodal">
-    <div class="mapmodal-content">
-      <div class="close" id="close-map-modal">&times;</div>
-    </div>
-  </div>
-  <script>
-    document.addEventListener("DOMContentLoaded", function () {
-      const mapmodal = document.getElementById("map-modal");
-      const postcodeLink = document.getElementById("postcode-link");
-      const closeModal = document.getElementById("close-map-modal");
-
-      // Show modal when link is clicked
-      postcodeLink.addEventListener("click", () => {
+    <script>
+      document.getElementById("postcode-link").addEventListener("click", function(event) {
+        // No need for preventDefault since href="javascript:void(0)" already prevents navigation
+        const mapmodal = document.getElementById("map-modal");
+        const closeModal = document.getElementById("close-map-modal");
+        // Show the modal
         mapmodal.style.display = "block";
-      });
-
-      // Close modal when X is clicked
-      closeModal.addEventListener("click", () => {
-        mapmodal.style.display = "none";
-      });
-
-      // Close modal when clicking outside
-      mapmodal.addEventListener("click", (event) => {
-        if (event.target === mapmodal) {
+        // Close the modal when the close button is clicked
+        closeModal.addEventListener("click", function() {
           mapmodal.style.display = "none";
-        }
+        });
+        // Close the modal when clicking outside of it
+        window.addEventListener("click", function(event) {
+          if (event.target === mapmodal) {
+            mapmodal.style.display = "none";
+          }
+        });
       });
-    });
-  </script>
-  <!-- Contact Details End -->
+    </script>
+    <!-- Contact Details End -->
   <!-- Footer -->
   <footer class="text-uppercase">
     <!-- Social Media Links -->
