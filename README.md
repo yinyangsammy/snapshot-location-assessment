@@ -392,12 +392,12 @@ The Snapshot Location website has been tested using the following methods:
     - [FHD (1920x1080)](#fhd-1920x1080)
     - [2k (2560x1440)](#2k-2560x1440)
     - [4K (3840 x 2160)](#4k-3840-x-2160)
-- [Testing User Experience](#testing-user-experience)
-    - [Testing Visitor Goals](#testing-visitor-goals)
+- [Manual Testing](#manual-testing)
 - [Debugging](#debugging)
     - [Resolved](#resolved)    
     - [Unresolved](#unresolved)
-- [Manual Testing](#manual-testing)
+- [Testing User Experience](#testing-user-experience)
+    - [Testing Visitor Goals](#testing-visitor-goals)
 
 
 ## Importance of Automated & Manual Testing
@@ -414,7 +414,7 @@ The Snapshot Location website has been tested using the following methods:
 
 * More Accurate - Less room for human error -- tests are only as good as the tester(s), and can therefore end up being purely decorative.
 
-* More Honest - aka less prone to manipulation or corruption.
+* More Honest - Less prone to manipulation or corruption.
 
 ### Manual
 
@@ -575,6 +575,185 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 ### 4K (3840 x 2160)
 <h2 align="center"><img src="assets/readme/snapshot-location-4k.png"></h2>
 
+# Manual Testing 
+
+## Manual Testing (Console)
+
+In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. In certain situations, where I felt regressive testing might be useful later, I left them in place. Please see the two examples below:
+
+### Testing for API Fetch Functionality
+
+Test if API fetch functionality is working correctly.
+
+- Run this in the browser console (F12 → Console tab):
+
+
+console.log(`✅ You have ${window.fetch ? "active API calls using fetch" : "no fetch API calls detected"}`);
+
+- Result:
+
+<h3 align="center"><img src="assets/readme/manual-console-javascript-fetch-test.png"></h3>
+
+### Testing for Specific HTML Elements:
+
+Test if hotel and amenity tables exist.
+
+- Run this in the browser console (F12 → Console tab): 
+
+```javascript
+const hotelTable = document.getElementById("hotel-results");
+const placesTable = document.getElementById("places-results");
+
+console.log("🏨 Hotel table exists:", !!hotelTable);
+console.log("📍 Amenity table exists:", !!placesTable);
+```
+
+- Result:
+
+<h3 align="center"><img src="assets/readme/manual-console-javascript-element-test.png"></h3>
+
+### Manual Testing (BDD)
+
+Behaviour-Driven Development is based on  the expected outcome of an action, to see if an app behaves as expected. BDD builds on the user stories, extending this by adding Given, Then, and When  - so given (a specific context), when (a specific action is carried out), then (a particular set of observable consequences should occur). The behaviour is now testable and repeatable.
+ 
+### BDD - Snapshot Location
+
+As a user, when I arrive at the webpage. 
+- I want to be able to hover over each country, so that each country tile displays the name of the country.
+- When I click on the country, I want to know that my clicking the country has had an impact.
+- When I scroll down, I want to find all the information about the clicked country waiting for me.
+- When I enter a city name or address into the search bar, I want the map to zoom in on that city or address.
+- If I enter an incorrect result, I want to be notified that I have made a mistake.
+- When I click on a map in the table of hotel and place results, I want the map to zoom in on that hotel or place.
+- When I click on an amenity button, I want those amenities populated on the map.
+
+## Debugging
+    
+## Resolved
+
+1. Not technically a bug, but the biggest obstacle I faced to developing this site was the monthly charge I kept incurring for using Google Cloud Services: 
+    -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further 10-15 city searches. 
+    -   To my horror, two days later I received a bill for £1800. This was owing to my not having restricted which APIs were being triggered during searches and having not set quotas around my potential budget. 
+    -   I would recommend any other devs signing up for Google Cloud Services ensure that they i) have restricted which APIs / SKUs they are using and ii) set quota limits for each day. 
+    -   I would also recommend that Google Cloud Services create a much more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap I did.
+    -   Fortunately, the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my first bill as a goodwill gesture. Hence my thanks to them later in this README.
+    -   Setting my API key to Maps Javascript API & Places API only and restricting the daily quota fixed my problem, but even doing five plus city searches per day with those checks in place would have proved prohibitively expensive.
+    
+    -   I ultimately solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
+
+2. My #name modal, which appears above a country when the user hovers above it, caused me the following problem:
+
+    -   It would either disappear off the screen or expand the viewport beyond my body width for countries to the far right of the map.
+
+    -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen:
+
+    ```javascript
+	**// Scale based on screen width
+	if (width >= 3300) {
+		modal.style.transform = "scale(2.5)";
+	} else if (width >= 2600) {
+		modal.style.transform = "scale(1.8)";
+    ...
+	} else {
+		modal.style.transform = "scale(1)";
+	}**
+
+3. My PEXELS Image Carousel would only take up part of the screen. 
+
+    -   I solved this by cloning the first and last slides as below to create a lopping effect:
+
+    ```javascript
+    // Clone first and last slides for seamless looping effect
+    const firstClone = carouselContainer.firstElementChild.cloneNode(true);
+    const lastClone = carouselContainer.lastElementChild.cloneNode(true);
+    carouselContainer.appendChild(firstClone);
+    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
+
+4. At first, three of my amenity buttons (park, landmark and museum) would not fetch and display the places of interest assigned to them. I came to realize that all three are not listed as amenities, but as tourism nodes:
+
+    ```javascript
+    let queryType;
+
+    switch (type) {
+        case "museum":
+            queryType = `
+                (
+                    node["tourism"="museum"](around:5000,${lat},${lng});
+                    way["tourism"="museum"](around:5000,${lat},${lng});
+                    relation["tourism"="museum"](around:5000,${lat},${lng});
+                );`;
+            break;
+        case "park":
+            queryType = `
+                (
+                    node["leisure"="park"](around:5000,${lat},${lng});
+                    way["leisure"="park"](around:5000,${lat},${lng});
+                    relation["leisure"="park"](around:5000,${lat},${lng});
+                );`;
+            break;
+        case "landmark":
+            queryType = `
+                (
+                    node["tourism"="attraction"](around:5000,${lat},${lng});
+                    way["tourism"="attraction"](around:5000,${lat},${lng});
+                    node["historic"](around:5000,${lat},${lng});
+                    way["historic"](around:5000,${lat},${lng});
+                    relation["historic"](around:5000,${lat},${lng});
+                );`;
+            break;
+        default:
+            queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
+            break;
+    }
+    ```
+
+5. My favicon kept triggering an error message on all browsers when I used the standard:
+
+    ```html
+    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+    ```
+
+    So, I used the backup workaround instead, replacing the `.ico` image with a `.png` image instead:
+
+
+    ```html
+    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+    ```
+
+    This solved my problem.
+
+## Unresolved
+
+1.  ###  Limited SVG Map
+
+        I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
+
+2.   ### Quota Errors
+
+    <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+
+
+        As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
+
+        -   400 Bad Request 
+        -   403 Forbidden
+        -   426 Upgrade Required
+
+        or the likes of
+
+        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
+
+        which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
+
+3.  ### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
+
+
+    -   After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
+
+        I believe this is owing to the fact I have prohibited people using the search bar and map before clicking on a country.
+
+        This should be fixed in the next version.
+
 
 # Testing User Stories
 
@@ -734,183 +913,6 @@ I also created custom settings for FHD (1920x1080), 2k (2560x1440) & 4K (3840 x 
 🟢 **14 features implemented**  
 🔴 **3 features pending**
 
-
-
-
-## Debugging
-    
-## Resolved
-
-1. Not technically a bug, but the biggest obstacle I faced to developing this site was the monthly charge I kept incurring for using Google Cloud Services: 
-    -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further 10-15 city searches. 
-    -   To my horror, two days later I received a bill for £1800. This was owing to my not having restricted which APIs were being triggered during searches and having not set quotas around my potential budget. 
-    -   I would recommend any other devs signing up for Google Cloud Services ensure that they i) have restricted which APIs / SKUs they are using and ii) set quota limits for each day. 
-    -   I would also recommend that Google Cloud Services create a much more transparent and intuitive landing page and guide, so that other students and developers do not fall into the same trap I did.
-    -   Fortunately, the Google Cloud Services representatives are really kind and really helpful, so they guided me through how to set quotas and restrict APIS and waived my first bill as a goodwill gesture. Hence my thanks to them later in this README.
-    -   Setting my API key to Maps Javascript API & Places API only and restricting the daily quota fixed my problem, but even doing five plus city searches per day with those checks in place would have proved prohibitively expensive.
-    
-    -   I ultimately solved this problem by using OpenStreetMaps, Leaflet, Nominatim and Overpass.
-
-2. My #name modal, which appears above a country when the user hovers above it, caused me the following problem:
-
-    -   It would either disappear off the screen or expand the viewport beyond my body width for countries to the far right of the map.
-
-    -   This was fixed by using a resizeModalByScreen() function and then using modal.style.transform to scale the size of the modal on each screen:
-
-    ```javascript
-	**// Scale based on screen width
-	if (width >= 3300) {
-		modal.style.transform = "scale(2.5)";
-	} else if (width >= 2600) {
-		modal.style.transform = "scale(1.8)";
-    ...
-	} else {
-		modal.style.transform = "scale(1)";
-	}**
-
-3. My PEXELS Image Carousel would only take up part of the screen. 
-
-    -   I solved this by cloning the first and last slides as below to create a lopping effect:
-
-    ```javascript
-    // Clone first and last slides for seamless looping effect
-    const firstClone = carouselContainer.firstElementChild.cloneNode(true);
-    const lastClone = carouselContainer.lastElementChild.cloneNode(true);
-    carouselContainer.appendChild(firstClone);
-    carouselContainer.insertBefore(lastClone, carouselContainer.firstChild);
-
-4. At first, three of my amenity buttons (park, landmark and museum) would not fetch and display the places of interest assigned to them. I came to realize that all three are not listed as amenities, but as tourism nodes:
-
-    ```javascript
-    let queryType;
-
-    switch (type) {
-        case "museum":
-            queryType = `
-                (
-                    node["tourism"="museum"](around:5000,${lat},${lng});
-                    way["tourism"="museum"](around:5000,${lat},${lng});
-                    relation["tourism"="museum"](around:5000,${lat},${lng});
-                );`;
-            break;
-        case "park":
-            queryType = `
-                (
-                    node["leisure"="park"](around:5000,${lat},${lng});
-                    way["leisure"="park"](around:5000,${lat},${lng});
-                    relation["leisure"="park"](around:5000,${lat},${lng});
-                );`;
-            break;
-        case "landmark":
-            queryType = `
-                (
-                    node["tourism"="attraction"](around:5000,${lat},${lng});
-                    way["tourism"="attraction"](around:5000,${lat},${lng});
-                    node["historic"](around:5000,${lat},${lng});
-                    way["historic"](around:5000,${lat},${lng});
-                    relation["historic"](around:5000,${lat},${lng});
-                );`;
-            break;
-        default:
-            queryType = `node["amenity"="${type}"](around:5000,${lat},${lng});`;
-            break;
-    }
-    ```
-
-5. My favicon kept triggering an error message on all browsers when I used the standard:
-
-    ```html
-    <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
-    ```
-
-    - So, I used the backup workaround instead, replacing the `.ico` image with a `.png` image instead:
-
-    ```html
-    <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
-    ```
-
-    - This solved my problem.
-
-
-## Unresolved
-
-<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
-
-1.  ###  Limited SVG Map
-
-I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
-
-2.   ### Quota Errors
-
-        As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
-
-        -   400 Bad Request 
-        -   403 Forbidden
-        -   426 Upgrade Required
-
-        or the likes of
-
-        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
-
-        which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
-
-3.  ### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
-
-
-    -   After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
-
-        I believe this is owing to the fact I have prohibited people using the search bar and map before clicking on a country.
-
-        This should be fixed in the next version.
-
-# Manual Testing 
-
-## Manual Testing (Console)
-
-In order to ensure that my javascript was working correctly, I would add manual tests throughout my script, and then check them in console. In certain situations, where I felt regressive testing might be useful later, I left them in place. Please see the two examples below:
-
-### Testing for API Fetch Functionality
-
-Test if API fetch functionality is working correctly.
-
-- Run this in the browser console (F12 → Console tab):
-
-
-console.log(`✅ You have ${window.fetch ? "active API calls using fetch" : "no fetch API calls detected"}`);
-
-<h3 align="center"><img src="assets/readme/manual-console-javascript-fetch-test.png"></h3>
-
-### Testing for Specific HTML Elements:
-
-Test if hotel and amenity tables exist.
-
-- Run this in the browser console (F12 → Console tab): 
-
-```javascript
-const hotelTable = document.getElementById("hotel-results");
-const placesTable = document.getElementById("places-results");
-
-console.log("🏨 Hotel table exists:", !!hotelTable);
-console.log("📍 Amenity table exists:", !!placesTable);
-```
-
-
-<h3 align="center"><img src="assets/readme/manual-console-javascript-element-test.png"></h3>
-
-### Manual Testing (BDD)
-
-Behaviour-Driven Development is based on  the expected outcome of an action, to see if an app behaves as expected. BDD builds on the user stories, extending this by adding Given, Then, and When  - so given (a specific context), when (a specific action is carried out), then (a particular set of observable consequences should occur). The behaviour is now testable and repeatable.
- 
-### BDD - Snapshot Location
-
-As a user, when I arrive at the webpage. 
-- I want to be able to hover over each country, so that each country tile displays the name of the country.
-- When I click on the country, I want to know that my clicking the country has had an impact.
-- When I scroll down, I want to find all the information about the clicked country waiting for me.
-- When I enter a city name or address into the search bar, I want the map to zoom in on that city or address.
-- If I enter an incorrect result, I want to be notified that I have made a mistake.
-- When I click on a map in the table of hotel and place results, I want the map to zoom in on that hotel or place.
-- When I click on an amenity button, I want those amenities populated on the map.
 
 # Deployment
 
