@@ -892,6 +892,7 @@ const placesTable = document.getElementById("places-results");
 
 console.log("🏨 Hotel table exists:", !!hotelTable);
 console.log("📍 Amenity table exists:", !!placesTable);
+```
 
 
 <h3 align="center"><img src="assets/readme/manual-console-javascript-element-test.png"></h3>
