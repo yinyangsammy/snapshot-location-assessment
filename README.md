@@ -728,24 +728,24 @@ As a user, when I arrive at the webpage.
 
 1.  ###  Limited SVG Map
 
-        I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
+    I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
 2.   ### Quota Errors
 
     <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
 
 
-        As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
+    As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
         -   400 Bad Request 
         -   403 Forbidden
         -   426 Upgrade Required
 
-        or the likes of
+    or the likes of
 
         GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
 
-        which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
+    which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
 3.  ### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
 
@@ -764,72 +764,63 @@ As a user, when I arrive at the webpage.
 ### ✅ As a user of Snapshot Location, I would like an interface layout that can be immediately understood, irrespective of age and nationality, without the need for complicated instructions or a key.
 
 **Implemented with:**
-- Clean, intuitive layout using consistent UI design principles  
-- A clickable SVG map with hover states for interactive discovery  
-- Instructional black modal that appears on map click and fades on scroll  
+- Clean layout with instructions and intuitive UI. 
+- A clickable SVG map with hover states for different countries.
+- Black modal with instructions that appears on map click and fades on scroll down.  
 
-📸 *Add screenshot of homepage and instruction modal here*
+<h3 align="center"><img src="assets/readme/snapshot-location-intuitive.png"></h3>
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like an easy-to-navigate platform to find different locations and get a snapshot of life living there.
 
 **Implemented with:**
-- Navbar linking to homepage, weather map, and safety map  
+- Navbar with links to homepage, weather page, and safety page 
 - Interactive SVG map and map search bar  
-- Country data containers fade in dynamically upon selection  
-
-📸 *Add screenshot of interactive map and data snapshot sections here*
+- Country information containers fade in dynamically after user clicks a country  
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like clearly marked locations I can easily navigate and choose from.
 
 **Implemented with:**
-- Highlightable countries on the SVG map (hover and click interactions)  
-- Country name modals with fade effects  
-- Search bar with real-time results  
-
-📸 *Add screenshot of SVG map with country tiles hovered or selected*
+- Country name modals  
+- Search bar with map zoom on input
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like clear and relevant information provided for each location with each distinct parameter clearly marked.
 
 **Implemented with:**
-- Country name, general info, and exchange rate sections  
-- Weather forecasts and photo carousel  
-- Safety and amenities info clearly structured in responsive containers  
+- Country name, general info and currency containers
+- Weather forecasts
+- Photo carousel  
+- Hotels and amenities markers and tables
 
-📸 *Add screenshot of info sections per country*
+<h3 align="center"><img src="assets/readme/country-info-containers.png"></h3>
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like the time and timezone of the location.
 
 **Implemented with:**
-- Real-time timezone display per country in the location snapshot section  
-
-📸 *Add screenshot of timezone feature*
+- Time & Timezone Box
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like the name and general information about the location, such as languages spoken, the capital city, the dialling code and population size.
 
 **Implemented with:**
+- Name Box
 - A General Information panel for every country including key stats  
-
-📸 *Add screenshot of General Information box*
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like the principal currency used in the location with exchange rates for other locations I might be traveling from.
 
 **Implemented with:**
-- Currency and exchange rate section  
+- Country Currency Box 
 - Interactive exchange rate widget  
-
-📸 *Add screenshot of currency/exchange rate area*
 
 ---
 
@@ -839,15 +830,15 @@ As a user, when I arrive at the webpage.
 - Global safety map with visual markers  
 - Safety index information per country  
 
-📸 *Add screenshot of global safety map or safety data*
+<h3 align="center"><img src="assets/readme/safety-map.png"></h3>
 
 ---
 
 ### ✅ As a user of Snapshot Location, I would like places to stay in the location.
 
 **Implemented with:**
-- Search bar generating list of hotels with details and amenities  
-- Map markers and scrollable list of results  
+- A search bar generating hotel markers on the map
+- A search bar generating scrollable lists of results  
 
 📸 *Add screenshot of hotel results and map interaction*
 
