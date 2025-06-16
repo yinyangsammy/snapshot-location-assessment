@@ -15,6 +15,7 @@
  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
   <link rel="preload" as="image" href="assets/img/map_banner_4k.avif" fetchpriority="high"/>
+  <link rel="preload" as="image" href="assets/img/map_banner_small.avif" type="image/avif">
   <link rel="stylesheet" href="style.css">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -35,7 +36,17 @@
 <body>
   <!-- Header -->
   <header class="text-center page-header" id="header">
-    <img src="assets/img/map_banner_4k.avif" alt="Hero map banner" id="hero-img" fetchpriority="high"/>
+   <picture>
+  <source media="(min-width: 1200px)" type="image/avif" srcset="assets/img/map_banner_4k.avif">
+  <source media="(min-width: 768px)" type="image/avif" srcset="assets/img/map_banner_fhd.avif">
+  <source type="image/avif" srcset="assets/img/map_banner_hd.avif"> <!-- fallback for <1024px -->
+  <img src="assets/img/map_banner_backup.webp"
+       alt="Hero map banner"
+       id="hero-img"
+       width="1024"
+       height="878"
+       fetchpriority="high">
+</picture>
     <div class="vertical-center">
       <h1 id="brand">Snapshot Location</h1>
       <p id="tagline">A snapshot of locations worldwide!</p>
