@@ -3,36 +3,30 @@
 <!-- Head -->
 
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Snapshot Location, a snapshot of life in locations worldwide" />
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Snapshot Location, a snapshot of life in locations worldwide">
   <meta name="keywords"
-    content="location, destination, travel, traveling, holiday, weather, news, global news, headlines, time, safety, population, information" />
-  <meta name="author" content="Snapshot Location" />
+    content="location, destination, travel, traveling, holiday, weather, news, global news, headlines, time, safety, population, information">
+  <meta name="author" content="Snapshot Location">
   <!-- Page Title Start -->
   <title>Snapshot Location</title>
   <!-- Page Title End -->
-  <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any" />
-  <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32" />
-
-  <!-- preload only the right image based on viewport -->
-<link rel="preload" as="image" href="assets/img/map_banner_4k.avif" type="image/avif" media="(min-width: 1200px)" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/img/map_banner_fhd.avif" type="image/avif" media="(min-width: 768px) and (max-width: 1199px)" fetchpriority="high" />
-<link rel="preload" as="image" href="assets/img/map_banner_hd.avif" type="image/avif" media="(max-width: 767px)" fetchpriority="high" />
-
-
-  <link rel="stylesheet" href="style.css" />
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+ <link rel="icon" href="/favicon.ico" type="image/x-icon" sizes="any">
+ <link rel="icon" type="image/png" href="/favicon-32x32.png" sizes="32x32">
+  <link rel="preload" as="image" href="assets/img/map_banner_4k.avif" fetchpriority="high"/>
+  <link rel="stylesheet" href="style.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link
     href="https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap"
-    rel="stylesheet" />
-  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css" />
-  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css" />
+    rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Dancing+Script&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet.markercluster/dist/MarkerCluster.Default.css">
   <script src="https://kit.fontawesome.com/fced343307.js" crossorigin="anonymous" defer></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" defer />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.css" defer>
   <script src="https://cdn.jsdelivr.net/npm/@fancyapps/ui/dist/fancybox.umd.js" defer></script>
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
@@ -41,13 +35,7 @@
 <body>
   <!-- Header -->
   <header class="text-center page-header" id="header">
-    <picture>
-      <source media="(min-width: 1200px)" type="image/avif" srcset="assets/img/map_banner_4k.avif" />
-      <source media="(min-width: 768px)" type="image/avif" srcset="assets/img/map_banner_fhd.avif" />
-      <source type="image/avif" srcset="assets/img/map_banner_hd.avif" />
-      <img src="assets/img/map_banner_backup.webp" alt="Hero map banner" id="hero-img" width="1024" height="878"
-        fetchpriority="high" />
-    </picture>
+    <img src="assets/img/map_banner_4k.avif" alt="Hero map banner" id="hero-img" width="4096" height="878" fetchpriority="high"/>
     <div class="vertical-center">
       <h1 id="brand">Snapshot Location</h1>
       <p id="tagline">A snapshot of locations worldwide!</p>
