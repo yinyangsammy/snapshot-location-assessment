@@ -732,14 +732,13 @@ As a user, when I arrive at the webpage.
 
 2.   ### Quota Errors
 
-    <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
-
-
     As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
-        -   400 Bad Request 
-        -   403 Forbidden
-        -   426 Upgrade Required
+    <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+
+    -   400 Bad Request 
+    -   403 Forbidden
+    -   426 Upgrade Required
 
     or the likes of
 
@@ -827,8 +826,8 @@ As a user, when I arrive at the webpage.
 ### ✅ As a user of Snapshot Location, I would like to know how safe or dangerous the location happens to be.
 
 **Implemented with:**
-- Global safety map with visual markers  
-- Safety index information per country  
+- Global safety map featuring heatmaps for different levels of danger 
+- Safety index information for each country  
 
 <h3 align="center"><img src="assets/readme/safety-map.png"></h3>
 
@@ -840,7 +839,7 @@ As a user, when I arrive at the webpage.
 - A search bar generating hotel markers on the map
 - A search bar generating scrollable lists of results  
 
-📸 *Add screenshot of hotel results and map interaction*
+<h3 align="center"><img src="assets/readme/hotels-places-weather-canada.png"></h3>
 
 ---
 
@@ -848,9 +847,9 @@ As a user, when I arrive at the webpage.
 
 **Implemented with:**
 - Amenity buttons for tourist attractions, museums, cafés, etc.  
-- Interactive amenity markers on map with info popups  
+- Interactive amenity markers on map with info popups
 
-📸 *Add screenshot of amenity buttons or POIs*
+<h3 align="center"><img src="assets/readme/hotels-places-weather-canada.png"></h3>
 
 ---
 
@@ -860,7 +859,7 @@ As a user, when I arrive at the webpage.
 - Weather forecast widget (daily, 5-day, and 16-day)  
 - Weather map view for global context  
 
-📸 *Add screenshot of weather forecast section or weather map*
+<h3 align="center"><img src="assets/readme/weather-map.png"></h3>
 
 ---
 
@@ -901,7 +900,7 @@ As a user, when I arrive at the webpage.
 
 ---
 
-## 🏁 Summary
+## Summary
 
 🟢 **14 features implemented**  
 🔴 **3 features pending**
