@@ -63,6 +63,7 @@ Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/
 - :white_check_mark: *how safe or dangerous the location happens to be*.
 - :white_check_mark: *places to stay in the location*.
 - :white_check_mark: *places of interest in the location*.
+- :white_check_mark: *a means of making an itinerary of places to stay and places to visit.*.
 - :white_check_mark: *what the weather is like in the location*.
 - :white_check_mark: *Easily-accessible contact information to get in touch with any questions or to place an advert*.
 - :white_check_mark: *Clearly-located social media links to see what else the site has to offer me*.
@@ -301,7 +302,7 @@ The functionality of both seem to work much more efficiently that way. At some p
 -   A global weather map.
 -   Responsive on all device sizes.
 -   Content-packed pages, full of colourful and engaging imagery and media.
--   Interactive elements such a:
+-   Interactive elements such as:
     -   Clickable maps 
     -   Scroll buttons to navigate news headlines and amenity / hotel lists
     -   Scroll arrows to navigate weather forecasts
@@ -506,7 +507,7 @@ I didn't use Lighthouse for the other pages, i.e. Safety & Weather, on account o
 
 I have improved the header, navbar, contact section and footer to the best of my abilities for all pages.
 
-Overall, I am happy with the speed the site runs on every device I've tried (Various laptops, desktops, tablets and mobile phones). The pages load fast and all the functions run smoothly.
+Overall, I am happy with the speed the site runs on every device I've tried (various laptops, desktops, tablets and mobile phones). The pages load fast and all the functions run smoothly.
 
 I am also more inclined to develop an app for tablets and mobile devices.
 
@@ -858,6 +859,19 @@ This should be fixed in an upcoming version.
 
 ---
 
+### ✅ As a user of Snapshot Location, I would like a means of making an itinerary of places to stay and places to visit.
+
+**Implemented with:**
+- Tables of amenity and hotel results
+- Map emoji & map marker sync
+- Amenity buttons
+- Pop up markers 
+- Pin buttons
+
+<h3 align="center"><img src="assets/readme/pin-itinerary.png"></h3>
+
+---
+
 ### ✅ As a user of Snapshot Location, I would like to know what the weather is like in the location.
 
 **Implemented with:**
@@ -1015,7 +1029,7 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -   All News Stories were kindly provided by [NEWS API](https://newsapi.org/), [World News API ](https://worldnewsapi.com/), [GNews](https://gnews.io/) &[NewsData](https://newsdata.io/).
 
--   The currency exchange widget was kindly provided by [Wise](https://wise.com/gb/business-tools/fx-widget)
+-   The currency exchange widget was kindly provided by [Wise](https://wise.com/gb/business-tools/fx-widget).
 
 -   All Weather forecasts were kindly provided by [OpenWeather](https://openweathermap.org/api).
 
