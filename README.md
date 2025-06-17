@@ -487,7 +487,8 @@ Homepage scored:
     - SEO - 100
 
 ### Lighthouse Report for Homepage (Desktop)
-    <h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
+    
+<h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
 
 ### Mobile:
 
@@ -498,7 +499,8 @@ Homepage scored:
     - SEO - 100
 
 ### Lighthouse Report for Homepage (Mobile)
-    <h2 align="center"><img src="assets/readme/lighthouse-homepage-mobile.png"></h2>
+    
+<h2 align="center"><img src="assets/readme/lighthouse-homepage-mobile.png"></h2>
 
 I didn't use Lighthouse for the other pages, i.e. Safety & Weather, on account of the third party scripts attached to those maps which I cannot change unless I approach their respective developers. (*Please see below for future improvements.*)
 
