@@ -481,10 +481,10 @@ I used the Lighthouse reports in Google Developer Tools to examine the pages of 
 ### Desktop:
 
 Homepage scored:
-    - Performance - 98
-    - Accessibility - 100
-    - Best Practices - 100
-    - SEO - 100
+- Performance - 98
+- Accessibility - 100
+- Best Practices - 100
+- SEO - 100
 
 ### Lighthouse Report for Homepage (Desktop)
     
@@ -493,10 +493,10 @@ Homepage scored:
 ### Mobile:
 
 Homepage scored:
-    - Performance - 81
-    - Accessibility -98
-    - Best Practices -75
-    - SEO - 100
+- Performance - 81
+- Accessibility -98
+- Best Practices -75
+- SEO - 100
 
 ### Lighthouse Report for Homepage (Mobile)
     
@@ -616,7 +616,7 @@ console.log("📍 Amenity table exists:", !!placesTable);
 
 <h3 align="center"><img src="assets/readme/manual-console-javascript-element-test.png"></h3>
 
-### Manual Testing (BDD)
+## Manual Testing (BDD)
 
 Behaviour-Driven Development is based on  the expected outcome of an action, to see if an app behaves as expected. BDD builds on the user stories, extending this by adding Given, Then, and When  - so given (a specific context), when (a specific action is carried out), then (a particular set of observable consequences should occur). The behaviour is now testable and repeatable.
  
@@ -633,7 +633,7 @@ As a user, when I arrive at the webpage.
 
 ## Debugging
     
-## Resolved
+### Resolved
 
 1. Not technically a bug, but the biggest obstacle I faced to developing this site was the monthly charge I kept incurring for using Google Cloud Services: 
     -   I signed up for a free trial ($300 credit included) and was extremely diligent about checking my daily spend, to ensure I hadn't surpassed my credit limit. Unfortunately the billing amount you see listed is backdated by one day. As I saw the forecasted total bill for the month as £0, I carried on using the services in a dev capacity for the last day of the month, probably doing a further 10-15 city searches. 
@@ -726,13 +726,13 @@ As a user, when I arrive at the webpage.
 
     This solved my problem.
 
-## Unresolved
+### Unresolved
 
-1.  ###  Limited SVG Map
+1.  ####  Limited SVG Map
 
 I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
-2.   ### Quota Errors
+2.   #### Quota Errors
 
 As I am using many API services on their free pricing model during the development stage, occasionally the user will experience errors such as the following:
 
@@ -749,7 +749,7 @@ GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapsho
 
 which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
-3.  ### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
+3.  #### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
 
 
 After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
