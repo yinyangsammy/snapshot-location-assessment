@@ -486,7 +486,7 @@ Homepage scored:
     - Best Practices - 100
     - SEO - 100
 
--  ### Lighthouse Report for Homepage (Desktop)
+### Lighthouse Report for Homepage (Desktop)
     <h2 align="center"><img src="assets/readme/lighthouse-homepage-desktop.png"></h2>
 
 ### Mobile:
@@ -497,7 +497,7 @@ Homepage scored:
     - Best Practices -75
     - SEO - 100
 
-- ### Lighthouse Report for Homepage (Mobile)
+### Lighthouse Report for Homepage (Mobile)
     <h2 align="center"><img src="assets/readme/lighthouse-homepage-mobile.png"></h2>
 
 I didn't use Lighthouse for the other pages, i.e. Safety & Weather, on account of the third party scripts attached to those maps which I cannot change unless I approach their respective developers. (*Please see below for future improvements.*)
@@ -728,32 +728,33 @@ As a user, when I arrive at the webpage.
 
 1.  ###  Limited SVG Map
 
-    I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
+I have used the free SVG World Map download from Simple Maps (https://simplemaps.com/world). Neither China nor the United States are included unless you buy the fully licensed version for $199. I will likely do this in the future. Until then, China will appear as Taiwan and the United States as the United States Minor Outlying Islands.
 
 2.   ### Quota Errors
 
-    As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
+As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
 
-    <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
+<h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
 
-    -   400 Bad Request 
-    -   403 Forbidden
-    -   426 Upgrade Required
+-   400 Bad Request 
+-   403 Forbidden
+-   426 Upgrade Required
 
     or the likes of
 
-        GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
 
-    which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
+GET https://gtm.wise.com/anon-get?eventName=fx-embed-load&origin=https://snapshot-location.pages.dev/ NS_BINDING_ABORTED
+
+which is an analytics call trying to send data back to Wise’s servers, informing them which site is using their widget.
 
 3.  ### OpenStreetMaps Map Occasionally Needs Reloading Before A New Search
 
 
-    -   After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
+After looking up one city, it is not advised to put another city into the search bar before reloading the page. 
 
-        I believe this is owing to the fact I have prohibited people using the search bar and map before clicking on a country.
+I believe this is owing to the fact I have prohibited people using the search bar and map before clicking on a country.
 
-        This should be fixed in the next version.
+This should be fixed in an upcoming version.
 
 
 # Testing User Stories
@@ -857,7 +858,7 @@ As a user, when I arrive at the webpage.
 
 **Implemented with:**
 - Weather forecast widget (daily, 5-day, and 16-day)  
-- Weather map view for global context  
+- Global weather map featuring heatmaps for different temperatures
 
 <h3 align="center"><img src="assets/readme/weather-map.png"></h3>
 
@@ -869,7 +870,7 @@ As a user, when I arrive at the webpage.
 - Interactive contact form with mail and phone buttons  
 - Map modal with clickable postcode and directions  
 
-📸 *Add screenshot of contact section*
+<h3 align="center"><img src="assets/readme/contact.png"></h3>
 
 ---
 
@@ -877,8 +878,6 @@ As a user, when I arrive at the webpage.
 
 **Implemented with:**
 - Footer and contact section with external links to social media platforms  
-
-📸 *Add screenshot of social links*
 
 ---
 
