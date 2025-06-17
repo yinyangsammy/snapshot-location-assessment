@@ -561,10 +561,10 @@ Responsiveness tests were carried out using Google Chrome DevTools & Microsoft E
 - Nest Hub Max
 
 ### Iphone 
-<h2 align="center"><img src="assets/readme/iphone.jpg"></h2>
+<h2 align="center"><img src="assets/readme/iphone-best.png"></h2>
 
 ### Ipad 
-<h2 align="center"><img src="assets/readme/ipad.jpg"></h2>
+<h2 align="center"><img src="assets/readme/ipad-best.png"></h2>
 
 ### Nest Hub Max 
 <h2 align="center"><img src="assets/readme/nest-hub-max.png"></h2>
