@@ -7,7 +7,7 @@ Snapshot Location is your go-to website for discovering more about a particular 
 
 From keen traveler looking for their next holiday destination to young schoolchild wanting to broaden their knowledge of different countries and their cultures, Snapshot Location is so simple and so intuitive to use, anyone anywhere can start exploring the planet.
 
-Get started right here: [Snapshot Location](https://snapshot-location.pages.dev/)
+Get started right here: ([Snapshot Location](https://snapshot-location-project.pages.dev/))
 
 
 # Table of Contents 
