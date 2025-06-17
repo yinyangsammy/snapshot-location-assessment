@@ -734,7 +734,7 @@ I have used the free SVG World Map download from Simple Maps (https://simplemaps
 
 2.   ### Quota Errors
 
-As I am using many API services on their free pricing model while in the developmental stage, occasionally the user will experience errors such as the following:
+As I am using many API services on their free pricing model during the development stage, occasionally the user will experience errors such as the following:
 
 <h3 align="center"><img src="assets/readme/structural-irregularities+necessary-errors.jpg"></h3>
 
@@ -779,7 +779,9 @@ This should be fixed in an upcoming version.
 **Implemented with:**
 - Navbar with links to homepage, weather page, and safety page 
 - Interactive SVG map and map search bar  
-- Country information containers fade in dynamically after user clicks a country  
+- Country information containers fade in dynamically after user clicks a country
+
+<h3 align="center"><img src="assets/readme/search-bar.png"></h3>
 
 ---
 
@@ -852,7 +854,7 @@ This should be fixed in an upcoming version.
 - Amenity buttons for tourist attractions, museums, cafés, etc.  
 - Interactive amenity markers on map with info popups
 
-<h3 align="center"><img src="assets/readme/hotels-places-weather-canada.png"></h3>
+<h3 align="center"><img src="assets/readme/theatre-amenity-canada.png"></h3>
 
 ---
 
