@@ -3111,12 +3111,12 @@ async function fetchCityData() {
 		console.log("✅ Using cached Nominatim result for:", cityName);
 		data = JSON.parse(cachedData);
 	} else {
-		const nominatimURL = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(cityName)}`;
-		const proxiedURL = `https://api.allorigins.win/raw?url=${encodeURIComponent(nominatimURL)}`;
+		const workerURL = `https://nominatim-proxy.yinyangsammy.workers.dev?q=${encodeURIComponent(cityName)}`;
 
-		try {
-			const response = await fetch(proxiedURL);
-			data = await response.json();
+	try {
+	const response = await fetch(workerURL);
+	data = await response.json();
+
 
 			if (!data.length) return alert("City not found. Try again.");
 
