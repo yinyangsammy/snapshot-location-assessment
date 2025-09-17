@@ -5944,3 +5944,81 @@ footer {
     width:100%;
     bottom:0px;
 }
+
+/* Safety Map */
+#safety-map {
+  position: relative;
+  width: 95%;
+  background-color: whitesmoke;
+  margin: 2% auto 1% 2%;
+  border-radius: 15px;
+  overflow: hidden;
+  zoom: 112.5%;
+}
+
+/* Weather Map */
+#weather-map {
+  position: relative;
+  width: 95%;
+  background-color: whitesmoke;
+  margin: 2% auto 1% 2%;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+/* Shared responsive iframe rule */
+#safety-map iframe,
+#weather-map iframe {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  border: 0;
+}
+
+/* Aspect ratio control */
+#safety-map::before {
+  content: "";
+  display: block;
+  padding-bottom: 75%; /* ~4:3 ratio */
+  min-height: 400px;   /* fallback on very small screens */
+}
+
+#weather-map::before {
+  content: "";
+  display: block;
+  padding-bottom: 120%; /* taller ratio */
+  min-height: 500px;
+}
+
+/* Default (desktop, large screens) already handled by aspect ratios */
+
+/* Medium screens: tablets, small laptops */
+@media screen and (max-width: 1024px) {
+  #safety-map::before {
+    padding-bottom: 65%; /* shorter box */
+    min-height: 300px;
+  }
+  #weather-map::before {
+    padding-bottom: 90%;
+    min-height: 350px;
+  }
+}
+
+/* Small screens: phones */
+@media screen and (max-width: 768px) {
+  #safety-map::before,
+  #weather-map::before {
+    padding-bottom: 60%; /* more compact */
+    min-height: 250px;
+  }
+
+  #safety-map,
+  #weather-map {
+    width: 100%;   /* no left margin eating screen space */
+    margin-left: 0;
+    margin: 0 auto;
+  }
+}
+
