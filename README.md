@@ -376,7 +376,7 @@ The functionality of both seem to work much more efficiently that way. At some p
 The Snapshot Location website has been tested using the following methods:
 
 - [Testing](#testing)
-- [Testing Snapshot Location](#testing-snapshot-location)
+- [Testing Functionality](#testing-functionality)
 - [Code Validation](#code-validation)
     - [W3C HTML Validator](#w3c-html-validator)
         - [Homepage](#homepage)
@@ -431,7 +431,7 @@ The Snapshot Location website has been tested using the following methods:
 
 * More Organic - Automated tests don't test the User Experience beyond the performative, so manual testing is essential to get a full understanding of the user experience (UX).
 
-# Testing Snapshot Location
+# Testing Functionality
 
 The W3C Markup Validator and W3C CSS Validator Services were used to validate every page of the project to ensure there were no syntax errors in the project.
 
