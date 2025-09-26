@@ -1812,150 +1812,168 @@ async function fetchTopHeadlinesByCountry(countryName) {
 		nameqContainer.innerText = countryName;
 	}
 
-	headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
+ headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
-	// API keys and base URLs
-	const gNewsApiKey = "f760069439c7443a00e06790756587d2";
-	const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
+  // API keys and base URLs
+  const gNewsApiKey = "f760069439c7443a00e06790756587d2";
+  const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
 
-	const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
-	const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
+  const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
+  const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
 
-	const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee";
-	const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
+  const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee";
+  const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
 
-	const worldNewsApiKey = "6a12b24e61msh79a4ff4b1df50bep1d86b8jsn2f76f469d4e9";
-	const worldNewsUrl = `https://world-news-api.p.rapidapi.com/search-news?text=${encodeURIComponent(countryName)}&language=en`;
+  const worldNewsApiKey = "6a12b24e61msh79a4ff4b1df50bep1d86b8jsn2f76f469d4e9";
+  const worldNewsUrl = `https://world-news-api.p.rapidapi.com/search-news?text=${encodeURIComponent(
+    countryName
+  )}&language=en`;
 
-	try {
-		// Fetch data from all APIs in parallel
-		const [gNewsResponse, newsDataResponse, newsApiResponse, worldNewsResponse] = await Promise.all([
-			fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
-			fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
-			fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`),
-			fetch(worldNewsUrl, {
-				headers: {
-					"X-RapidAPI-Key": worldNewsApiKey,
-					"X-RapidAPI-Host": "world-news-api.p.rapidapi.com"
-				}
-			})
-		]);
+  
 
-		const gNewsData = await gNewsResponse.json();
-		const newsDataData = await newsDataResponse.json();
-		const newsApiData = await newsApiResponse.json();
-		const worldNewsData = await worldNewsResponse.json();
+  try {
+    // Fetch data from all APIs in parallel
+    const [
+      gNewsResponse,
+      newsDataResponse,
+      newsApiResponse,
+      worldNewsResponse,
+    ] = await Promise.all([
+      fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
+      fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
+      fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`),
+      fetch(worldNewsUrl, {
+        headers: {
+          "X-RapidAPI-Key": worldNewsApiKey,
+          "X-RapidAPI-Host": "world-news-api.p.rapidapi.com",
+        },
+      }),
+    ]);
 
-		// Combine articles from all APIs
-		let articles = [];
+    const gNewsData = await gNewsResponse.json();
+    const newsDataData = await newsDataResponse.json();
+    const newsApiData = await newsApiResponse.json();
+    const worldNewsData = await worldNewsResponse.json();
 
-		if (gNewsData.articles) {
-			articles = articles.concat(
-				gNewsData.articles.map(article => ({
-					title: article.title,
-					description: article.description,
-					url: article.url,
-					source: "GNews",
-					content: article.content || ''
-				}))
-			);
-		}
+    // Combine articles from all APIs
+    let articles = [];
 
-		if (newsDataData.results) {
-			articles = articles.concat(
-				newsDataData.results.map(article => ({
-					title: article.title,
-					description: article.description,
-					url: article.link,
-					source: "NewsData",
-					content: article.content || ''
-				}))
-			);
-		}
+    if (gNewsData.articles) {
+      articles = articles.concat(
+        gNewsData.articles.map((article) => ({
+          title: article.title,
+          description: article.description,
+          url: article.url,
+          source: "GNews",
+          content: article.content || "",
+        }))
+      );
+    }
 
-		if (newsApiData.articles) {
-			articles = articles.concat(
-				newsApiData.articles.map(article => ({
-					title: article.title,
-					description: article.description,
-					url: article.url,
-					source: "NewsAPI",
-					content: article.content || ''
-				}))
-			);
-		}
+    if (newsDataData.results) {
+      articles = articles.concat(
+        newsDataData.results.map((article) => ({
+          title: article.title,
+          description: article.description,
+          url: article.link,
+          source: "NewsData",
+          content: article.content || "",
+        }))
+      );
+    }
 
-		if (worldNewsData.news) {
-			articles = articles.concat(
-				worldNewsData.news.map(article => ({
-					title: article.title,
-					description: article.summary,
-					url: article.url,
-					source: "WorldNewsAPI",
-					content: article.content || ''
-				}))
-			);
-		}
+    if (newsApiData.articles) {
+      articles = articles.concat(
+        newsApiData.articles.map((article) => ({
+          title: article.title,
+          description: article.description,
+          url: article.url,
+          source: "NewsAPI",
+          content: article.content || "",
+        }))
+      );
+    }
 
-		if (articles.length === 0) {
-			headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
-			return;
-		}
+    if (worldNewsData.news) {
+      articles = articles.concat(
+        worldNewsData.news.map((article) => ({
+          title: article.title,
+          description: article.summary,
+          url: article.url,
+          source: "WorldNewsAPI",
+          content: article.content || "",
+        }))
+      );
+    }
 
-		// Remove duplicate articles by URL
-		const uniqueArticles = [];
-		const seenUrls = new Set();
-		articles.forEach(article => {
-			if (!seenUrls.has(article.url)) {
-				seenUrls.add(article.url);
-				uniqueArticles.push(article);
-			}
-		});
+    if (articles.length === 0) {
+      headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
+      return;
+    }
 
-		// Prioritize articles with the country name in the title, description, or content
-		uniqueArticles.sort((a, b) => {
-			const countryRegex = new RegExp(countryName, 'i');
-			const aMatch = countryRegex.test(a.title + a.description + a.content) ? 1 : 0;
-			const bMatch = countryRegex.test(b.title + b.description + b.content) ? 1 : 0;
-			return bMatch - aMatch; // Higher priority for matches
-		});
+    // Remove duplicate articles by URL
+    const uniqueArticles = [];
+    const seenUrls = new Set();
+    articles.forEach((article) => {
+      if (!seenUrls.has(article.url)) {
+        seenUrls.add(article.url);
+        uniqueArticles.push(article);
+      }
+    });
 
-		// Limit article descriptions to 5 lines max
-		function trimToFiveLines(text) {
-			if (!text) return "No description available";
-			const lines = text.split('. ').slice(0, 5).join('. ') + '.';
-			return lines.length < text.length ? lines + "..." : lines;
-		}
+    // Prioritize articles with the country name in the title, description, or content
+    uniqueArticles.sort((a, b) => {
+      const countryRegex = new RegExp(countryName, "i");
+      const aMatch = countryRegex.test(a.title + a.description + a.content)
+        ? 1
+        : 0;
+      const bMatch = countryRegex.test(b.title + b.description + b.content)
+        ? 1
+        : 0;
+      return bMatch - aMatch; // Higher priority for matches
+    });
 
-		// Render articles with attribution
-		headlinesContainer.innerHTML = `
-            ${uniqueArticles.map(article => `
+    // Limit article descriptions to 5 lines max
+    function trimToFiveLines(text) {
+      if (!text) return "No description available";
+      const lines = text.split(". ").slice(0, 5).join(". ") + ".";
+      return lines.length < text.length ? lines + "..." : lines;
+    }
+
+    // Render articles with attribution
+    headlinesContainer.innerHTML = `
+            ${uniqueArticles
+              .map(
+                (article) => `
                 <div class="headline">
                     <h4>${article.title}</h4>
-                    <p class="description">${trimToFiveLines(article.description)}</p>
+                    <p class="description">${trimToFiveLines(
+                      article.description
+                    )}</p>
                     <a href="${article.url}" target="_blank">Read more</a>
                 </div>
-            `).join('')}
+            `
+              )
+              .join("")}
             <div id="attribution">
                 <p>Powered by GNews, NewsData, NewsAPI, and WorldNewsAPI</p>
             </div>
         `;
-	} catch (error) {
-		console.error("Error fetching news headlines:", error);
-		headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
-	}
+  } catch (error) {
+    console.error("Error fetching news headlines:", error);
+    headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
+  }
 }
 
 // Move attribution above the buttons
 const attributionDiv = document.getElementById("attribution");
 const scrollButtonsContainer = document.getElementById("scroll-buttons");
 if (attributionDiv && scrollButtonsContainer) {
-	scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+  scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
 }
 
 // Reinitialize scroll functionality for navigation buttons
 setupScrollButtons();
-
 
 /**
  * Truncates text to a maximum number of lines.
@@ -1964,18 +1982,18 @@ setupScrollButtons();
  * @returns {string} - The truncated text.
  */
 function truncateText(text, maxLines) {
-	if (!text) return "";
-	const words = text.split(" ");
-	let truncatedText = "";
-	let lines = 0;
+  if (!text) return "";
+  const words = text.split(" ");
+  let truncatedText = "";
+  let lines = 0;
 
-	for (let i = 0; i < words.length; i++) {
-		truncatedText += words[i] + " ";
-		if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
-		if (lines >= maxLines) break;
-	}
+  for (let i = 0; i < words.length; i++) {
+    truncatedText += words[i] + " ";
+    if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
+    if (lines >= maxLines) break;
+  }
 
-	return truncatedText.trim() + "...";
+  return truncatedText.trim() + "...";
 }
 
 
