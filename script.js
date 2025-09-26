@@ -939,7 +939,7 @@ document.querySelectorAll(".allPaths").forEach((path) => {
  */
 
 function getWeather(city) {
-	const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
+	const apiKey = '642eeb6e64dce24c37374b7c13a2d4d4';
 
 	if (!city || city.trim() === '') {
 		alert('Please enter a city');
@@ -1803,7 +1803,8 @@ async function fetchTopHeadlines(countryName) {
 
     try {
         // Fetch from worker proxy
-        const response = await fetch(`/worker-proxy?news=${encodeURIComponent(countryName)}`);
+        const response = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`);
+
         if (!response.ok) throw new Error(`Worker proxy returned ${response.status}`);
         const data = await response.json();
 
