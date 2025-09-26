@@ -1803,177 +1803,89 @@ document.querySelectorAll(".allPaths").forEach(e => {
  * @param {string} countryName - The name of the country to fetch news headlines for.
  */
 
-async function fetchTopHeadlinesByCountry(countryName) {
-	const headlinesContainer = document.getElementById("headlines");
-	const nameqContainer = document.getElementById("nameq");
+// === OLD WAY (direct APIs with keys) ===
+async function fetchTopHeadlinesDirect(countryName) {
+  console.log("Using direct API fetch (keys in frontend)...");
+  // Keep your existing fetchTopHeadlinesByCountry logic here
+}
 
-	// Update the country name in the location box
-	if (nameqContainer) {
-		nameqContainer.innerText = countryName;
-	}
+// === NEW WAY (via worker proxy) ===
+async function fetchTopHeadlinesWorker(countryName) {
+  console.log("Using worker proxy fetch...");
+  const headlinesContainer = document.getElementById("headlines");
+  const nameqContainer = document.getElementById("nameq");
 
- headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
-
-  // API keys and base URLs
-  const gNewsApiKey = "f760069439c7443a00e06790756587d2";
-  const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
-
-  const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
-  const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
-
-  const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee";
-  const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
-
-  const worldNewsApiKey = "6a12b24e61msh79a4ff4b1df50bep1d86b8jsn2f76f469d4e9";
-  const worldNewsUrl = `https://world-news-api.p.rapidapi.com/search-news?text=${encodeURIComponent(
-    countryName
-  )}&language=en`;
-
-  
+  if (nameqContainer) nameqContainer.innerText = countryName;
+  headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
   try {
-    // Fetch data from all APIs in parallel
-    const [
-      gNewsResponse,
-      newsDataResponse,
-      newsApiResponse,
-      worldNewsResponse,
-    ] = await Promise.all([
-      fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
-      fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
-      fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`),
-      fetch(worldNewsUrl, {
-        headers: {
-          "X-RapidAPI-Key": worldNewsApiKey,
-          "X-RapidAPI-Host": "world-news-api.p.rapidapi.com",
-        },
-      }),
-    ]);
+    const response = await fetch(`/worker-proxy?news=${encodeURIComponent(countryName)}`);
+    const data = await response.json();
 
-    const gNewsData = await gNewsResponse.json();
-    const newsDataData = await newsDataResponse.json();
-    const newsApiData = await newsApiResponse.json();
-    const worldNewsData = await worldNewsResponse.json();
-
-    // Combine articles from all APIs
-    let articles = [];
-
-    if (gNewsData.articles) {
-      articles = articles.concat(
-        gNewsData.articles.map((article) => ({
-          title: article.title,
-          description: article.description,
-          url: article.url,
-          source: "GNews",
-          content: article.content || "",
-        }))
-      );
-    }
-
-    if (newsDataData.results) {
-      articles = articles.concat(
-        newsDataData.results.map((article) => ({
-          title: article.title,
-          description: article.description,
-          url: article.link,
-          source: "NewsData",
-          content: article.content || "",
-        }))
-      );
-    }
-
-    if (newsApiData.articles) {
-      articles = articles.concat(
-        newsApiData.articles.map((article) => ({
-          title: article.title,
-          description: article.description,
-          url: article.url,
-          source: "NewsAPI",
-          content: article.content || "",
-        }))
-      );
-    }
-
-    if (worldNewsData.news) {
-      articles = articles.concat(
-        worldNewsData.news.map((article) => ({
-          title: article.title,
-          description: article.summary,
-          url: article.url,
-          source: "WorldNewsAPI",
-          content: article.content || "",
-        }))
-      );
-    }
-
-    if (articles.length === 0) {
+    if (!data || !data.articles || data.articles.length === 0) {
       headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
       return;
     }
 
-    // Remove duplicate articles by URL
+    // Deduplicate
     const uniqueArticles = [];
     const seenUrls = new Set();
-    articles.forEach((article) => {
+    data.articles.forEach(article => {
       if (!seenUrls.has(article.url)) {
         seenUrls.add(article.url);
         uniqueArticles.push(article);
       }
     });
 
-    // Prioritize articles with the country name in the title, description, or content
+    // Prioritize country name
+    const countryRegex = new RegExp(countryName, "i");
     uniqueArticles.sort((a, b) => {
-      const countryRegex = new RegExp(countryName, "i");
-      const aMatch = countryRegex.test(a.title + a.description + a.content)
-        ? 1
-        : 0;
-      const bMatch = countryRegex.test(b.title + b.description + b.content)
-        ? 1
-        : 0;
-      return bMatch - aMatch; // Higher priority for matches
+      const aMatch = countryRegex.test(`${a.title} ${a.description || a.summary || ""} ${a.content || ""}`) ? 1 : 0;
+      const bMatch = countryRegex.test(`${b.title} ${b.description || b.summary || ""} ${b.content || ""}`) ? 1 : 0;
+      return bMatch - aMatch;
     });
 
-    // Limit article descriptions to 5 lines max
+    // Trim descriptions
     function trimToFiveLines(text) {
       if (!text) return "No description available";
       const lines = text.split(". ").slice(0, 5).join(". ") + ".";
       return lines.length < text.length ? lines + "..." : lines;
     }
 
-    // Render articles with attribution
-    headlinesContainer.innerHTML = `
-            ${uniqueArticles
-              .map(
-                (article) => `
-                <div class="headline">
-                    <h4>${article.title}</h4>
-                    <p class="description">${trimToFiveLines(
-                      article.description
-                    )}</p>
-                    <a href="${article.url}" target="_blank">Read more</a>
-                </div>
-            `
-              )
-              .join("")}
-            <div id="attribution">
-                <p>Powered by GNews, NewsData, NewsAPI, and WorldNewsAPI</p>
-            </div>
-        `;
-  } catch (error) {
-    console.error("Error fetching news headlines:", error);
+    // Render
+    headlinesContainer.innerHTML = uniqueArticles.map(article => `
+      <div class="headline">
+        <h4>${article.title}</h4>
+        <p class="description">${trimToFiveLines(article.description || article.summary || "")}</p>
+        <a href="${article.url}" target="_blank">Read more</a>
+      </div>
+    `).join("") + `
+      <div id="attribution">
+        <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
+      </div>
+    `;
+  } catch (err) {
+    console.error("Error fetching news via worker:", err);
     headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
   }
 }
+
+// === USAGE EXAMPLE ===
+// Comment/uncomment whichever you want to test
+// fetchTopHeadlinesDirect("France");
+fetchTopHeadlinesWorker("France");
+
 
 // Move attribution above the buttons
 const attributionDiv = document.getElementById("attribution");
 const scrollButtonsContainer = document.getElementById("scroll-buttons");
 if (attributionDiv && scrollButtonsContainer) {
-  scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+	scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
 }
 
 // Reinitialize scroll functionality for navigation buttons
 setupScrollButtons();
+
 
 /**
  * Truncates text to a maximum number of lines.
@@ -1982,18 +1894,18 @@ setupScrollButtons();
  * @returns {string} - The truncated text.
  */
 function truncateText(text, maxLines) {
-  if (!text) return "";
-  const words = text.split(" ");
-  let truncatedText = "";
-  let lines = 0;
+	if (!text) return "";
+	const words = text.split(" ");
+	let truncatedText = "";
+	let lines = 0;
 
-  for (let i = 0; i < words.length; i++) {
-    truncatedText += words[i] + " ";
-    if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
-    if (lines >= maxLines) break;
-  }
+	for (let i = 0; i < words.length; i++) {
+		truncatedText += words[i] + " ";
+		if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
+		if (lines >= maxLines) break;
+	}
 
-  return truncatedText.trim() + "...";
+	return truncatedText.trim() + "...";
 }
 
 
