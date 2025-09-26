@@ -1789,193 +1789,94 @@ document.querySelectorAll(".allPaths").forEach(e => {
 	});
 });
 
-// =======================
-// Fetch & Display News (Hybrid Worker + Full Multi-API Fallback)
-// =======================
-async function fetchTopHeadlinesHybrid(countryName) {
-  const headlinesContainer = document.getElementById("headlines");
-  const nameqContainer = document.getElementById("nameq");
+// ==========================
+// Fetch and display news headlines (Worker-proxy only)
+// ==========================
+async function fetchTopHeadlines(countryName) {
+    const headlinesContainer = document.getElementById("headlines");
+    const nameqContainer = document.getElementById("nameq");
 
-  if (nameqContainer) nameqContainer.innerText = countryName;
-  headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
+    if (nameqContainer) nameqContainer.innerText = countryName;
+    headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
-  let articles = [];
+    let articles = [];
 
-  // --- Helper: determine worker URL (dev / prod) ---
-  function getWorkerUrl() {
-    const isDev = location.hostname === "localhost" || location.hostname === "127.0.0.1";
-    return isDev
-      ? "https://snapshot-location-worker-dev.pages.dev" // Dev worker
-      : "https://snapshot-location.pages.dev/worker-proxy"; // Prod worker
-  }
+    try {
+        // Fetch from worker proxy
+        const response = await fetch(`/worker-proxy?news=${encodeURIComponent(countryName)}`);
+        if (!response.ok) throw new Error(`Worker proxy returned ${response.status}`);
+        const data = await response.json();
 
-  // === 1️⃣ Try worker proxy first ===
-  try {
-    const WORKER_URL = getWorkerUrl();
-    const response = await fetch(`${WORKER_URL}?news=${encodeURIComponent(countryName)}`);
-    const data = await response.json();
-    if (data && Array.isArray(data.articles) && data.articles.length > 0) {
-      articles = data.articles;
-      console.log("✅ Loaded news from Worker Proxy");
-    }
-  } catch (err) {
-    console.warn("Worker proxy failed, will try fallback APIs:", err);
-  }
-
-  // === 2️⃣ Fallback to all APIs if worker failed or returned nothing ===
-  if (articles.length === 0) {
-    const fallbackApis = [
-      {
-        name: "GNews",
-        url: `https://gnews.io/api/v4/top-headlines?apikey=f760069439c7443a00e06790756587d2&lang=en&q=${encodeURIComponent(countryName)}`
-      },
-      {
-        name: "NewsAPI",
-        url: `https://newsapi.org/v2/everything?apiKey=3d03b6a8ba4e48c1b543bc0e701524ee&language=en&q=${encodeURIComponent(countryName)}`
-      },
-      {
-        name: "Currents",
-        url: `https://api.currentsapi.services/v1/search?keywords=${encodeURIComponent(countryName)}&apiKey=vGNJ8ZH2tdFxazbULwk_rMTeFbwcwSY3BFG5AbtSIfBGDbZm`
-      },
-      {
-        name: "WorldNewsAPI",
-        url: `https://world-news-api.p.rapidapi.com/search-news?text=${encodeURIComponent(countryName)}&language=en`,
-        headers: {
-          "X-RapidAPI-Key": "99411043da63416fbaf7c7db5ba0c583",
-          "X-RapidAPI-Host": "world-news-api.p.rapidapi.com"
+        if (data && Array.isArray(data.articles)) {
+            articles = data.articles.map(article => ({
+                title: article.title,
+                description: article.description || article.summary || "",
+                url: article.url,
+                source: article.source || "Unknown",
+                content: article.content || ""
+            }));
         }
-      },
-      {
-        name: "Mediastack",
-        url: `http://api.mediastack.com/v1/news?access_key=b3c877b6c2b0922866370855114bd530&languages=en&keywords=${encodeURIComponent(countryName)}`
-      },
-      {
-        name: "Guardian",
-        url: `https://content.guardianapis.com/search?q=${encodeURIComponent(countryName)}&api-key=<your Guardian API key>&show-fields=headline,trailText,byline,short-url`
-      }
-    ];
-
-    let lastError = null;
-
-    for (const api of fallbackApis) {
-      try {
-        const resp = await fetch(api.url, { headers: api.headers || {} });
-        if (!resp.ok) throw new Error(`${api.name} responded ${resp.status}`);
-        const data = await resp.json();
-        let apiArticles = [];
-
-        // Map articles depending on API structure
-        switch (api.name) {
-          case "GNews":
-          case "NewsAPI":
-            apiArticles = data.articles || [];
-            break;
-          case "Currents":
-            apiArticles = data.news || [];
-            break;
-          case "WorldNewsAPI":
-            apiArticles = data.news || [];
-            break;
-          case "Mediastack":
-            apiArticles = data.data || [];
-            break;
-          case "Guardian":
-            apiArticles = data.response?.results || [];
-            break;
-        }
-
-        // Normalize articles
-        apiArticles = apiArticles.map(a => ({
-          title: a.title || a.headline || "No title",
-          description: a.description || a.summary || a.trailText || "No description",
-          url: a.url || a.link || a.webUrl || "#",
-          source: api.name,
-          content: a.content || ""
-        }));
-
-        articles = articles.concat(apiArticles);
-
-      } catch (err) {
-        lastError = err;
-        console.warn(`API ${api.name} failed:`, err);
-      }
+    } catch (err) {
+        console.warn("Worker proxy failed:", err);
+        // No direct API fallback in browser to avoid CORS errors
     }
 
+    // Always render something
     if (articles.length === 0) {
-      console.error("All fallback APIs failed:", lastError);
-      articles.push({
-        title: "No news available",
-        description: "Please try again later.",
-        url: "#",
-        source: "None",
-        content: ""
-      });
+        headlinesContainer.innerHTML = `<p>No headlines available for ${countryName} at the moment.</p>`;
+        return;
     }
-  }
 
-  // === 3️⃣ Deduplicate & prioritize ===
-  const uniqueArticles = [];
-  const seenUrls = new Set();
-  articles.forEach(article => {
-    if (article.url && !seenUrls.has(article.url)) {
-      seenUrls.add(article.url);
-      uniqueArticles.push(article);
+    // Deduplicate by URL
+    const uniqueArticles = [];
+    const seenUrls = new Set();
+    articles.forEach(article => {
+        if (article.url && !seenUrls.has(article.url)) {
+            seenUrls.add(article.url);
+            uniqueArticles.push(article);
+        }
+    });
+
+    // Prioritize articles containing the country name
+    const countryRegex = new RegExp(countryName, "i");
+    uniqueArticles.sort((a, b) => {
+        const aMatch = countryRegex.test(`${a.title} ${a.description} ${a.content}`) ? 1 : 0;
+        const bMatch = countryRegex.test(`${b.title} ${b.description} ${b.content}`) ? 1 : 0;
+        return bMatch - aMatch;
+    });
+
+    function trimToFiveLines(text) {
+        if (!text) return "No description available";
+        const lines = text.split(". ").slice(0, 5).join(". ") + ".";
+        return lines.length < text.length ? lines + "..." : lines;
     }
-  });
 
-  const countryRegex = new RegExp(countryName, "i");
-  uniqueArticles.sort((a, b) => {
-    const aMatch = countryRegex.test(`${a.title} ${a.description} ${a.content}`) ? 1 : 0;
-    const bMatch = countryRegex.test(`${b.title} ${b.description} ${b.content}`) ? 1 : 0;
-    return bMatch - aMatch;
-  });
+    // Render articles
+    headlinesContainer.innerHTML = uniqueArticles.map(article => `
+        <div class="headline">
+            <h4>${article.title}</h4>
+            <p class="description">${trimToFiveLines(article.description)}</p>
+            <a href="${article.url}" target="_blank">Read more</a>
+        </div>
+    `).join("") + `
+        <div id="attribution">
+            <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
+        </div>
+    `;
 
-  // === 4️⃣ Trim descriptions ===
-  function trimToFiveLines(text) {
-    if (!text) return "No description available";
-    const lines = text.split(". ").slice(0, 5).join(". ") + ".";
-    return lines.length < text.length ? lines + "..." : lines;
-  }
+    // Move attribution above the scroll buttons
+    const attributionDiv = document.getElementById("attribution");
+    const scrollButtonsContainer = document.getElementById("scroll-buttons");
+    if (attributionDiv && scrollButtonsContainer) {
+        scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+    }
 
-  // === 5️⃣ Render ===
-  headlinesContainer.innerHTML = uniqueArticles.map(article => `
-    <div class="headline">
-      <h4>${article.title}</h4>
-      <p class="description">${trimToFiveLines(article.description)}</p>
-      <a href="${article.url}" target="_blank">Read more</a>
-    </div>
-  `).join("") + `
-    <div id="attribution">
-      <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
-    </div>
-  `;
-
-  const attributionDiv = document.getElementById("attribution");
-  const scrollButtonsContainer = document.getElementById("scroll-buttons");
-  if (attributionDiv && scrollButtonsContainer) {
-    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-  }
-
-  if (typeof setupScrollButtons === "function") setupScrollButtons();
+    // Reinitialize scroll functionality
+    if (typeof setupScrollButtons === "function") setupScrollButtons();
 }
 
-/**
- * Utility: truncate text by word count
- */
-function truncateText(text, maxLines) {
-  if (!text) return "";
-  const words = text.split(" ");
-  let truncatedText = "";
-  let lines = 0;
-
-  for (let i = 0; i < words.length; i++) {
-    truncatedText += words[i] + " ";
-    if ((i + 1) % 10 === 0) lines++;
-    if (lines >= maxLines) break;
-  }
-
-  return truncatedText.trim() + "...";
-}
+// Example usage:
+// fetchTopHeadlines("Italy");
 
 // Scroll functionality
 
