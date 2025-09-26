@@ -2358,279 +2358,141 @@ async function fetchPublicHolidays(countryName) {
 
 
 
-// Weather Container
+// ===== Open-Meteo Weather (16-day) =====
 
-/**
- * Fetches and displays current weather and forecast data for a given city.
- * 
- * @param {string} city - The name of the city to fetch weather data for.
- */
-
-function getWeather(city) {
-	const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
-
-	if (!city) {
-		alert('Please enter a city');
-		return;
-	}
-
-	const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-	const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
-
-	fetch(currentWeatherUrl)
-		.then(response => response.json())
-		.then(data => {
-			displayWeather(data);
-		})
-		.catch(error => {
-			console.error('Error fetching current weather data:', error);
-			alert('Error fetching current weather data. Please try again.');
-		});
-
-	fetch(forecastUrl)
-		.then(response => response.json())
-		.then(data => {
-			displayHourlyForecast(data.list);
-			displayFiveDayForecast(data.list);
-		})
-		.catch(error => {
-			console.error('Error fetching forecast data:', error);
-			alert('Error fetching forecast data. Please try again.');
-		});
+// Map weather codes to description & emoji/icon
+function getWeatherDescription(code) {
+  const map = {
+    0: "Clear sky", 1: "Mainly clear", 2: "Partly cloudy", 3: "Overcast",
+    45: "Fog", 48: "Depositing rime fog",
+    51: "Drizzle: light", 53: "Drizzle: moderate", 55: "Drizzle: dense",
+    61: "Rain: slight", 63: "Rain: moderate", 65: "Rain: heavy",
+    71: "Snow: slight", 73: "Snow: moderate", 75: "Snow: heavy",
+    80: "Rain showers: slight", 81: "Rain showers: moderate", 82: "Rain showers: violent",
+    95: "Thunderstorm: slight/moderate", 96: "Thunderstorm with slight hail", 99: "Thunderstorm with heavy hail"
+  };
+  return map[code] || "Unknown";
 }
 
-/**
- * Displays the current weather information in the UI.
- * 
- * @param {Object} data - The weather data returned from the API.
- */
-
-function displayWeather(data) {
-	const tempDivInfo = document.getElementById('temp-div');
-	const weatherInfoDiv = document.getElementById('weather-info');
-	const weatherIcon = document.getElementById('weather-icon');
-	const hourlyForecastDiv = document.getElementById('hourly-forecast');
-
-	// Clear previous content
-	weatherInfoDiv.innerHTML = '';
-	hourlyForecastDiv.innerHTML = '';
-	tempDivInfo.innerHTML = '';
-
-	if (data.cod === '404') {
-		weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
-	} else {
-		const cityName = data.name;
-		const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
-		const description = data.weather[0].description;
-		const iconCode = data.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
-
-		const temperatureHTML = `<p>${temperature}°C</p>`;
-		const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
-
-		tempDivInfo.innerHTML = temperatureHTML;
-		weatherInfoDiv.innerHTML = weatherHtml;
-		weatherIcon.src = iconUrl;
-		weatherIcon.alt = description;
-
-		showImage();
-	}
+function getWeatherIcon(code) {
+  const map = {
+    0: "☀️", 1: "🌤️", 2: "⛅", 3: "☁️",
+    45: "🌫️", 48: "🌫️",
+    51: "🌦️", 53: "🌦️", 55: "🌧️",
+    61: "🌧️", 63: "🌧️", 65: "🌧️",
+    71: "🌨️", 73: "🌨️", 75: "❄️",
+    80: "🌦️", 81: "🌦️", 82: "⛈️",
+    95: "⛈️", 96: "⛈️", 99: "⛈️"
+  };
+  return map[code] || "❓";
 }
 
-/**
- * Displays the hourly weather forecast for the next 24 hours in the UI.
- * 
- * @param {Array} hourlyData - An array of weather forecast data points.
- */
+// Fetch weather for city
+async function getWeather(city) {
+  if (!city) return alert("Please enter a city");
 
-function displayHourlyForecast(hourlyData) {
-	const hourlyForecastDiv = document.getElementById('hourly-forecast');
-	const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
+  try {
+    // 1️⃣ Get lat/lon from Nominatim
+    const locResp = await fetch(`https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`, {
+      headers: { "User-Agent": "SnapshotLocation/1.0 (your-email@example.com)" }
+    });
+    const locData = await locResp.json();
+    if (!locData[0]) return alert("City not found");
+    const { lat, lon } = locData[0];
 
-	hourlyForecastDiv.innerHTML = ''; // Clear previous content
+    // 2️⃣ Fetch Open-Meteo forecast
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&hourly=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&current_weather=true&timezone=auto`;
+    const resp = await fetch(url);
+    const data = await resp.json();
 
-	next24Hours.forEach(item => {
-		const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
-		const hour = dateTime.getHours();
-		const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const hourlyItemHtml = `
-            <div class="hourly-item">
-                <span>${hour}:00</span>
-                <img src="${iconUrl}" alt="Hourly Weather Icon">
-                <span>${temperature}°C</span>
-            </div>
-        `;
-
-		hourlyForecastDiv.innerHTML += hourlyItemHtml;
-	});
+    displayCurrentWeather(data.current_weather);
+    displayHourlyForecast(data.hourly);
+    displayFiveDayForecast(data.daily);
+    displayLongTermForecast(data.daily); // full 16 days
+  } catch (err) {
+    console.error("Error fetching weather:", err);
+    alert("Error fetching weather data. Please try again.");
+  }
 }
 
-/**
- * Displays the 5-day weather forecast in the UI, selecting one forecast per day at noon.
- * 
- * @param {Array} hourlyData - An array of weather forecast data points.
- */
+// ===== Display functions =====
+function displayCurrentWeather(current) {
+  const tempDiv = document.getElementById("temp-div");
+  const infoDiv = document.getElementById("weather-info");
+  const iconImg = document.getElementById("weather-icon");
 
-function displayFiveDayForecast(hourlyData) {
-	const forecastCards = document.getElementById('forecast-cards');
-	forecastCards.innerHTML = ''; // Clear previous forecasts
-
-	// Group forecasts by day (select one forecast per day, e.g., at noon)
-	const dailyForecasts = hourlyData.filter(item => {
-		const dateTime = new Date(item.dt * 1000);
-		return dateTime.getHours() === 12; // Pick the forecast for 12:00 PM
-	}).slice(0, 5); // Limit to the next 5 days
-
-	dailyForecasts.forEach(item => {
-		const dateTime = new Date(item.dt * 1000); // Convert timestamp to date
-		const day = dateTime.toLocaleDateString('en-US', {
-			weekday: 'short'
-		}); // Get day of the week
-		const temperature = Math.round(item.main.temp - 273.15); // Convert Kelvin to Celsius
-		const description = item.weather[0].description;
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const cardHtml = `
-            <div class="forecast-card">
-                <p><strong>${day}</strong></p>
-                <img src="${iconUrl}" alt="${description}">
-                <p>${temperature}°C</p>
-                <p>${description}</p>
-            </div>
-        `;
-
-		forecastCards.innerHTML += cardHtml;
-	});
+  tempDiv.innerHTML = `${Math.round(current.temperature)}°C`;
+  const desc = getWeatherDescription(current.weathercode);
+  infoDiv.innerHTML = `<p>${desc}</p>`;
+  iconImg.src = ""; // optional PNG if you want, else emoji displayed in text
+  iconImg.alt = desc;
 }
 
-/**
- * Fetch and display the 16-day weather forecast.
- * @param {string} city - The name of the city.
- */
-function getLongTermForecast(city) {
-	const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
+function displayHourlyForecast(hourly) {
+  const container = document.getElementById("hourly-forecast");
+  container.innerHTML = "";
+  const times = hourly.time.slice(0, 24); // next 24 hours
+  const temps = hourly.temperature_2m.slice(0, 24);
+  const codes = hourly.weathercode.slice(0, 24);
 
-	// Step 1: Convert city name to latitude & longitude
-	fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
-		.then(response => response.json())
-		.then(data => {
-			if (data.cod !== 200) {
-				alert("Error fetching city coordinates.");
-				return;
-			}
-
-			const {
-				lat,
-				lon
-			} = data.coord;
-
-			// Step 2: Fetch 16-day forecast using One Call API
-			fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${apiKey}`)
-				.then(response => response.json())
-				.then(data => {
-					displayLongTermForecast(data.daily);
-				})
-				.catch(error => {
-					console.error('Error fetching 16-day forecast:', error);
-					alert('Error fetching 16-day forecast. Please try again.');
-				});
-		})
-		.catch(error => {
-			console.error('Error fetching city coordinates:', error);
-			alert('Error fetching city coordinates. Please try again.');
-		});
+  for (let i = 0; i < times.length; i++) {
+    const dt = new Date(times[i]);
+    container.innerHTML += `
+      <div class="hourly-item">
+        <span>${dt.getHours()}:00</span>
+        <span>${getWeatherIcon(codes[i])}</span>
+        <span>${Math.round(temps[i])}°C</span>
+      </div>`;
+  }
 }
 
+function displayFiveDayForecast(daily) {
+  const container = document.getElementById("forecast-cards");
+  container.innerHTML = "";
+  const days = daily.time.slice(0, 5);
+  const maxTemps = daily.temperature_2m_max.slice(0, 5);
+  const minTemps = daily.temperature_2m_min.slice(0, 5);
+  const codes = daily.weathercode.slice(0, 5);
 
-/**
- * Displays the 16-day weather forecast in a scrolling format.
- * @param {Array} dailyData - Array of daily weather data.
- */
-function displayLongTermForecast(dailyData) {
-	const longTermForecastDiv = document.getElementById('long-term-forecast');
-	longTermForecastDiv.innerHTML = ''; // Clear previous forecasts
-
-	dailyData.slice(0, 16).forEach(item => {
-		const dateTime = new Date(item.dt * 1000);
-		const formattedDate = dateTime.toLocaleDateString('en-US', {
-			weekday: 'short',
-			month: 'short',
-			day: 'numeric'
-		});
-		const temperature = Math.round(item.temp.day); // No need to convert, API returns Celsius
-		const description = item.weather[0].description;
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const cardHtml = `
-            <div class="forecast-card">
-                <p><strong>${formattedDate}</strong></p>
-                <img src="${iconUrl}" alt="${description}">
-                <p>${temperature}°C</p>
-                <p>${description}</p>
-            </div>
-        `;
-
-		longTermForecastDiv.innerHTML += cardHtml;
-	});
+  for (let i = 0; i < days.length; i++) {
+    const dt = new Date(days[i]);
+    container.innerHTML += `
+      <div class="forecast-card">
+        <p><strong>${dt.toLocaleDateString("en-US",{weekday:"short"})}</strong></p>
+        <span>${getWeatherIcon(codes[i])}</span>
+        <p>${Math.round(maxTemps[i])}°C / ${Math.round(minTemps[i])}°C</p>
+        <p>${getWeatherDescription(codes[i])}</p>
+      </div>`;
+  }
 }
 
+function displayLongTermForecast(daily) {
+  const container = document.getElementById("long-term-forecast");
+  container.innerHTML = "";
+  const days = daily.time.slice(0, 16); // full 16 days
+  const maxTemps = daily.temperature_2m_max.slice(0, 16);
+  const minTemps = daily.temperature_2m_min.slice(0, 16);
+  const codes = daily.weathercode.slice(0, 16);
 
-
-// Add scrolling functionality to the 16-day forecast
-document.getElementById('long-term-scroll-left').addEventListener('click', () => {
-	document.getElementById('long-term-forecast').scrollBy({
-		left: -150,
-		behavior: 'smooth'
-	});
-});
-
-document.getElementById('long-term-scroll-right').addEventListener('click', () => {
-	document.getElementById('long-term-forecast').scrollBy({
-		left: 150,
-		behavior: 'smooth'
-	});
-});
-
-
-// Add scrolling functionality for the 5-day forecast
-/**
- * Scrolls the 5-day forecast cards to the left when the left arrow is clicked.
- */
-
-document.getElementById("scroll-left").addEventListener("click", () => {
-	const forecastCards = document.getElementById("forecast-cards");
-	forecastCards.scrollBy({
-		left: -150,
-		behavior: "smooth"
-	});
-});
-
-/**
- * Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
- */
-
-document.getElementById("scroll-right").addEventListener("click", () => {
-	const forecastCards = document.getElementById("forecast-cards");
-	forecastCards.scrollBy({
-		left: 150,
-		behavior: "smooth"
-	});
-});
-
-/**
- * Displays the weather icon by making the image element visible once it's loaded.
- */
-
-function showImage() {
-	const weatherIcon = document.getElementById('weather-icon');
-	weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
+  for (let i = 0; i < days.length; i++) {
+    const dt = new Date(days[i]);
+    container.innerHTML += `
+      <div class="forecast-card">
+        <p><strong>${dt.toLocaleDateString("en-US",{weekday:"short", month:"short", day:"numeric"})}</strong></p>
+        <span>${getWeatherIcon(codes[i])}</span>
+        <p>${Math.round(maxTemps[i])}°C / ${Math.round(minTemps[i])}°C</p>
+        <p>${getWeatherDescription(codes[i])}</p>
+      </div>`;
+  }
 }
 
+// ===== Scroll buttons =====
+document.getElementById("scroll-left").onclick = () => document.getElementById("forecast-cards").scrollBy({left:-150, behavior:"smooth"});
+document.getElementById("scroll-right").onclick = () => document.getElementById("forecast-cards").scrollBy({left:150, behavior:"smooth"});
+document.getElementById("hourly-scroll-left").onclick = () => document.getElementById("hourly-forecast").scrollBy({left:-150, behavior:"smooth"});
+document.getElementById("hourly-scroll-right").onclick = () => document.getElementById("hourly-forecast").scrollBy({left:150, behavior:"smooth"});
+document.getElementById("long-term-scroll-left").onclick = () => document.getElementById("long-term-forecast").scrollBy({left:-150, behavior:"smooth"});
+document.getElementById("long-term-scroll-right").onclick = () => document.getElementById("long-term-forecast").scrollBy({left:150, behavior:"smooth"});
 
 
 
