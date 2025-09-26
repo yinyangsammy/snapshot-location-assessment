@@ -2091,51 +2091,6 @@ async function fetchPublicHolidays(countryName) {
 }
 
 
-// ====== FULL Open-Meteo Weather Replacement (drop-in) ======
-
-// Map codes -> description + emoji (you can replace emoji with PNG URLs if desired)
-const weatherCodeMap = {
-  0: { icon: "☀️", desc: "Clear sky" },
-  1: { icon: "🌤️", desc: "Mainly clear" },
-  2: { icon: "⛅", desc: "Partly cloudy" },
-  3: { icon: "☁️", desc: "Overcast" },
-  45: { icon: "🌫️", desc: "Fog" },
-  48: { icon: "🌫️", desc: "Depositing rime fog" },
-  51: { icon: "🌦️", desc: "Light drizzle" },
-  53: { icon: "🌦️", desc: "Moderate drizzle" },
-  55: { icon: "🌦️", desc: "Dense drizzle" },
-  61: { icon: "🌧️", desc: "Slight rain" },
-  63: { icon: "🌧️", desc: "Moderate rain" },
-  65: { icon: "🌧️", desc: "Heavy rain" },
-  71: { icon: "❄️", desc: "Slight snow" },
-  73: { icon: "❄️", desc: "Moderate snow" },
-  75: { icon: "❄️", desc: "Heavy snow" },
-  80: { icon: "🌧️", desc: "Rain showers" },
-  81: { icon: "🌧️", desc: "Rain showers" },
-  82: { icon: "⛈️", desc: "Violent showers" },
-  95: { icon: "⛈️", desc: "Thunderstorm" },
-  96: { icon: "⛈️", desc: "Thunderstorm with slight hail" },
-  99: { icon: "⛈️", desc: "Thunderstorm with heavy hail" }
-};
-
-// Safe getter
-const $ = id => document.getElementById(id);
-
-// PUBLIC: convert city -> coords and fetch weather
-async function getWeather(city) {
-  if (!city || !city.trim()) return alert("Please enter a city");
-  try {
-    const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`;
-    const res = await fetch(nomUrl, { headers: { "User-Agent": "SnapshotLocation/1.0 (your-email@example.com)" } });
-    const loc = await res.json();
-    if (!Array.isArray(loc) || loc.length === 0) return alert("City not found");
-    const { lat, lon } = loc[0];
-    await fetchWeather(lat, lon);
-  } catch (err) {
-    console.error("Geocoding error:", err);
-    alert("Could not resolve city to coordinates.");
-  }
-}
 
 
 // OpenStreets Map with Leaflet Search Bar //
@@ -2843,6 +2798,7 @@ function setupScrollButtons(containerId, leftBtnId, rightBtnId) {
 // expose for backwards compatibility
 window.getWeather = getWeather;
 window.fetchWeather = fetchWeather;
+
 
 
 // Fetch Hotels using Overpass API
