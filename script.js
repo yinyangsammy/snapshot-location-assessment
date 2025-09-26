@@ -1792,7 +1792,7 @@ document.querySelectorAll(".allPaths").forEach(e => {
 // ==========================
 // Fetch and display news headlines (Worker-proxy only)
 // ==========================
-async function fetchTopHeadlines(countryName) {
+async function fetchTopHeadlinesByCountry(countryName) {
     const headlinesContainer = document.getElementById("headlines");
     const nameqContainer = document.getElementById("nameq");
 
@@ -1802,30 +1802,28 @@ async function fetchTopHeadlines(countryName) {
     let articles = [];
 
     try {
-        // Fetch from worker proxy
         const response = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`);
+        if (!response.ok) throw new Error(`Worker returned status ${response.status}`);
 
-        if (!response.ok) throw new Error(`Worker proxy returned ${response.status}`);
         const data = await response.json();
 
-        if (data && Array.isArray(data.articles)) {
+        // Ensure at least one article always
+        if (data && Array.isArray(data.articles) && data.articles.length > 0) {
             articles = data.articles.map(article => ({
-                title: article.title,
-                description: article.description || article.summary || "",
-                url: article.url,
+                title: article.title || "No title",
+                description: article.description || article.content || "No description",
+                url: article.url || "#",
                 source: article.source || "Unknown",
                 content: article.content || ""
             }));
+        } else {
+            // Dummy fallback if worker returns empty
+            articles.push({ title: "No news available", description: "Please try again later.", url: "#", source: "None", content: "" });
         }
     } catch (err) {
         console.warn("Worker proxy failed:", err);
-        // No direct API fallback in browser to avoid CORS errors
-    }
-
-    // Always render something
-    if (articles.length === 0) {
-        headlinesContainer.innerHTML = `<p>No headlines available for ${countryName} at the moment.</p>`;
-        return;
+        // Always push a dummy article to ensure UI never breaks
+        articles.push({ title: "No news available", description: "Please try again later.", url: "#", source: "None", content: "" });
     }
 
     // Deduplicate by URL
@@ -1846,17 +1844,18 @@ async function fetchTopHeadlines(countryName) {
         return bMatch - aMatch;
     });
 
-    function trimToFiveLines(text) {
+    // Trim description to max 5 sentences
+    function trimToFiveSentences(text) {
         if (!text) return "No description available";
-        const lines = text.split(". ").slice(0, 5).join(". ") + ".";
-        return lines.length < text.length ? lines + "..." : lines;
+        const sentences = text.split(". ").slice(0, 5).join(". ");
+        return sentences.length < text.length ? sentences + "..." : sentences;
     }
 
     // Render articles
     headlinesContainer.innerHTML = uniqueArticles.map(article => `
         <div class="headline">
             <h4>${article.title}</h4>
-            <p class="description">${trimToFiveLines(article.description)}</p>
+            <p class="description">${trimToFiveSentences(article.description)}</p>
             <a href="${article.url}" target="_blank">Read more</a>
         </div>
     `).join("") + `
@@ -1865,7 +1864,7 @@ async function fetchTopHeadlines(countryName) {
         </div>
     `;
 
-    // Move attribution above the scroll buttons
+    // Move attribution above scroll buttons
     const attributionDiv = document.getElementById("attribution");
     const scrollButtonsContainer = document.getElementById("scroll-buttons");
     if (attributionDiv && scrollButtonsContainer) {
@@ -1876,8 +1875,6 @@ async function fetchTopHeadlines(countryName) {
     if (typeof setupScrollButtons === "function") setupScrollButtons();
 }
 
-// Example usage:
-// fetchTopHeadlines("Italy");
 
 // Scroll functionality
 
