@@ -1803,77 +1803,88 @@ document.querySelectorAll(".allPaths").forEach(e => {
  * @param {string} countryName - The name of the country to fetch news headlines for.
  */
 
-// === OLD WAY (direct APIs with keys) ===
-async function fetchTopHeadlinesDirect(countryName) {
-  console.log("Using direct API fetch (keys in frontend)...");
-  // Keep your existing fetchTopHeadlinesByCountry logic here
-}
-
-// === NEW WAY (via worker proxy) ===
-async function fetchTopHeadlinesWorker(countryName) {
-  console.log("Using worker proxy fetch...");
+async function fetchTopHeadlinesHybrid(countryName) {
   const headlinesContainer = document.getElementById("headlines");
   const nameqContainer = document.getElementById("nameq");
 
   if (nameqContainer) nameqContainer.innerText = countryName;
   headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
+  let articles = [];
+
+  // --- 1️⃣ Try worker proxy first ---
   try {
     const response = await fetch(`/worker-proxy?news=${encodeURIComponent(countryName)}`);
     const data = await response.json();
-
-    if (!data || !data.articles || data.articles.length === 0) {
-      headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
-      return;
-    }
-
-    // Deduplicate
-    const uniqueArticles = [];
-    const seenUrls = new Set();
-    data.articles.forEach(article => {
-      if (!seenUrls.has(article.url)) {
-        seenUrls.add(article.url);
-        uniqueArticles.push(article);
-      }
-    });
-
-    // Prioritize country name
-    const countryRegex = new RegExp(countryName, "i");
-    uniqueArticles.sort((a, b) => {
-      const aMatch = countryRegex.test(`${a.title} ${a.description || a.summary || ""} ${a.content || ""}`) ? 1 : 0;
-      const bMatch = countryRegex.test(`${b.title} ${b.description || b.summary || ""} ${b.content || ""}`) ? 1 : 0;
-      return bMatch - aMatch;
-    });
-
-    // Trim descriptions
-    function trimToFiveLines(text) {
-      if (!text) return "No description available";
-      const lines = text.split(". ").slice(0, 5).join(". ") + ".";
-      return lines.length < text.length ? lines + "..." : lines;
-    }
-
-    // Render
-    headlinesContainer.innerHTML = uniqueArticles.map(article => `
-      <div class="headline">
-        <h4>${article.title}</h4>
-        <p class="description">${trimToFiveLines(article.description || article.summary || "")}</p>
-        <a href="${article.url}" target="_blank">Read more</a>
-      </div>
-    `).join("") + `
-      <div id="attribution">
-        <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
-      </div>
-    `;
+    if (data && Array.isArray(data.articles)) articles = data.articles;
   } catch (err) {
-    console.error("Error fetching news via worker:", err);
-    headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
+    console.warn("Worker proxy failed, will try fallback APIs:", err);
   }
-}
 
-// === USAGE EXAMPLE ===
-// Comment/uncomment whichever you want to test
-// fetchTopHeadlinesDirect("France");
-fetchTopHeadlinesWorker("France");
+  // --- 2️⃣ If worker failed or returned nothing, try a direct fallback API ---
+  if (articles.length === 0) {
+    try {
+      console.log("Trying fallback API (direct fetch)...");
+      // Example: fallback to GNews only (simplest)
+      const gNewsApiKey = "f760069439c7443a00e06790756587d2";
+      const fallbackResp = await fetch(
+        `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en&q=${encodeURIComponent(countryName)}`
+      );
+      const fallbackData = await fallbackResp.json();
+      if (fallbackData && fallbackData.articles) articles = fallbackData.articles.map(a => ({
+        title: a.title,
+        description: a.description,
+        url: a.url,
+        source: "GNews",
+        content: a.content || ""
+      }));
+    } catch (err) {
+      console.error("Fallback API also failed:", err);
+    }
+  }
+
+  // --- 3️⃣ Always render what we have ---
+  if (articles.length === 0) {
+    headlinesContainer.innerHTML = `<p>No headlines available for ${countryName} at the moment.</p>`;
+    return;
+  }
+
+  // Deduplicate
+  const uniqueArticles = [];
+  const seenUrls = new Set();
+  articles.forEach(article => {
+    if (article.url && !seenUrls.has(article.url)) {
+      seenUrls.add(article.url);
+      uniqueArticles.push(article);
+    }
+  });
+
+  // Prioritize articles containing the country name
+  const countryRegex = new RegExp(countryName, "i");
+  uniqueArticles.sort((a, b) => {
+    const aMatch = countryRegex.test(`${a.title} ${a.description || a.summary || ""} ${a.content || ""}`) ? 1 : 0;
+    const bMatch = countryRegex.test(`${b.title} ${b.description || b.summary || ""} ${b.content || ""}`) ? 1 : 0;
+    return bMatch - aMatch;
+  });
+
+  function trimToFiveLines(text) {
+    if (!text) return "No description available";
+    const lines = text.split(". ").slice(0, 5).join(". ") + ".";
+    return lines.length < text.length ? lines + "..." : lines;
+  }
+
+  headlinesContainer.innerHTML = uniqueArticles.map(article => `
+    <div class="headline">
+      <h4>${article.title}</h4>
+      <p class="description">${trimToFiveLines(article.description || article.summary || "")}</p>
+      <a href="${article.url}" target="_blank">Read more</a>
+    </div>
+  `).join("") + `
+    <div id="attribution">
+      <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
+    </div>
+  `;
+}
 
 
 // Move attribution above the buttons
