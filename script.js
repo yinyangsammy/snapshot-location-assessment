@@ -1789,20 +1789,9 @@ document.querySelectorAll(".allPaths").forEach(e => {
 	});
 });
 
-// Function to fetch and display news headlines by country
-
-/**
- * Fetches and displays news headlines for a given country.
- * @param {string} countryName - The name of the country to fetch news headlines for.
- */
-
-// Function to fetch and display news headlines by country
-
-/**
- * Fetches and displays news headlines for a given country.
- * @param {string} countryName - The name of the country to fetch news headlines for.
- */
-
+// =======================
+// Fetch & Display News
+// =======================
 async function fetchTopHeadlinesHybrid(countryName) {
   const headlinesContainer = document.getElementById("headlines");
   const nameqContainer = document.getElementById("nameq");
@@ -1812,44 +1801,52 @@ async function fetchTopHeadlinesHybrid(countryName) {
 
   let articles = [];
 
-  // --- 1️⃣ Try worker proxy first ---
+  // === 1️⃣ Try worker proxy first ===
   try {
-    const response = await fetch(`/worker-proxy?news=${encodeURIComponent(countryName)}`);
+    // Update WORKER_URL with your deployed worker URL
+    const WORKER_URL = "https://nominatim-proxy.yinyangsammy.workers.dev/";
+    const response = await fetch(`${WORKER_URL}?news=${encodeURIComponent(countryName)}`);
     const data = await response.json();
     if (data && Array.isArray(data.articles)) articles = data.articles;
   } catch (err) {
     console.warn("Worker proxy failed, will try fallback APIs:", err);
   }
 
-  // --- 2️⃣ If worker failed or returned nothing, try a direct fallback API ---
+  // === 2️⃣ Fallback direct API if worker returned nothing ===
   if (articles.length === 0) {
     try {
-      console.log("Trying fallback API (direct fetch)...");
-      // Example: fallback to GNews only (simplest)
+      console.log("Trying fallback API (GNews direct)...");
       const gNewsApiKey = "f760069439c7443a00e06790756587d2";
       const fallbackResp = await fetch(
         `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en&q=${encodeURIComponent(countryName)}`
       );
       const fallbackData = await fallbackResp.json();
-      if (fallbackData && fallbackData.articles) articles = fallbackData.articles.map(a => ({
-        title: a.title,
-        description: a.description,
-        url: a.url,
-        source: "GNews",
-        content: a.content || ""
-      }));
+      if (fallbackData && fallbackData.articles) {
+        articles = fallbackData.articles.map(a => ({
+          title: a.title,
+          description: a.description,
+          url: a.url,
+          source: "GNews",
+          content: a.content || ""
+        }));
+      }
     } catch (err) {
       console.error("Fallback API also failed:", err);
     }
   }
 
-  // --- 3️⃣ Always render what we have ---
+  // === 3️⃣ Ensure we have at least one article ===
   if (articles.length === 0) {
-    headlinesContainer.innerHTML = `<p>No headlines available for ${countryName} at the moment.</p>`;
-    return;
+    articles.push({
+      title: "No news available",
+      description: "Please try again later.",
+      url: "#",
+      source: "None",
+      content: ""
+    });
   }
 
-  // Deduplicate
+  // === 4️⃣ Deduplicate articles by URL ===
   const uniqueArticles = [];
   const seenUrls = new Set();
   articles.forEach(article => {
@@ -1859,7 +1856,7 @@ async function fetchTopHeadlinesHybrid(countryName) {
     }
   });
 
-  // Prioritize articles containing the country name
+  // === 5️⃣ Prioritize articles containing the country name ===
   const countryRegex = new RegExp(countryName, "i");
   uniqueArticles.sort((a, b) => {
     const aMatch = countryRegex.test(`${a.title} ${a.description || a.summary || ""} ${a.content || ""}`) ? 1 : 0;
@@ -1867,12 +1864,14 @@ async function fetchTopHeadlinesHybrid(countryName) {
     return bMatch - aMatch;
   });
 
+  // === 6️⃣ Trim descriptions to ~5 lines ===
   function trimToFiveLines(text) {
     if (!text) return "No description available";
     const lines = text.split(". ").slice(0, 5).join(". ") + ".";
     return lines.length < text.length ? lines + "..." : lines;
   }
 
+  // === 7️⃣ Render articles ===
   headlinesContainer.innerHTML = uniqueArticles.map(article => `
     <div class="headline">
       <h4>${article.title}</h4>
@@ -1884,41 +1883,35 @@ async function fetchTopHeadlinesHybrid(countryName) {
       <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
     </div>
   `;
+
+  // === 8️⃣ Move attribution above scroll buttons ===
+  const attributionDiv = document.getElementById("attribution");
+  const scrollButtonsContainer = document.getElementById("scroll-buttons");
+  if (attributionDiv && scrollButtonsContainer) {
+    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+  }
+
+  // === 9️⃣ Reinitialize scroll buttons ===
+  if (typeof setupScrollButtons === "function") setupScrollButtons();
 }
-
-
-// Move attribution above the buttons
-const attributionDiv = document.getElementById("attribution");
-const scrollButtonsContainer = document.getElementById("scroll-buttons");
-if (attributionDiv && scrollButtonsContainer) {
-	scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-}
-
-// Reinitialize scroll functionality for navigation buttons
-setupScrollButtons();
-
 
 /**
- * Truncates text to a maximum number of lines.
- * @param {string} text - The text to truncate.
- * @param {number} maxLines - The maximum number of lines allowed.
- * @returns {string} - The truncated text.
+ * Utility: truncate text by word count
  */
 function truncateText(text, maxLines) {
-	if (!text) return "";
-	const words = text.split(" ");
-	let truncatedText = "";
-	let lines = 0;
+  if (!text) return "";
+  const words = text.split(" ");
+  let truncatedText = "";
+  let lines = 0;
 
-	for (let i = 0; i < words.length; i++) {
-		truncatedText += words[i] + " ";
-		if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
-		if (lines >= maxLines) break;
-	}
+  for (let i = 0; i < words.length; i++) {
+    truncatedText += words[i] + " ";
+    if ((i + 1) % 10 === 0) lines++;
+    if (lines >= maxLines) break;
+  }
 
-	return truncatedText.trim() + "...";
+  return truncatedText.trim() + "...";
 }
-
 
 // Scroll functionality
 
