@@ -931,272 +931,6 @@ document.querySelectorAll(".allPaths").forEach((path) => {
 });
 
 
-// Weather Container
-
-/**
- * Fetches and displays weather data for a given city using the OpenWeatherMap API.
- * @param {string} city - The name of the city to fetch weather data for.
- */
-
-function getWeather(city) {
-	const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
-
-	if (!city || city.trim() === '') {
-		alert('Please enter a city');
-		return;
-	}
-
-	const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-	const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
-
-	fetch(currentWeatherUrl)
-		.then(response => response.json())
-		.then(data => {
-			if (data.cod !== 200) {
-				alert('City not found. Please try again.');
-				return;
-			}
-			displayWeather(data);
-		})
-		.catch(error => {
-			console.error('Error fetching current weather data:', error);
-			alert('Error fetching current weather data. Please try again.');
-		});
-
-	fetch(forecastUrl)
-		.then(response => response.json())
-		.then(data => {
-			if (data.cod !== "200") {
-				alert('Error fetching forecast data. Please try again.');
-				return;
-			}
-			displayHourlyForecast(data.list);
-			displayFiveDayForecast(data.list);
-		})
-		.catch(error => {
-			console.error('Error fetching forecast data:', error);
-			alert('Error fetching forecast data. Please try again.');
-		});
-}
-
-/**
- * Displays the current weather for the city, including temperature, description, and icon.
- * @param {Object} data - The weather data object.
- */
-
-function displayWeather(data) {
-	const tempDivInfo = document.getElementById('temp-div');
-	const weatherInfoDiv = document.getElementById('weather-info');
-	const weatherIcon = document.getElementById('weather-icon');
-	const hourlyForecastDiv = document.getElementById('hourly-forecast');
-
-	// Clear previous content
-	weatherInfoDiv.innerHTML = '';
-	hourlyForecastDiv.innerHTML = '';
-	tempDivInfo.innerHTML = '';
-
-	const cityName = data.name;
-	const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
-	const description = data.weather[0].description;
-	const iconCode = data.weather[0].icon;
-	const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
-
-	const temperatureHTML = `<p>${temperature}°C</p>`;
-	const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
-
-	tempDivInfo.innerHTML = temperatureHTML;
-	weatherInfoDiv.innerHTML = weatherHtml;
-	weatherIcon.src = iconUrl;
-	weatherIcon.alt = description;
-
-	showImage();
-}
-
-/**
- * Displays the hourly forecast for the next 24 hours based on the fetched data.
- * @param {Array} hourlyData - Array of hourly weather data.
- */
-
-function displayHourlyForecast(hourlyData) {
-	const hourlyForecastDiv = document.getElementById('hourly-forecast');
-	hourlyForecastDiv.innerHTML = ''; // Clear previous content
-
-	const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
-
-	next24Hours.forEach(item => {
-		const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
-		const hour = dateTime.getHours();
-		const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const hourlyItemHtml = `
-            <div class="hourly-item">
-                <span>${hour}:00</span>
-                <img src="${iconUrl}" alt="Hourly Weather Icon">
-                <span>${temperature}°C</span>
-            </div>
-        `;
-
-		hourlyForecastDiv.innerHTML += hourlyItemHtml;
-	});
-
-	// Hide scrollbar for hourly forecast using CSS
-	hourlyForecastDiv.style.overflowX = 'hidden';
-	hourlyForecastDiv.style.scrollBehavior = 'smooth';
-	hourlyForecastDiv.style.msOverflowStyle = 'none'; // For Internet Explorer and Edge
-	hourlyForecastDiv.style.scrollbarWidth = 'none'; // For Firefox
-}
-
-/**
- * Displays the 5-day weather forecast based on the fetched data.
- * @param {Array} hourlyData - Array of hourly weather data.
- */
-
-function displayFiveDayForecast(hourlyData) {
-	const forecastCards = document.getElementById('forecast-cards');
-	forecastCards.innerHTML = ''; // Clear old forecast cards
-
-	const dailyGroups = {};
-
-	// Group forecasts by date (YYYY-MM-DD)
-	hourlyData.forEach(item => {
-		const date = new Date(item.dt * 1000);
-		const dateKey = date.toISOString().split('T')[0];
-		if (!dailyGroups[dateKey]) dailyGroups[dateKey] = [];
-		dailyGroups[dateKey].push(item);
-	});
-
-	// Get the first 5 days including today
-	const fiveDays = Object.keys(dailyGroups).slice(0, 5);
-
-	fiveDays.forEach(dateKey => {
-		const readableDay = new Date(dateKey).toLocaleDateString('en-US', {
-			weekday: 'short'
-		});
-
-		const card = document.createElement('div');
-		card.classList.add('forecast-card', 'vertical-scroll-card');
-
-		const title = document.createElement('p');
-		title.innerHTML = `<strong>${readableDay}</strong>`;
-		card.appendChild(title);
-
-		const scrollWrapper = document.createElement('div');
-		scrollWrapper.classList.add('inner-scroll');
-
-		// Scroll up/down buttons
-		const upBtn = document.createElement('button');
-		upBtn.innerHTML = '▲';
-		upBtn.className = 'scroll-up';
-		upBtn.addEventListener('click', () => {
-			scrollWrapper.scrollBy({
-				top: -100,
-				behavior: 'smooth'
-			});
-		});
-
-		const downBtn = document.createElement('button');
-		downBtn.innerHTML = '▼';
-		downBtn.className = 'scroll-down';
-		downBtn.addEventListener('click', () => {
-			scrollWrapper.scrollBy({
-				top: 100,
-				behavior: 'smooth'
-			});
-		});
-
-		dailyGroups[dateKey].forEach(item => {
-			const time = new Date(item.dt * 1000).toLocaleTimeString('en-US', {
-				hour: '2-digit',
-				minute: '2-digit'
-			});
-			const temp = Math.round(item.main.temp - 273.15);
-			const desc = item.weather[0].description;
-			const icon = item.weather[0].icon;
-			const iconUrl = `https://openweathermap.org/img/wn/${icon}.png`;
-
-			const hourBlock = document.createElement('div');
-			hourBlock.classList.add('hour-block');
-			hourBlock.innerHTML = `
-                <p><strong>${time}</strong></p>
-                <img src="${iconUrl}" alt="${desc}" height="30px" width="30px">
-                <p>${temp}°C</p>
-                <p>${desc}</p>
-            `;
-
-			scrollWrapper.appendChild(hourBlock);
-		});
-
-		// Assemble everything
-		card.appendChild(upBtn);
-		card.appendChild(scrollWrapper);
-		card.appendChild(downBtn);
-		forecastCards.appendChild(card);
-	});
-}
-
-
-/**
- * Makes the weather icon visible once it's loaded.
- */
-
-function showImage() {
-	const weatherIcon = document.getElementById('weather-icon');
-	weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
-}
-
-
-// Arrow scrolling for five-day forecast
-const scrollLeftButton = document.getElementById('scroll-left');
-const scrollRightButton = document.getElementById('scroll-right');
-const forecastCards = document.getElementById('forecast-cards');
-
-scrollLeftButton.addEventListener('click', () => {
-	forecastCards.scrollBy({
-		left: -150,
-		behavior: 'smooth'
-	});
-});
-
-scrollRightButton.addEventListener('click', () => {
-	forecastCards.scrollBy({
-		left: 150,
-		behavior: 'smooth'
-	});
-});
-
-/**
- * Scrolls the hourly forecast container left or right when the corresponding buttons are clicked.
- */
-
-// Arrow scrolling for hourly forecast
-const hourlyScrollLeftButton = document.getElementById('hourly-scroll-left');
-const hourlyScrollRightButton = document.getElementById('hourly-scroll-right');
-const hourlyForecast = document.getElementById('hourly-forecast');
-
-/**
- * Scrolls the hourly forecast left by 150px.
- */
-
-hourlyScrollLeftButton.addEventListener('click', () => {
-	hourlyForecast.scrollBy({
-		left: -150,
-		behavior: 'smooth'
-	});
-});
-
-/**
- * Scrolls the hourly forecast right by 150px.
- */
-hourlyScrollRightButton.addEventListener('click', () => {
-	hourlyForecast.scrollBy({
-		left: 150,
-		behavior: 'smooth'
-	});
-});
-
-
 // Time Container
 
 // Function to get local time based on each timezone
@@ -1789,193 +1523,90 @@ document.querySelectorAll(".allPaths").forEach(e => {
 	});
 });
 
-// Function to fetch and display news headlines by country
-
-/**
- * Fetches and displays news headlines for a given country.
- * @param {string} countryName - The name of the country to fetch news headlines for.
- */
-
-// Function to fetch and display news headlines by country
-
-/**
- * Fetches and displays news headlines for a given country.
- * @param {string} countryName - The name of the country to fetch news headlines for.
- */
-
+// ==========================
+// Fetch and display news headlines (Worker-proxy only)
+// ==========================
 async function fetchTopHeadlinesByCountry(countryName) {
-	const headlinesContainer = document.getElementById("headlines");
-	const nameqContainer = document.getElementById("nameq");
+    const headlinesContainer = document.getElementById("headlines");
+    const nameqContainer = document.getElementById("nameq");
 
-	// Update the country name in the location box
-	if (nameqContainer) {
-		nameqContainer.innerText = countryName;
-	}
+    if (nameqContainer) nameqContainer.innerText = countryName;
+    headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
-	headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
+    let articles = [];
 
-	// API keys and base URLs
-	const gNewsApiKey = "f760069439c7443a00e06790756587d2";
-	const gNewsUrl = `https://gnews.io/api/v4/top-headlines?apikey=${gNewsApiKey}&lang=en`;
+    try {
+        const response = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`);
+        if (!response.ok) throw new Error(`Worker returned status ${response.status}`);
 
-	const newsDataApiKey = "pub_61543c37c6c1f87179e71855c773036be96e2";
-	const newsDataUrl = `https://newsdata.io/api/1/news?apikey=${newsDataApiKey}&language=en`;
+        const data = await response.json();
 
-	const newsApiApiKey = "3d03b6a8ba4e48c1b543bc0e701524ee";
-	const newsApiUrl = `https://newsapi.org/v2/everything?apiKey=${newsApiApiKey}&language=en`;
+        // Ensure at least one article always
+        if (data && Array.isArray(data.articles) && data.articles.length > 0) {
+            articles = data.articles.map(article => ({
+                title: article.title || "No title",
+                description: article.description || article.content || "No description",
+                url: article.url || "#",
+                source: article.source || "Unknown",
+                content: article.content || ""
+            }));
+        } else {
+            // Dummy fallback if worker returns empty
+            articles.push({ title: "No news available", description: "Please try again later.", url: "#", source: "None", content: "" });
+        }
+    } catch (err) {
+        console.warn("Worker proxy failed:", err);
+        // Always push a dummy article to ensure UI never breaks
+        articles.push({ title: "No news available", description: "Please try again later.", url: "#", source: "None", content: "" });
+    }
 
-	const worldNewsApiKey = "6a12b24e61msh79a4ff4b1df50bep1d86b8jsn2f76f469d4e9";
-	const worldNewsUrl = `https://world-news-api.p.rapidapi.com/search-news?text=${encodeURIComponent(countryName)}&language=en`;
+    // Deduplicate by URL
+    const uniqueArticles = [];
+    const seenUrls = new Set();
+    articles.forEach(article => {
+        if (article.url && !seenUrls.has(article.url)) {
+            seenUrls.add(article.url);
+            uniqueArticles.push(article);
+        }
+    });
 
-	try {
-		// Fetch data from all APIs in parallel
-		const [gNewsResponse, newsDataResponse, newsApiResponse, worldNewsResponse] = await Promise.all([
-			fetch(`${gNewsUrl}&q=${encodeURIComponent(countryName)}`),
-			fetch(`${newsDataUrl}&q=${encodeURIComponent(countryName)}`),
-			fetch(`${newsApiUrl}&q=${encodeURIComponent(countryName)}`),
-			fetch(worldNewsUrl, {
-				headers: {
-					"X-RapidAPI-Key": worldNewsApiKey,
-					"X-RapidAPI-Host": "world-news-api.p.rapidapi.com"
-				}
-			})
-		]);
+    // Prioritize articles containing the country name
+    const countryRegex = new RegExp(countryName, "i");
+    uniqueArticles.sort((a, b) => {
+        const aMatch = countryRegex.test(`${a.title} ${a.description} ${a.content}`) ? 1 : 0;
+        const bMatch = countryRegex.test(`${b.title} ${b.description} ${b.content}`) ? 1 : 0;
+        return bMatch - aMatch;
+    });
 
-		const gNewsData = await gNewsResponse.json();
-		const newsDataData = await newsDataResponse.json();
-		const newsApiData = await newsApiResponse.json();
-		const worldNewsData = await worldNewsResponse.json();
+    // Trim description to max 5 sentences
+    function trimToFiveSentences(text) {
+        if (!text) return "No description available";
+        const sentences = text.split(". ").slice(0, 5).join(". ");
+        return sentences.length < text.length ? sentences + "..." : sentences;
+    }
 
-		// Combine articles from all APIs
-		let articles = [];
+    // Render articles
+    headlinesContainer.innerHTML = uniqueArticles.map(article => `
+        <div class="headline">
+            <h4>${article.title}</h4>
+            <p class="description">${trimToFiveSentences(article.description)}</p>
+            <a href="${article.url}" target="_blank">Read more</a>
+        </div>
+    `).join("") + `
+        <div id="attribution">
+            <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
+        </div>
+    `;
 
-		if (gNewsData.articles) {
-			articles = articles.concat(
-				gNewsData.articles.map(article => ({
-					title: article.title,
-					description: article.description,
-					url: article.url,
-					source: "GNews",
-					content: article.content || ''
-				}))
-			);
-		}
+    // Move attribution above scroll buttons
+    const attributionDiv = document.getElementById("attribution");
+    const scrollButtonsContainer = document.getElementById("scroll-buttons");
+    if (attributionDiv && scrollButtonsContainer) {
+        scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
+    }
 
-		if (newsDataData.results) {
-			articles = articles.concat(
-				newsDataData.results.map(article => ({
-					title: article.title,
-					description: article.description,
-					url: article.link,
-					source: "NewsData",
-					content: article.content || ''
-				}))
-			);
-		}
-
-		if (newsApiData.articles) {
-			articles = articles.concat(
-				newsApiData.articles.map(article => ({
-					title: article.title,
-					description: article.description,
-					url: article.url,
-					source: "NewsAPI",
-					content: article.content || ''
-				}))
-			);
-		}
-
-		if (worldNewsData.news) {
-			articles = articles.concat(
-				worldNewsData.news.map(article => ({
-					title: article.title,
-					description: article.summary,
-					url: article.url,
-					source: "WorldNewsAPI",
-					content: article.content || ''
-				}))
-			);
-		}
-
-		if (articles.length === 0) {
-			headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
-			return;
-		}
-
-		// Remove duplicate articles by URL
-		const uniqueArticles = [];
-		const seenUrls = new Set();
-		articles.forEach(article => {
-			if (!seenUrls.has(article.url)) {
-				seenUrls.add(article.url);
-				uniqueArticles.push(article);
-			}
-		});
-
-		// Prioritize articles with the country name in the title, description, or content
-		uniqueArticles.sort((a, b) => {
-			const countryRegex = new RegExp(countryName, 'i');
-			const aMatch = countryRegex.test(a.title + a.description + a.content) ? 1 : 0;
-			const bMatch = countryRegex.test(b.title + b.description + b.content) ? 1 : 0;
-			return bMatch - aMatch; // Higher priority for matches
-		});
-
-		// Limit article descriptions to 5 lines max
-		function trimToFiveLines(text) {
-			if (!text) return "No description available";
-			const lines = text.split('. ').slice(0, 5).join('. ') + '.';
-			return lines.length < text.length ? lines + "..." : lines;
-		}
-
-		// Render articles with attribution
-		headlinesContainer.innerHTML = `
-            ${uniqueArticles.map(article => `
-                <div class="headline">
-                    <h4>${article.title}</h4>
-                    <p class="description">${trimToFiveLines(article.description)}</p>
-                    <a href="${article.url}" target="_blank">Read more</a>
-                </div>
-            `).join('')}
-            <div id="attribution">
-                <p>Powered by GNews, NewsData, NewsAPI, and WorldNewsAPI</p>
-            </div>
-        `;
-	} catch (error) {
-		console.error("Error fetching news headlines:", error);
-		headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
-	}
-}
-
-// Move attribution above the buttons
-const attributionDiv = document.getElementById("attribution");
-const scrollButtonsContainer = document.getElementById("scroll-buttons");
-if (attributionDiv && scrollButtonsContainer) {
-	scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-}
-
-// Reinitialize scroll functionality for navigation buttons
-setupScrollButtons();
-
-
-/**
- * Truncates text to a maximum number of lines.
- * @param {string} text - The text to truncate.
- * @param {number} maxLines - The maximum number of lines allowed.
- * @returns {string} - The truncated text.
- */
-function truncateText(text, maxLines) {
-	if (!text) return "";
-	const words = text.split(" ");
-	let truncatedText = "";
-	let lines = 0;
-
-	for (let i = 0; i < words.length; i++) {
-		truncatedText += words[i] + " ";
-		if ((i + 1) % 10 === 0) lines++; // Approximate line count (10 words per line)
-		if (lines >= maxLines) break;
-	}
-
-	return truncatedText.trim() + "...";
+    // Reinitialize scroll functionality
+    if (typeof setupScrollButtons === "function") setupScrollButtons();
 }
 
 
@@ -2461,281 +2092,6 @@ async function fetchPublicHolidays(countryName) {
 
 
 
-// Weather Container
-
-/**
- * Fetches and displays current weather and forecast data for a given city.
- * 
- * @param {string} city - The name of the city to fetch weather data for.
- */
-
-function getWeather(city) {
-	const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
-
-	if (!city) {
-		alert('Please enter a city');
-		return;
-	}
-
-	const currentWeatherUrl = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`;
-	const forecastUrl = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${apiKey}`;
-
-	fetch(currentWeatherUrl)
-		.then(response => response.json())
-		.then(data => {
-			displayWeather(data);
-		})
-		.catch(error => {
-			console.error('Error fetching current weather data:', error);
-			alert('Error fetching current weather data. Please try again.');
-		});
-
-	fetch(forecastUrl)
-		.then(response => response.json())
-		.then(data => {
-			displayHourlyForecast(data.list);
-			displayFiveDayForecast(data.list);
-		})
-		.catch(error => {
-			console.error('Error fetching forecast data:', error);
-			alert('Error fetching forecast data. Please try again.');
-		});
-}
-
-/**
- * Displays the current weather information in the UI.
- * 
- * @param {Object} data - The weather data returned from the API.
- */
-
-function displayWeather(data) {
-	const tempDivInfo = document.getElementById('temp-div');
-	const weatherInfoDiv = document.getElementById('weather-info');
-	const weatherIcon = document.getElementById('weather-icon');
-	const hourlyForecastDiv = document.getElementById('hourly-forecast');
-
-	// Clear previous content
-	weatherInfoDiv.innerHTML = '';
-	hourlyForecastDiv.innerHTML = '';
-	tempDivInfo.innerHTML = '';
-
-	if (data.cod === '404') {
-		weatherInfoDiv.innerHTML = `<p>${data.message}</p>`;
-	} else {
-		const cityName = data.name;
-		const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
-		const description = data.weather[0].description;
-		const iconCode = data.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}@4x.png`;
-
-		const temperatureHTML = `<p>${temperature}°C</p>`;
-		const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
-
-		tempDivInfo.innerHTML = temperatureHTML;
-		weatherInfoDiv.innerHTML = weatherHtml;
-		weatherIcon.src = iconUrl;
-		weatherIcon.alt = description;
-
-		showImage();
-	}
-}
-
-/**
- * Displays the hourly weather forecast for the next 24 hours in the UI.
- * 
- * @param {Array} hourlyData - An array of weather forecast data points.
- */
-
-function displayHourlyForecast(hourlyData) {
-	const hourlyForecastDiv = document.getElementById('hourly-forecast');
-	const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
-
-	hourlyForecastDiv.innerHTML = ''; // Clear previous content
-
-	next24Hours.forEach(item => {
-		const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
-		const hour = dateTime.getHours();
-		const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const hourlyItemHtml = `
-            <div class="hourly-item">
-                <span>${hour}:00</span>
-                <img src="${iconUrl}" alt="Hourly Weather Icon">
-                <span>${temperature}°C</span>
-            </div>
-        `;
-
-		hourlyForecastDiv.innerHTML += hourlyItemHtml;
-	});
-}
-
-/**
- * Displays the 5-day weather forecast in the UI, selecting one forecast per day at noon.
- * 
- * @param {Array} hourlyData - An array of weather forecast data points.
- */
-
-function displayFiveDayForecast(hourlyData) {
-	const forecastCards = document.getElementById('forecast-cards');
-	forecastCards.innerHTML = ''; // Clear previous forecasts
-
-	// Group forecasts by day (select one forecast per day, e.g., at noon)
-	const dailyForecasts = hourlyData.filter(item => {
-		const dateTime = new Date(item.dt * 1000);
-		return dateTime.getHours() === 12; // Pick the forecast for 12:00 PM
-	}).slice(0, 5); // Limit to the next 5 days
-
-	dailyForecasts.forEach(item => {
-		const dateTime = new Date(item.dt * 1000); // Convert timestamp to date
-		const day = dateTime.toLocaleDateString('en-US', {
-			weekday: 'short'
-		}); // Get day of the week
-		const temperature = Math.round(item.main.temp - 273.15); // Convert Kelvin to Celsius
-		const description = item.weather[0].description;
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const cardHtml = `
-            <div class="forecast-card">
-                <p><strong>${day}</strong></p>
-                <img src="${iconUrl}" alt="${description}">
-                <p>${temperature}°C</p>
-                <p>${description}</p>
-            </div>
-        `;
-
-		forecastCards.innerHTML += cardHtml;
-	});
-}
-
-/**
- * Fetch and display the 16-day weather forecast.
- * @param {string} city - The name of the city.
- */
-function getLongTermForecast(city) {
-	const apiKey = 'f768a779b53eb5b4119fb6ccbb38c01e';
-
-	// Step 1: Convert city name to latitude & longitude
-	fetch(`https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${apiKey}`)
-		.then(response => response.json())
-		.then(data => {
-			if (data.cod !== 200) {
-				alert("Error fetching city coordinates.");
-				return;
-			}
-
-			const {
-				lat,
-				lon
-			} = data.coord;
-
-			// Step 2: Fetch 16-day forecast using One Call API
-			fetch(`https://api.openweathermap.org/data/2.5/onecall?lat=${lat}&lon=${lon}&exclude=current,minutely,hourly,alerts&units=metric&appid=${apiKey}`)
-				.then(response => response.json())
-				.then(data => {
-					displayLongTermForecast(data.daily);
-				})
-				.catch(error => {
-					console.error('Error fetching 16-day forecast:', error);
-					alert('Error fetching 16-day forecast. Please try again.');
-				});
-		})
-		.catch(error => {
-			console.error('Error fetching city coordinates:', error);
-			alert('Error fetching city coordinates. Please try again.');
-		});
-}
-
-
-/**
- * Displays the 16-day weather forecast in a scrolling format.
- * @param {Array} dailyData - Array of daily weather data.
- */
-function displayLongTermForecast(dailyData) {
-	const longTermForecastDiv = document.getElementById('long-term-forecast');
-	longTermForecastDiv.innerHTML = ''; // Clear previous forecasts
-
-	dailyData.slice(0, 16).forEach(item => {
-		const dateTime = new Date(item.dt * 1000);
-		const formattedDate = dateTime.toLocaleDateString('en-US', {
-			weekday: 'short',
-			month: 'short',
-			day: 'numeric'
-		});
-		const temperature = Math.round(item.temp.day); // No need to convert, API returns Celsius
-		const description = item.weather[0].description;
-		const iconCode = item.weather[0].icon;
-		const iconUrl = `https://openweathermap.org/img/wn/${iconCode}.png`;
-
-		const cardHtml = `
-            <div class="forecast-card">
-                <p><strong>${formattedDate}</strong></p>
-                <img src="${iconUrl}" alt="${description}">
-                <p>${temperature}°C</p>
-                <p>${description}</p>
-            </div>
-        `;
-
-		longTermForecastDiv.innerHTML += cardHtml;
-	});
-}
-
-
-
-// Add scrolling functionality to the 16-day forecast
-document.getElementById('long-term-scroll-left').addEventListener('click', () => {
-	document.getElementById('long-term-forecast').scrollBy({
-		left: -150,
-		behavior: 'smooth'
-	});
-});
-
-document.getElementById('long-term-scroll-right').addEventListener('click', () => {
-	document.getElementById('long-term-forecast').scrollBy({
-		left: 150,
-		behavior: 'smooth'
-	});
-});
-
-
-// Add scrolling functionality for the 5-day forecast
-/**
- * Scrolls the 5-day forecast cards to the left when the left arrow is clicked.
- */
-
-document.getElementById("scroll-left").addEventListener("click", () => {
-	const forecastCards = document.getElementById("forecast-cards");
-	forecastCards.scrollBy({
-		left: -150,
-		behavior: "smooth"
-	});
-});
-
-/**
- * Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
- */
-
-document.getElementById("scroll-right").addEventListener("click", () => {
-	const forecastCards = document.getElementById("forecast-cards");
-	forecastCards.scrollBy({
-		left: 150,
-		behavior: "smooth"
-	});
-});
-
-/**
- * Displays the weather icon by making the image element visible once it's loaded.
- */
-
-function showImage() {
-	const weatherIcon = document.getElementById('weather-icon');
-	weatherIcon.style.display = 'block'; // Make the image visible once it's loaded
-}
-
-
-
 
 // OpenStreets Map with Leaflet Search Bar //
 
@@ -3180,368 +2536,151 @@ async function fetchCityData() {
 	fetchNearbyAmenities(lat, lon);  // Amenities table
 	fadeInContainers();              // Animate containers
 }
+// ====== Weather Code Map ======
+const weatherCodeMap = {
+  0: { icon: "☀️", desc: "Clear sky" },
+  1: { icon: "🌤️", desc: "Mainly clear" },
+  2: { icon: "⛅", desc: "Partly cloudy" },
+  3: { icon: "☁️", desc: "Overcast" },
+  45: { icon: "🌫️", desc: "Fog" },
+  48: { icon: "🌫️", desc: "Depositing rime fog" },
+  51: { icon: "🌦️", desc: "Light drizzle" },
+  53: { icon: "🌦️", desc: "Moderate drizzle" },
+  55: { icon: "🌦️", desc: "Dense drizzle" },
+  61: { icon: "🌧️", desc: "Slight rain" },
+  63: { icon: "🌧️", desc: "Moderate rain" },
+  65: { icon: "🌧️", desc: "Heavy rain" },
+  71: { icon: "❄️", desc: "Slight snow" },
+  73: { icon: "❄️", desc: "Moderate snow" },
+  75: { icon: "❄️", desc: "Heavy snow" },
+  80: { icon: "🌧️", desc: "Rain showers" },
+  81: { icon: "🌧️", desc: "Rain showers" },
+  82: { icon: "⛈️", desc: "Violent showers" },
+  95: { icon: "⛈️", desc: "Thunderstorm" },
+  96: { icon: "⛈️", desc: "Thunderstorm with slight hail" },
+  99: { icon: "⛈️", desc: "Thunderstorm with heavy hail" }
+};
 
+const $id = (id) => document.getElementById(id);
 
+// ====== Show Weather Container ======
+function showWeatherContainer() {
+  const wc = $id("weather-container");
+  if (wc) {
+    wc.classList.remove("hidden");
+    wc.classList.add("fade-in");
+  }
+}
 
-// Fetch Weather Data using OpenWeatherMap API
-// === Fetch Weather Data ===
+// ====== Public: getWeather(city) ======
+async function getWeather(city) {
+  if (!city || !String(city).trim()) return;
+  try {
+    const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`;
+    const res = await fetch(nomUrl, { headers: { "User-Agent": "SnapshotLocation/1.0 (your-email@example.com)" } });
+    const loc = await res.json();
+    if (!Array.isArray(loc) || loc.length === 0) return;
+    const { lat, lon } = loc[0];
+    await fetchWeather(lat, lon);
+  } catch (err) {
+    console.error("Geocoding error:", err);
+  }
+  showWeatherContainer();
+}
+
+// ====== Public: fetchWeather(lat, lon) ======
 async function fetchWeather(lat, lon) {
-	const apiKey = '642eeb6e64dce24c37374b7c13a2d4d4';
-
-	const weatherURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&appid=${apiKey}`;
-	const hourlyURL = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&units=metric&cnt=40&appid=${apiKey}`;
-	const dailyURL = `https://api.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&units=metric&cnt=5&appid=${apiKey}`;
-	const sixteenDayURL = `https://pro.openweathermap.org/data/2.5/forecast/daily?lat=${lat}&lon=${lon}&cnt=16&units=metric&appid=${apiKey}`;
-
-	try {
-		const [weatherResponse, hourlyResponse, dailyResponse, sixteenDayResponse] = await Promise.all([
-			fetch(weatherURL),
-			fetch(hourlyURL),
-			fetch(dailyURL),
-			fetch(sixteenDayURL)
-		]);
-
-		const weatherData = await weatherResponse.json();
-		const hourlyData = await hourlyResponse.json();
-		const dailyData = await dailyResponse.json();
-		const sixteenDayData = await sixteenDayResponse.json();
-
-		displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData);
-	} catch (error) {
-		console.error('Error fetching weather:', error);
-	}
+  try {
+    if (lat == null || lon == null) throw new Error("Missing coordinates");
+    const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&hourly=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&current_weather=true&forecast_days=16&timezone=auto`;
+    const resp = await fetch(url);
+    const data = await resp.json();
+    if (!data || !data.daily || !data.hourly) throw new Error("Incomplete weather data");
+    displayWeatherData(data);
+  } catch (err) {
+    console.error("Error fetching weather:", err);
+    const wc = $id("weather-container");
+    if (wc) wc.innerHTML = `<p>Weather data not available.</p>`;
+  }
+  showWeatherContainer();
 }
 
-// === Display Weather Data ===
-function displayWeatherData(weatherData, hourlyData, dailyData, sixteenDayData) {
-	const weatherContainer = document.getElementById("weather-container");
+// ====== Render Function ======
+function displayWeatherData(data) {
+  const wc = $id("weather-container");
+  if (!wc) return;
 
-	// === DAILY (Today) Forecast ===
-	const currentWeather = weatherData.list[0];
-	const iconUrl = `https://openweathermap.org/img/wn/${currentWeather.weather[0].icon}@2x.png`;
+  const hourly = data.hourly || {};
+  const daily = data.daily || {};
 
-	let dailyHtml = `
-        <h2>Daily Forecast</h2>
-        <img id="weather-icon" src="${iconUrl}" alt="Weather Icon">
-        <div id="temp-div">
-            <p class="weather-text">${Math.round(currentWeather.main.temp)}°C</p>
-        </div>
-        <div id="weather-info">
-            <p class="weather-text">${currentWeather.weather[0].description}</p>
-        </div>`;
+  const timesHourly = hourly.time || [];
+  const tempsHourly = hourly.temperature_2m || [];
+  const codesHourly = hourly.weathercode || [];
 
-	// === HOURLY (Next 6 Hours) ===
-	let hourlyHtml = '';
-	hourlyData.list.slice(0, 6).forEach(hour => {
-		const hourIcon = `https://openweathermap.org/img/wn/${hour.weather[0].icon}@2x.png`;
-		const time = new Date(hour.dt * 1000);
-		const hours = time.getHours().toString().padStart(2, '0');
-		const minutes = time.getMinutes().toString().padStart(2, '0');
-		hourlyHtml += `
-            <div class="hourly-item">
-                <img src="${hourIcon}" alt="Icon">
-                <p class="weather-text">${Math.round(hour.main.temp)}°C</p>
-                <p class="weather-text">${hours}:${minutes}</p>
-            </div>`;
-	});
+  const timesDaily = daily.time || [];
+  const maxDaily = daily.temperature_2m_max || [];
+  const minDaily = daily.temperature_2m_min || [];
+  const codesDaily = daily.weathercode || [];
 
-	// === 5-DAY Forecast ===
-	let fiveDayHtml = '';
-	dailyData.list.slice(0, 5).forEach(day => {
-		const icon = `https://openweathermap.org/img/wn/${day.weather[0].icon}@2x.png`;
-		fiveDayHtml += `
-            <div class="forecast-card">
-                <p class="weather-text">${new Date(day.dt * 1000).toDateString()}</p>
-                <img src="${icon}" alt="${day.weather[0].description}">
-                <p class="weather-text">${Math.round(day.temp.day)}°C</p>
-                <p class="weather-text">${day.weather[0].description}</p>
-            </div>`;
-	});
+  // current
+  const currentTemp = (data.current_weather?.temperature != null)
+    ? Math.round(data.current_weather.temperature)
+    : (tempsHourly[0] != null ? Math.round(tempsHourly[0]) : "N/A");
+  const currentCode = data.current_weather?.weathercode ?? codesHourly[0];
+  const currentMeta = weatherCodeMap[currentCode] || { icon: "❓", desc: "Unknown" };
 
-	// === 16-DAY Forecast ===
-	let longTermHtml = '';
-	sixteenDayData.list.forEach(entry => {
-		const icon = `https://openweathermap.org/img/wn/${entry.weather[0].icon}@2x.png`;
-		longTermHtml += `
-            <div class="forecast-card">
-                <p class="weather-text">${new Date(entry.dt * 1000).toDateString()}</p>
-                <img src="${icon}" alt="${entry.weather[0].description}">
-                <p class="weather-text">${Math.round(entry.temp.day)}°C</p>
-                <p class="weather-text">${entry.weather[0].description}</p>
-            </div>`;
-	});
+  // hourly (24h)
+  let hourlyHtml = "";
+  for (let i = 0; i < Math.min(24, timesHourly.length); i++) {
+    const t = new Date(timesHourly[i]);
+    const hourLabel = t.getHours().toString().padStart(2, "0") + ":00";
+    const temp = tempsHourly[i] != null ? Math.round(tempsHourly[i]) : "N/A";
+    const icon = weatherCodeMap[codesHourly[i]]?.icon || "❓";
+    hourlyHtml += `<div class="hourly-item"><p>${icon}</p><p>${temp}°C</p><p>${hourLabel}</p></div>`;
+  }
 
-	// === Final Injected Layout ===
-	weatherContainer.innerHTML = `
-        ${dailyHtml}
-        <div id="hourly-forecast" class="scroll-container">
-            ${hourlyHtml}
-        </div>
-        <div class="scroll-controls">
-            <button id="hourly-scroll-left">⟸</button>
-            <button id="hourly-scroll-right">⟹</button>
-        </div>
-        <hr id="forecast-break">
-        <div id="forecast-container">
-            <h2>5-Day Forecast</h2>
-            <br>
-            <div id="forecast-cards" class="scroll-container">
-                ${fiveDayHtml}
-            </div>
-            <div class="scroll-controls">
-                <button id="scroll-left">⟸</button>
-                <button id="scroll-right">⟹</button>
-            </div>
-        </div>
-        <hr id="forecast-break-2">
-        <div id="long-term-forecast-container">
-            <h2>16-Day Forecast</h2>
-            <div id="long-term-forecast" class="scroll-container">
-                ${longTermHtml}
-            </div>
-            <div class="scroll-controls">
-                <button id="long-term-scroll-left">⟸</button>
-                <button id="long-term-scroll-right">⟹</button>
-            </div>
-        </div>`;
+  // 5-day
+  let fiveDayHtml = "";
+  for (let i = 0; i < Math.min(5, timesDaily.length); i++) {
+    const dt = new Date(timesDaily[i]);
+    const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
+    const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
+    const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
+    const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
+    fiveDayHtml += `<div class="forecast-card"><p>${dt.toDateString()}</p><p>${icon}</p><p>Max: ${max}°C</p><p>Min: ${min}°C</p><p>${desc}</p></div>`;
+  }
 
-	// ✅ Reveal container *after* injecting content
-	weatherContainer.classList.remove("hidden");
+  // 16-day
+  let longHtml = "";
+  for (let i = 0; i < Math.min(16, timesDaily.length); i++) {
+    const dt = new Date(timesDaily[i]);
+    const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
+    const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
+    const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
+    const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
+    longHtml += `<div class="forecast-card"><p>${dt.toDateString()}</p><p>${icon}</p><p>Max: ${max}°C</p><p>Min: ${min}°C</p><p>${desc}</p></div>`;
+  }
 
-	// === Add Hourly Timelines to Each 5-Day Forecast Card ===
-	function enhanceFiveDayForecastCards(hourlyList) {
-		const forecastCards = document.querySelectorAll('#forecast-cards .forecast-card');
+  // Inject
+  if ($id("temp-div")) $id("temp-div").innerHTML = `<p>${currentTemp}°C</p>`;
+  if ($id("weather-info")) $id("weather-info").innerHTML = `<p>${currentMeta.desc}</p>`;
+  if ($id("hourly-forecast")) $id("hourly-forecast").innerHTML = hourlyHtml;
+  if ($id("forecast-cards")) $id("forecast-cards").innerHTML = fiveDayHtml;
+  if ($id("long-term-forecast")) $id("long-term-forecast").innerHTML = longHtml;
 
-		forecastCards.forEach(card => {
-			const dateText = card.querySelector('p').textContent;
-			const cardDate = new Date(dateText);
-			const cardDay = cardDate.getDate();
-
-			// Filter hourly data matching this day
-			const hourlyForDay = hourlyList.filter(item => {
-				const itemDate = new Date(item.dt * 1000);
-				return itemDate.getDate() === cardDay;
-			});
-
-			if (hourlyForDay.length > 0) {
-				// Build hourly strip with times and icons
-				const scrollStrip = document.createElement('div');
-				scrollStrip.className = 'mini-hourly-strip';
-				scrollStrip.style.cssText = 'display: flex; overflow-x: auto; gap: 8px; padding-top: 8px; margin-top: 8px; border-top: 1px solid rgba(255,255,255,0.2);';
-
-				hourlyForDay.forEach(hourItem => {
-					const hour = new Date(hourItem.dt * 1000);
-					const readableHour = hour.toLocaleTimeString('en-US', {
-						hour: 'numeric',
-						hour12: true
-					});
-					const icon = `https://openweathermap.org/img/wn/${hourItem.weather[0].icon}.png`;
-
-					const hourBlock = document.createElement('div');
-					hourBlock.style.cssText = 'flex: 0 0 auto; text-align: center; min-width: 60px;';
-					hourBlock.innerHTML = `
-                    <img src="${icon}" alt="" style="width: 40px; height: 40px;">
-                    <p style="font-size: 0.8em;">${readableHour}</p>
-                `;
-					scrollStrip.appendChild(hourBlock);
-				});
-
-				card.appendChild(scrollStrip);
-			}
-		});
-	}
-
-	// === Call After Weather is Rendered ===
-	setTimeout(() => {
-		if (typeof hourlyData !== 'undefined') {
-			enhanceFiveDayForecastCards(hourlyData.list);
-		}
-	}, 100);
-
-	// === Scroll Buttons for HOURLY / Daily Forecast ===
-	document.getElementById("hourly-scroll-left").addEventListener("click", () => {
-		document.getElementById("hourly-forecast").scrollBy({
-			left: -300,
-			behavior: "smooth"
-		});
-	});
-
-	document.getElementById("hourly-scroll-right").addEventListener("click", () => {
-		document.getElementById("hourly-forecast").scrollBy({
-			left: 300,
-			behavior: "smooth"
-		});
-	});
-
-	// Example for the 5-Day forecast
-	document.getElementById("scroll-left").addEventListener("click", () => {
-		document.getElementById("forecast-cards").scrollBy({
-			left: -300,
-			behavior: "smooth"
-		});
-	});
-
-	document.getElementById("scroll-right").addEventListener("click", () => {
-		document.getElementById("forecast-cards").scrollBy({
-			left: 300,
-			behavior: "smooth"
-		});
-	});
-
-	// === Scroll Buttons for 16-Day Forecast ===
-	document.getElementById("long-term-scroll-left").addEventListener("click", () => {
-		document.getElementById("long-term-forecast").scrollBy({
-			left: -300,
-			behavior: "smooth"
-		});
-	});
-
-	document.getElementById("long-term-scroll-right").addEventListener("click", () => {
-		document.getElementById("long-term-forecast").scrollBy({
-			left: 300,
-			behavior: "smooth"
-		});
-	});
-
-
-	// === Add Mini Horizontal Scroll Arrows to Each 5-Day Forecast Card ===
-	setTimeout(() => {
-		const forecastCards = document.querySelectorAll("#forecast-cards .forecast-card");
-
-		forecastCards.forEach((card, index) => {
-			// Create scrollable inner content (if not already present)
-			let innerScroll = card.querySelector(".mini-hourly-strip");
-			if (!innerScroll) {
-				const existingContent = card.innerHTML;
-				card.innerHTML = `
-                <div class="mini-hourly-strip">
-                    ${existingContent}
-                </div>
-            `;
-			}
-
-			// Create arrow buttons for horizontal scrolling (if not already present)
-			let miniScrollControls = card.querySelector(".mini-scroll-controls");
-			if (!miniScrollControls) {
-				card.innerHTML += `
-                <div class="mini-scroll-controls">
-                    <button class="mini-scroll-left">⟸</button>
-                    <button class="mini-scroll-right">⟹</button>
-                </div>
-            `;
-			}
-		});
-
-		// Add scroll behavior for each card (horizontal scrolling) using same logic as big arrows
-		document.querySelectorAll(".mini-scroll-left").forEach((btn, i) => {
-			btn.addEventListener("click", () => {
-				const scrollContainer = document.querySelectorAll(".mini-hourly-strip")[i];
-				scrollContainer.scrollBy({
-					left: -100,
-					behavior: "smooth"
-				});
-			});
-		});
-
-		document.querySelectorAll(".mini-scroll-right").forEach((btn, i) => {
-			btn.addEventListener("click", () => {
-				const scrollContainer = document.querySelectorAll(".mini-hourly-strip")[i];
-				scrollContainer.scrollBy({
-					left: 100,
-					behavior: "smooth"
-				});
-			});
-		});
-	}, 100); // Delay to make sure DOM is ready
-
-	// Fade-in Animation Class
-	const elementsToFadeIn = weatherContainer.querySelectorAll('h2, .forecast-item, .forecast-card, .hourly-item');
-	elementsToFadeIn.forEach(element => {
-		element.classList.add('fade-in');
-	});
+  showWeatherContainer();
 }
 
-// CSS (Make sure to add this to your styles)
-const styles = `
-    .weather-text {
-        font-size: 1.1rem;
-        text-align: center;
-    }
-
-    .scroll-container {
-        display: flex;
-        overflow-x: auto;
-        gap: 10px;
-        scroll-behavior: smooth;
-        scrollbar-width: none; /* Removes scrollbar in Firefox */
-    }
-
-    .scroll-container::-webkit-scrollbar {
-        display: none; /* Removes scrollbar in Chrome, Safari, Edge */
-    }
-
-    .scroll-controls {
-        text-align: center;
-        margin-top: 10px;
-    }
-
-    .scroll-controls button {
-        background: none;
-        border: none;
-        font-size: 1.5em;
-        cursor: pointer;
-    }
-`;
-
-// Append styles to the document
-const styleSheet = document.createElement("style");
-styleSheet.innerText = styles;
-document.head.appendChild(styleSheet);
-
-
-// Scroll Functionality for Forecast Sections
-function setupScrollButtons(containerId, leftBtnId, rightBtnId) {
-	const container = document.getElementById(containerId);
-	const leftBtn = document.getElementById(leftBtnId);
-	const rightBtn = document.getElementById(rightBtnId);
-
-	if (!container || !leftBtn || !rightBtn) return; // Exit if elements are missing
-
-	const scrollAmount = 200; // Adjust for smooth scrolling
-
-	// Scroll left
-	leftBtn.addEventListener("click", () => {
-		container.scrollBy({
-			left: -scrollAmount,
-			behavior: "smooth"
-		});
-	});
-
-	// Scroll right
-	rightBtn.addEventListener("click", () => {
-		container.scrollBy({
-			left: scrollAmount,
-			behavior: "smooth"
-		});
-	});
-
-	// Hide/show buttons based on scroll position
-	function toggleScrollButtons() {
-		leftBtn.style.visibility = container.scrollLeft > 0 ? "visible" : "hidden";
-		rightBtn.style.visibility = container.scrollLeft + container.clientWidth < container.scrollWidth ? "visible" : "hidden";
-	}
-
-	container.addEventListener("scroll", toggleScrollButtons);
-	toggleScrollButtons(); // Initial check
-}
-
-// Activate Scroll for Hourly, 5-Day & 16-Day Forecasts
-document.addEventListener("DOMContentLoaded", () => {
-	setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
-	setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
-	setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
+// ====== Hook into your city search ======
+// after your fetchCityData(cityName) or map click resolves:
+document.addEventListener("citySelected", (e) => {
+  const city = e.detail?.city;
+  if (city) getWeather(city);
 });
 
+// Expose
+window.getWeather = getWeather;
+window.fetchWeather = fetchWeather;
 
 
 // Fetch Hotels using Overpass API
