@@ -1594,7 +1594,7 @@ async function fetchTopHeadlinesByCountry(countryName) {
         </div>
     `).join("") + `
         <div id="attribution">
-            <p>Powered by GNews, NewsData, NewsAPI, WorldNewsAPI, Mediastack, Guardian</p>
+            <p>Powered by GNews, NewsData, NewsAPI, TheNewsAPI, WorldNewsAPI, Currents, Mediastack, Guardian</p>
         </div>
     `;
 
