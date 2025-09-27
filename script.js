@@ -2536,16 +2536,7 @@ async function fetchCityData() {
 	fetchNearbyAmenities(lat, lon);  // Amenities table
 	fadeInContainers();              // Animate containers
 }
-
-/**
- * Open-Meteo Weather — merged, robust, drop-in
- * - Call getWeather("London") or fetchWeather(lat, lon)
- * - Renders: current, hourly (24h), 5-day cards with mini-hourly strips, 16-day
- * - Adds scroll buttons and mini-strip arrows
- * - Defensive checks so it won't crash if data/DOM missing
- */
-
-// ====== weather code map (single source) ======
+// ====== Weather Code Map ======
 const weatherCodeMap = {
   0: { icon: "☀️", desc: "Clear sky" },
   1: { icon: "🌤️", desc: "Mainly clear" },
@@ -2570,33 +2561,37 @@ const weatherCodeMap = {
   99: { icon: "⛈️", desc: "Thunderstorm with heavy hail" }
 };
 
-// small helper
 const $id = (id) => document.getElementById(id);
 
-// ====== Public: getWeather(city) -> uses Nominatim then fetchWeather ======
-async function getWeather(city) {
-  if (!city || !String(city).trim()) {
-    return alert("Please enter a city");
+// ====== Show Weather Container ======
+function showWeatherContainer() {
+  const wc = $id("weather-container");
+  if (wc) {
+    wc.classList.remove("hidden");
+    wc.classList.add("fade-in");
   }
+}
 
+// ====== Public: getWeather(city) ======
+async function getWeather(city) {
+  if (!city || !String(city).trim()) return;
   try {
     const nomUrl = `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(city)}`;
     const res = await fetch(nomUrl, { headers: { "User-Agent": "SnapshotLocation/1.0 (your-email@example.com)" } });
     const loc = await res.json();
-    if (!Array.isArray(loc) || loc.length === 0) return alert("City not found");
+    if (!Array.isArray(loc) || loc.length === 0) return;
     const { lat, lon } = loc[0];
     await fetchWeather(lat, lon);
   } catch (err) {
     console.error("Geocoding error:", err);
-    alert("Could not resolve city to coordinates.");
   }
+  showWeatherContainer();
 }
 
 // ====== Public: fetchWeather(lat, lon) ======
 async function fetchWeather(lat, lon) {
   try {
     if (lat == null || lon == null) throw new Error("Missing coordinates");
-    // request hourly & daily out to 16 days, include current_weather and timezone=auto
     const url = `https://api.open-meteo.com/v1/forecast?latitude=${encodeURIComponent(lat)}&longitude=${encodeURIComponent(lon)}&hourly=temperature_2m,weathercode&daily=temperature_2m_max,temperature_2m_min,weathercode&current_weather=true&forecast_days=16&timezone=auto`;
     const resp = await fetch(url);
     const data = await resp.json();
@@ -2607,198 +2602,85 @@ async function fetchWeather(lat, lon) {
     const wc = $id("weather-container");
     if (wc) wc.innerHTML = `<p>Weather data not available.</p>`;
   }
+  showWeatherContainer();
 }
 
-// ====== Render function (single place to update UI) ======
+// ====== Render Function ======
 function displayWeatherData(data) {
   const wc = $id("weather-container");
-  if (!wc) {
-    console.warn("No #weather-container in DOM — cannot render weather UI.");
-    return;
-  }
+  if (!wc) return;
 
-  // defensive extracts
   const hourly = data.hourly || {};
   const daily = data.daily || {};
-  const timesHourly = Array.isArray(hourly.time) ? hourly.time : [];
-  const tempsHourly = Array.isArray(hourly.temperature_2m) ? hourly.temperature_2m : [];
-  const codesHourly = Array.isArray(hourly.weathercode) ? hourly.weathercode : [];
-  const timesDaily = Array.isArray(daily.time) ? daily.time : [];
-  const maxDaily = Array.isArray(daily.temperature_2m_max) ? daily.temperature_2m_max : [];
-  const minDaily = Array.isArray(daily.temperature_2m_min) ? daily.temperature_2m_min : [];
-  const codesDaily = Array.isArray(daily.weathercode) ? daily.weathercode : [];
 
-  // current values (prefer current_weather)
-  const currentTemp = (data.current_weather && data.current_weather.temperature != null)
+  const timesHourly = hourly.time || [];
+  const tempsHourly = hourly.temperature_2m || [];
+  const codesHourly = hourly.weathercode || [];
+
+  const timesDaily = daily.time || [];
+  const maxDaily = daily.temperature_2m_max || [];
+  const minDaily = daily.temperature_2m_min || [];
+  const codesDaily = daily.weathercode || [];
+
+  // current
+  const currentTemp = (data.current_weather?.temperature != null)
     ? Math.round(data.current_weather.temperature)
     : (tempsHourly[0] != null ? Math.round(tempsHourly[0]) : "N/A");
-  const currentCode = (data.current_weather && data.current_weather.weathercode != null)
-    ? data.current_weather.weathercode
-    : (codesHourly[0] != null ? codesHourly[0] : null);
+  const currentCode = data.current_weather?.weathercode ?? codesHourly[0];
   const currentMeta = weatherCodeMap[currentCode] || { icon: "❓", desc: "Unknown" };
 
-  // build hourly (next 24 if available)
-  const hourlyCount = Math.min(24, timesHourly.length);
+  // hourly (24h)
   let hourlyHtml = "";
-  for (let i = 0; i < hourlyCount; i++) {
+  for (let i = 0; i < Math.min(24, timesHourly.length); i++) {
     const t = new Date(timesHourly[i]);
     const hourLabel = t.getHours().toString().padStart(2, "0") + ":00";
     const temp = tempsHourly[i] != null ? Math.round(tempsHourly[i]) : "N/A";
     const icon = weatherCodeMap[codesHourly[i]]?.icon || "❓";
-    hourlyHtml += `<div class="hourly-item"><p style="font-size:1.2rem">${icon}</p><p class="weather-text">${temp}°C</p><p class="weather-text">${hourLabel}</p></div>`;
+    hourlyHtml += `<div class="hourly-item"><p>${icon}</p><p>${temp}°C</p><p>${hourLabel}</p></div>`;
   }
 
-  // build 5-day with mini-hourly strips
-  const five = Math.min(5, timesDaily.length);
+  // 5-day
   let fiveDayHtml = "";
-  for (let i = 0; i < five; i++) {
+  for (let i = 0; i < Math.min(5, timesDaily.length); i++) {
     const dt = new Date(timesDaily[i]);
     const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
     const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
-    const code = codesDaily[i];
-    const icon = weatherCodeMap[code]?.icon || "❓";
-    const desc = weatherCodeMap[code]?.desc || "Unknown";
-
-    // mini-hourly strip for day i
-    const dayNum = dt.getDate();
-    let miniHtml = "";
-    for (let j = 0; j < timesHourly.length; j++) {
-      const ht = new Date(timesHourly[j]);
-      if (ht.getDate() === dayNum) {
-        const hTemp = tempsHourly[j] != null ? Math.round(tempsHourly[j]) : "N/A";
-        const hIcon = weatherCodeMap[codesHourly[j]]?.icon || "❓";
-        const hLabel = ht.getHours().toString().padStart(2, "0") + ":00";
-        miniHtml += `<div class="mini-hour-block"><p style="font-size:1.1rem">${hIcon}</p><p class="weather-text">${hTemp}°C</p><p class="weather-text">${hLabel}</p></div>`;
-      }
-    }
-
-    fiveDayHtml += `
-      <div class="forecast-card">
-        <p class="weather-text">${dt.toDateString()}</p>
-        <p style="font-size:1.6rem">${icon}</p>
-        <p class="weather-text">Max: ${max}°C</p>
-        <p class="weather-text">Min: ${min}°C</p>
-        <p class="weather-text">${desc}</p>
-        <div class="mini-hourly-strip">${miniHtml || '<div style="padding:8px">No hourly data</div>'}</div>
-      </div>`;
+    const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
+    const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
+    fiveDayHtml += `<div class="forecast-card"><p>${dt.toDateString()}</p><p>${icon}</p><p>Max: ${max}°C</p><p>Min: ${min}°C</p><p>${desc}</p></div>`;
   }
 
-  // 16-day long term (limit to available length)
-  const longCount = Math.min(timesDaily.length, 16);
+  // 16-day
   let longHtml = "";
-  for (let i = 0; i < longCount; i++) {
+  for (let i = 0; i < Math.min(16, timesDaily.length); i++) {
     const dt = new Date(timesDaily[i]);
     const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
     const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
-    const code = codesDaily[i];
-    const icon = weatherCodeMap[code]?.icon || "❓";
-    const desc = weatherCodeMap[code]?.desc || "Unknown";
-    longHtml += `
-      <div class="forecast-card">
-        <p class="weather-text">${dt.toDateString()}</p>
-        <p style="font-size:1.4rem">${icon}</p>
-        <p class="weather-text">Max: ${max}°C</p>
-        <p class="weather-text">Min: ${min}°C</p>
-        <p class="weather-text">${desc}</p>
-      </div>`;
+    const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
+    const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
+    longHtml += `<div class="forecast-card"><p>${dt.toDateString()}</p><p>${icon}</p><p>Max: ${max}°C</p><p>Min: ${min}°C</p><p>${desc}</p></div>`;
   }
 
-  // Inject into DOM (prefer existing elements, otherwise full layout)
-  if ($id("temp-div")) $id("temp-div").innerHTML = `<p class="weather-text">${currentTemp}°C</p>`;
-  if ($id("weather-info")) $id("weather-info").innerHTML = `<p class="weather-text">${currentMeta.desc}</p>`;
+  // Inject
+  if ($id("temp-div")) $id("temp-div").innerHTML = `<p>${currentTemp}°C</p>`;
+  if ($id("weather-info")) $id("weather-info").innerHTML = `<p>${currentMeta.desc}</p>`;
   if ($id("hourly-forecast")) $id("hourly-forecast").innerHTML = hourlyHtml;
   if ($id("forecast-cards")) $id("forecast-cards").innerHTML = fiveDayHtml;
   if ($id("long-term-forecast")) $id("long-term-forecast").innerHTML = longHtml;
 
-  // If the page expects a single container injection, create it (backwards-compatible)
-  if (!$id("hourly-forecast") || !$id("forecast-cards") || !$id("long-term-forecast")) {
-    wc.innerHTML = `
-      <h2>Daily Forecast</h2>
-      <p style="font-size:3rem; text-align:center">${currentMeta.icon}</p>
-      <div id="temp-div"><p class="weather-text">${currentTemp}°C</p></div>
-      <div id="weather-info"><p class="weather-text">${currentMeta.desc}</p></div>
-      <div id="hourly-forecast" class="scroll-container">${hourlyHtml}</div>
-      <div class="scroll-controls"><button id="hourly-scroll-left">⟸</button><button id="hourly-scroll-right">⟹</button></div>
-      <hr>
-      <h2>5-Day Forecast</h2>
-      <div id="forecast-cards" class="scroll-container">${fiveDayHtml}</div>
-      <div class="scroll-controls"><button id="scroll-left">⟸</button><button id="scroll-right">⟹</button></div>
-      <hr>
-      <h2>16-Day Forecast</h2>
-      <div id="long-term-forecast" class="scroll-container">${longHtml}</div>
-      <div class="scroll-controls"><button id="long-term-scroll-left">⟸</button><button id="long-term-scroll-right">⟹</button></div>
-    `;
-  }
-
-  // Reveal container if hidden
-  wc.classList.remove("hidden");
-
-  // Wire main scroll buttons (safe - no-op if missing)
-  setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
-  setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
-  setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
-
-  // Add mini-strip controls for each 5-day card (create arrow buttons under each mini strip)
-  setTimeout(() => {
-    document.querySelectorAll('.forecast-card .mini-hourly-strip').forEach((strip) => {
-      // guard against duplicates
-      const next = strip.nextElementSibling;
-      if (next && next.classList && next.classList.contains('mini-scroll-controls')) return;
-
-      const controls = document.createElement('div');
-      controls.className = 'mini-scroll-controls';
-      controls.style.textAlign = 'center';
-      controls.style.marginTop = '6px';
-
-      const left = document.createElement('button');
-      left.textContent = '⟸';
-      const right = document.createElement('button');
-      right.textContent = '⟹';
-
-      [left, right].forEach(b => {
-        b.style.background = 'none';
-        b.style.border = 'none';
-        b.style.cursor = 'pointer';
-        b.style.margin = '0 6px';
-        b.style.fontSize = '1rem';
-      });
-
-      controls.appendChild(left);
-      controls.appendChild(right);
-      strip.parentNode.insertBefore(controls, strip.nextSibling);
-
-      left.addEventListener('click', () => strip.scrollBy({ left: -120, behavior: 'smooth' }));
-      right.addEventListener('click', () => strip.scrollBy({ left: 120, behavior: 'smooth' }));
-    });
-  }, 60);
-
-  // Optional fade-in
-  wc.querySelectorAll('h2, .forecast-card, .hourly-item, .mini-hourly-strip').forEach(el => el.classList.add('fade-in'));
+  showWeatherContainer();
 }
 
-// ====== Helper to safely wire scroll buttons ======
-function setupScrollButtons(containerId, leftBtnId, rightBtnId) {
-  const container = $id(containerId);
-  const leftBtn = $id(leftBtnId);
-  const rightBtn = $id(rightBtnId);
-  if (!container || !leftBtn || !rightBtn) return;
+// ====== Hook into your city search ======
+// after your fetchCityData(cityName) or map click resolves:
+document.addEventListener("citySelected", (e) => {
+  const city = e.detail?.city;
+  if (city) getWeather(city);
+});
 
-  const scrollAmount = 300;
-  leftBtn.onclick = () => container.scrollBy({ left: -scrollAmount, behavior: 'smooth' });
-  rightBtn.onclick = () => container.scrollBy({ left: scrollAmount, behavior: 'smooth' });
-
-  function toggle() {
-    leftBtn.style.visibility = container.scrollLeft > 0 ? "visible" : "hidden";
-    rightBtn.style.visibility = container.scrollLeft + container.clientWidth < container.scrollWidth ? "visible" : "hidden";
-  }
-  container.addEventListener('scroll', toggle);
-  toggle();
-}
-
-// expose for backwards compatibility
+// Expose
 window.getWeather = getWeather;
 window.fetchWeather = fetchWeather;
-
 
 
 // Fetch Hotels using Overpass API
