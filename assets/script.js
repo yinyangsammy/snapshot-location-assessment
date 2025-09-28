@@ -2843,6 +2843,225 @@ function displayWeatherData(data) {
 }
 
 
+// Weather Container
+
+
+/**
+ * Displays the current weather for the city, including temperature, description, and icon.
+ * @param {Object} data - The weather data object.
+ */
+
+function displayWeather(data) {
+  const tempDivInfo = document.getElementById("temp-div");
+  const weatherInfoDiv = document.getElementById("weather-info");
+  const weatherIcon = document.getElementById("weather-icon");
+  const hourlyForecastDiv = document.getElementById("hourly-forecast");
+
+  // Clear previous content
+  weatherInfoDiv.innerHTML = "";
+  hourlyForecastDiv.innerHTML = "";
+  tempDivInfo.innerHTML = "";
+
+  const cityName = data.name;
+  const temperature = Math.round(data.main.temp - 273.15); // Convert to Celsius
+  const description = data.weather[0].description;
+  const iconCode = data.weather[0].icon;
+ 
+
+  const temperatureHTML = `<p>${temperature}°C</p>`;
+  const weatherHtml = `<p>${cityName}</p><p>${description}</p>`;
+
+  tempDivInfo.innerHTML = temperatureHTML;
+  weatherInfoDiv.innerHTML = weatherHtml;
+  weatherIcon.src = iconUrl;
+  weatherIcon.alt = description;
+
+  showImage();
+}
+
+/**
+ * Displays the hourly forecast for the next 24 hours based on the fetched data.
+ * @param {Array} hourlyData - Array of hourly weather data.
+ */
+
+function displayHourlyForecast(hourlyData) {
+  const hourlyForecastDiv = document.getElementById("hourly-forecast");
+  hourlyForecastDiv.innerHTML = ""; // Clear previous content
+
+  const next24Hours = hourlyData.slice(0, 8); // Display the next 24 hours (3-hour intervals)
+
+  next24Hours.forEach((item) => {
+    const dateTime = new Date(item.dt * 1000); // Convert timestamp to milliseconds
+    const hour = dateTime.getHours();
+    const temperature = Math.round(item.main.temp - 273.15); // Convert to Celsius
+    const iconCode = item.weather[0].icon;
+   
+
+    const hourlyItemHtml = `
+            <div class="hourly-item">
+                <span>${hour}:00</span>
+                <img src="${iconUrl}" alt="Hourly Weather Icon">
+                <span>${temperature}°C</span>
+            </div>
+        `;
+
+    hourlyForecastDiv.innerHTML += hourlyItemHtml;
+  });
+
+  // Hide scrollbar for hourly forecast using CSS
+  hourlyForecastDiv.style.overflowX = "hidden";
+  hourlyForecastDiv.style.scrollBehavior = "smooth";
+  hourlyForecastDiv.style.msOverflowStyle = "none"; // For Internet Explorer and Edge
+  hourlyForecastDiv.style.scrollbarWidth = "none"; // For Firefox
+}
+
+/**
+ * Displays the 5-day weather forecast based on the fetched data.
+ * @param {Array} hourlyData - Array of hourly weather data.
+ */
+
+function displayFiveDayForecast(hourlyData) {
+  const forecastCards = document.getElementById("forecast-cards");
+  forecastCards.innerHTML = ""; // Clear old forecast cards
+
+  const dailyGroups = {};
+
+  // Group forecasts by date (YYYY-MM-DD)
+  hourlyData.forEach((item) => {
+    const date = new Date(item.dt * 1000);
+    const dateKey = date.toISOString().split("T")[0];
+    if (!dailyGroups[dateKey]) dailyGroups[dateKey] = [];
+    dailyGroups[dateKey].push(item);
+  });
+
+  // Get the first 5 days including today
+  const fiveDays = Object.keys(dailyGroups).slice(0, 5);
+
+  fiveDays.forEach((dateKey) => {
+    const readableDay = new Date(dateKey).toLocaleDateString("en-US", {
+      weekday: "short",
+    });
+
+    const card = document.createElement("div");
+    card.classList.add("forecast-card", "vertical-scroll-card");
+
+    const title = document.createElement("p");
+    title.innerHTML = `<strong>${readableDay}</strong>`;
+    card.appendChild(title);
+
+    const scrollWrapper = document.createElement("div");
+    scrollWrapper.classList.add("inner-scroll");
+
+    // Scroll up/down buttons
+    const upBtn = document.createElement("button");
+    upBtn.innerHTML = "▲";
+    upBtn.className = "scroll-up";
+    upBtn.addEventListener("click", () => {
+      scrollWrapper.scrollBy({
+        top: -100,
+        behavior: "smooth",
+      });
+    });
+
+    const downBtn = document.createElement("button");
+    downBtn.innerHTML = "▼";
+    downBtn.className = "scroll-down";
+    downBtn.addEventListener("click", () => {
+      scrollWrapper.scrollBy({
+        top: 100,
+        behavior: "smooth",
+      });
+    });
+
+    dailyGroups[dateKey].forEach((item) => {
+      const time = new Date(item.dt * 1000).toLocaleTimeString("en-US", {
+        hour: "2-digit",
+        minute: "2-digit",
+      });
+      const temp = Math.round(item.main.temp - 273.15);
+      const desc = item.weather[0].description;
+      const icon = item.weather[0].icon;
+  
+
+      const hourBlock = document.createElement("div");
+      hourBlock.classList.add("hour-block");
+      hourBlock.innerHTML = `
+                <p><strong>${time}</strong></p>
+                <img src="${iconUrl}" alt="${desc}" height="30px" width="30px">
+                <p>${temp}°C</p>
+                <p>${desc}</p>
+            `;
+
+      scrollWrapper.appendChild(hourBlock);
+    });
+
+    // Assemble everything
+    card.appendChild(upBtn);
+    card.appendChild(scrollWrapper);
+    card.appendChild(downBtn);
+    forecastCards.appendChild(card);
+  });
+}
+
+/**
+ * Makes the weather icon visible once it's loaded.
+ */
+
+function showImage() {
+  const weatherIcon = document.getElementById("weather-icon");
+  weatherIcon.style.display = "block"; // Make the image visible once it's loaded
+}
+
+// Arrow scrolling for five-day forecast
+const scrollLeftButton = document.getElementById("scroll-left");
+const scrollRightButton = document.getElementById("scroll-right");
+const forecastCards = document.getElementById("forecast-cards");
+
+scrollLeftButton.addEventListener("click", () => {
+  forecastCards.scrollBy({
+    left: -150,
+    behavior: "smooth",
+  });
+});
+
+scrollRightButton.addEventListener("click", () => {
+  forecastCards.scrollBy({
+    left: 150,
+    behavior: "smooth",
+  });
+});
+
+/**
+ * Scrolls the hourly forecast container left or right when the corresponding buttons are clicked.
+ */
+
+// Arrow scrolling for hourly forecast
+const hourlyScrollLeftButton = document.getElementById("hourly-scroll-left");
+const hourlyScrollRightButton = document.getElementById("hourly-scroll-right");
+const hourlyForecast = document.getElementById("hourly-forecast");
+
+/**
+ * Scrolls the hourly forecast left by 150px.
+ */
+
+hourlyScrollLeftButton.addEventListener("click", () => {
+  hourlyForecast.scrollBy({
+    left: -150,
+    behavior: "smooth",
+  });
+});
+
+/**
+ * Scrolls the hourly forecast right by 150px.
+ */
+hourlyScrollRightButton.addEventListener("click", () => {
+  hourlyForecast.scrollBy({
+    left: 150,
+    behavior: "smooth",
+  });
+});
+
+
 
 // Add scrolling functionality to the 16-day forecast
 document
