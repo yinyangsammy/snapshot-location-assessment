@@ -1523,229 +1523,90 @@ document.querySelectorAll(".allPaths").forEach(e => {
 	});
 });
 
-/**
- * Fetch and display news headlines for a given country using the worker.
- * @param {string} countryName - Country or topic to fetch news for
- */
-/**
- * Fetch and display news headlines for a given country
- * Combines worker API + free RSS feeds
- */
+// ==========================
+// Fetch and display news headlines (Worker-proxy only)
+// ==========================
 async function fetchTopHeadlinesByCountry(countryName) {
-  const headlinesContainer = document.getElementById("headlines");
-  const nameqContainer = document.getElementById("nameq");
+    const headlinesContainer = document.getElementById("headlines");
+    const nameqContainer = document.getElementById("nameq");
 
-  if (!headlinesContainer) {
-    console.warn("No #headlines container in DOM");
-    return;
-  }
+    if (nameqContainer) nameqContainer.innerText = countryName;
+    headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
-  if (nameqContainer) nameqContainer.innerText = countryName;
-  headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
+    let articles = [];
 
-  const workerUrl = `https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`;
+    try {
+        const response = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`);
+        if (!response.ok) throw new Error(`Worker returned status ${response.status}`);
 
-  try {
-    // --- Fetch from Worker (multi-API) ---
-    const workerPromise = fetch(workerUrl).then(r => r.json());
+        const data = await response.json();
 
-    // --- Extra RSS feeds (free, no key) ---
-    const rssFeeds = [
-      { name: "BBC", url: "https://feeds.bbci.co.uk/news/rss.xml" },
-      { name: "Reuters", url: "https://feeds.reuters.com/reuters/topNews" },
-      { name: "MSN", url: "https://www.msn.com/en-us/feed" },
-      { name: "Yahoo", url: "https://www.yahoo.com/news/rss" }
-    ];
+        // Ensure at least one article always
+        if (data && Array.isArray(data.articles) && data.articles.length > 0) {
+            articles = data.articles.map(article => ({
+                title: article.title || "No title",
+                description: article.description || article.content || "No description",
+                url: article.url || "#",
+                source: article.source || "Unknown",
+                content: article.content || ""
+            }));
+        } else {
+            // Dummy fallback if worker returns empty
+            articles.push({ title: "No news available", description: "Please try again later.", url: "#", source: "None", content: "" });
+        }
+    } catch (err) {
+        console.warn("Worker proxy failed:", err);
+        // Always push a dummy article to ensure UI never breaks
+        articles.push({ title: "No news available", description: "Please try again later.", url: "#", source: "None", content: "" });
+    }
 
-    const rssPromises = rssFeeds.map(feed =>
-      fetch(feed.url)
-        .then(r => r.text())
-        .then(xml => parseRSS(xml, feed.name))
-        .catch(() => [])
-    );
-
-    // Wait for worker + RSS in parallel
-    const [workerData, ...rssResults] = await Promise.all([workerPromise, ...rssPromises]);
-
-    // Worker articles
-    let articles = workerData.articles || [];
-
-    // Add RSS results
-    rssResults.forEach(list => {
-      articles = articles.concat(list);
+    // Deduplicate by URL
+    const uniqueArticles = [];
+    const seenUrls = new Set();
+    articles.forEach(article => {
+        if (article.url && !seenUrls.has(article.url)) {
+            seenUrls.add(article.url);
+            uniqueArticles.push(article);
+        }
     });
 
-    if (!articles.length) {
-      headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
-      return;
+    // Prioritize articles containing the country name
+    const countryRegex = new RegExp(countryName, "i");
+    uniqueArticles.sort((a, b) => {
+        const aMatch = countryRegex.test(`${a.title} ${a.description} ${a.content}`) ? 1 : 0;
+        const bMatch = countryRegex.test(`${b.title} ${b.description} ${b.content}`) ? 1 : 0;
+        return bMatch - aMatch;
+    });
+
+    // Trim description to max 5 sentences
+    function trimToFiveSentences(text) {
+        if (!text) return "No description available";
+        const sentences = text.split(". ").slice(0, 5).join(". ");
+        return sentences.length < text.length ? sentences + "..." : sentences;
     }
 
-    // Boost relevance by country match
-    const sortedArticles = boostRelevance(countryName, articles);
-
-    // Render
-    renderArticles(sortedArticles, headlinesContainer);
-
-  } catch (err) {
-    console.error("Error fetching news:", err);
-    headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
-  }
-}
-
-/**
- * Parse RSS feed into {title, description, url, source}
- */
-function parseRSS(xmlText, sourceName) {
-  const items = [...xmlText.matchAll(/<item>[\s\S]*?<title>(.*?)<\/title>[\s\S]*?<link>(.*?)<\/link>[\s\S]*?(?:<description>(.*?)<\/description>)?/g)];
-  return items.map(m => ({
-    title: decodeHTMLEntities(m[1]),
-    url: m[2],
-    description: m[3] ? decodeHTMLEntities(m[3].replace(/<[^>]+>/g, "")) : "",
-    source: sourceName,
-    content: ""
-  }));
-}
-
-/**
- * Decode HTML entities in RSS text
- */
-function decodeHTMLEntities(str) {
-  const txt = document.createElement("textarea");
-  txt.innerHTML = str;
-  return txt.value;
-}
-
-/**
- * Boost relevance (same as before)
- */
-function boostRelevance(countryName, articles) {
-  const info = countryInfo[countryName] || { aliases: [], capital: "", language: "" };
-  const aliases = [countryName, ...info.aliases].map(a => a.toLowerCase());
-  const capital = info.capital?.toLowerCase() || "";
-  const language = info.language?.toLowerCase() || "";
-
-  articles.forEach(article => {
-    let score = 0;
-    const text = (article.title + " " + article.description + " " + article.content).toLowerCase();
-
-    if (article.title.toLowerCase().includes(countryName.toLowerCase())) score += 3;
-    aliases.forEach(alias => { if (text.includes(alias)) score += 1; });
-    if (capital && text.includes(capital)) score += 1;
-    if (language && text.includes(language)) score += 1;
-
-    article.relevanceScore = score;
-  });
-
-  return articles.sort((a, b) => b.relevanceScore - a.relevanceScore);
-}
-
-/**
- * Render articles
- */
-function renderArticles(articles, container) {
-  function trimToFiveLines(text) {
-    if (!text) return "No description available";
-    const lines = text.split(". ").slice(0, 5).join(". ") + ".";
-    return lines.length < text.length ? lines + "..." : lines;
-  }
-
-  // Deduplicate
-  const uniqueArticles = [];
-  const seenUrls = new Set();
-  articles.forEach(a => {
-    if (!seenUrls.has(a.url)) {
-      seenUrls.add(a.url);
-      uniqueArticles.push(a);
-    }
-  });
-
-  container.innerHTML = `
-    ${uniqueArticles
-      .map(a => `
+    // Render articles
+    headlinesContainer.innerHTML = uniqueArticles.map(article => `
         <div class="headline">
-          <h4>${a.title}</h4>
-          <p class="description">${trimToFiveLines(a.description || a.content)}</p>
-          <a href="${a.url}" target="_blank">Read more</a>
-          <small class="source">(${a.source})</small>
-        </div>`).join("")}
-    <div id="attribution">
-      <p>Powered by Worker APIs + RSS (BBC, Reuters, MSN, Yahoo)</p>
-    </div>
-  `;
+            <h4>${article.title}</h4>
+            <p class="description">${trimToFiveSentences(article.description)}</p>
+            <a href="${article.url}" target="_blank">Read more</a>
+        </div>
+    `).join("") + `
+        <div id="attribution">
+            <p>Powered by GNews, NewsData, NewsAPI, TheNewsAPI, WorldNewsAPI, Currents, Mediastack, Guardian</p>
+        </div>
+    `;
 
-  const attributionDiv = document.getElementById("attribution");
-  const scrollButtonsContainer = document.getElementById("scroll-buttons");
-  if (attributionDiv && scrollButtonsContainer) {
-    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-  }
-}
-
-
-/**
- * Boost relevance by checking title, description, content against country name, aliases, capital, and language
- */
-function boostRelevance(countryName, articles) {
-  const info = countryInfo[countryName] || { aliases: [], capital: "", language: "" };
-  const aliases = [countryName, ...info.aliases].map(a => a.toLowerCase());
-  const capital = info.capital?.toLowerCase() || "";
-  const language = info.language?.toLowerCase() || "";
-
-  articles.forEach(article => {
-    let score = 0;
-    const text = (article.title + " " + article.description + " " + article.content).toLowerCase();
-
-    // Full points for countryName in title
-    if (article.title.toLowerCase().includes(countryName.toLowerCase())) score += 3;
-
-    // Partial points for aliases anywhere
-    aliases.forEach(alias => { if (text.includes(alias)) score += 1; });
-
-    if (capital && text.includes(capital)) score += 1;
-    if (language && text.includes(language)) score += 1;
-
-    article.relevanceScore = score;
-  });
-
-  return articles.sort((a, b) => b.relevanceScore - a.relevanceScore);
-}
-
-/**
- * Render articles inside the container
- */
-function renderArticles(articles, container) {
-  function trimToFiveLines(text) {
-    if (!text) return "No description available";
-    const lines = text.split(". ").slice(0, 5).join(". ") + ".";
-    return lines.length < text.length ? lines + "..." : lines;
-  }
-
-  const uniqueArticles = [];
-  const seenUrls = new Set();
-  articles.forEach(a => {
-    if (!seenUrls.has(a.url)) {
-      seenUrls.add(a.url);
-      uniqueArticles.push(a);
+    // Move attribution above scroll buttons
+    const attributionDiv = document.getElementById("attribution");
+    const scrollButtonsContainer = document.getElementById("scroll-buttons");
+    if (attributionDiv && scrollButtonsContainer) {
+        scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
     }
-  });
 
-  container.innerHTML = `
-    ${uniqueArticles
-      .map(a => `
-        <div class="headline">
-          <h4>${a.title}</h4>
-          <p class="description">${trimToFiveLines(a.description || a.content)}</p>
-          <a href="${a.url}" target="_blank">Read more</a>
-        </div>`).join("")}
-    <div id="attribution">
-      <p>Powered by GNews, NewsData, NewsAPI, TheNewsAPI, WorldNewsAPI, Currents, Mediastack, BBC, Guardian, Reuters</p>
-    </div>
-  `;
-
-  const attributionDiv = document.getElementById("attribution");
-  const scrollButtonsContainer = document.getElementById("scroll-buttons");
-  if (attributionDiv && scrollButtonsContainer) {
-    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-  }
+    // Reinitialize scroll functionality
+    if (typeof setupScrollButtons === "function") setupScrollButtons();
 }
 
 
@@ -2675,8 +2536,6 @@ async function fetchCityData() {
 	fetchNearbyAmenities(lat, lon);  // Amenities table
 	fadeInContainers();              // Animate containers
 }
-
-
 // ====== Weather Code Map ======
 const weatherCodeMap = {
   0: { icon: "☀️", desc: "Clear sky" },
@@ -2811,64 +2670,6 @@ function displayWeatherData(data) {
 
   showWeatherContainer();
 }
-
-
-
-// Add scrolling functionality to the 16-day forecast
-document
-  .getElementById("long-term-scroll-left")
-  .addEventListener("click", () => {
-    document.getElementById("long-term-forecast").scrollBy({
-      left: -150,
-      behavior: "smooth",
-    });
-  });
-
-document
-  .getElementById("long-term-scroll-right")
-  .addEventListener("click", () => {
-    document.getElementById("long-term-forecast").scrollBy({
-      left: 150,
-      behavior: "smooth",
-    });
-  });
-
-// Add scrolling functionality for the 5-day forecast
-/**
- * Scrolls the 5-day forecast cards to the left when the left arrow is clicked.
- */
-
-document.getElementById("scroll-left").addEventListener("click", () => {
-  const forecastCards = document.getElementById("forecast-cards");
-  forecastCards.scrollBy({
-    left: -150,
-    behavior: "smooth",
-  });
-});
-
-/**
- * Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
- */
-
-document.getElementById("scroll-right").addEventListener("click", () => {
-  const forecastCards = document.getElementById("forecast-cards");
-  forecastCards.scrollBy({
-    left: 150,
-    behavior: "smooth",
-  });
-});
-
-/**
- * Displays the weather icon by making the image element visible once it's loaded.
- */
-
-function showImage() {
-  const weatherIcon = document.getElementById("weather-icon");
-  weatherIcon.style.display = "block"; // Make the image visible once it's loaded
-}
-
-
-
 
 // ====== Hook into your city search ======
 // after your fetchCityData(cityName) or map click resolves:
