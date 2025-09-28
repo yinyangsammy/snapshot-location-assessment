@@ -1522,6 +1522,36 @@ document.querySelectorAll(".allPaths").forEach(e => {
 		openHeadlinesModal();
 	});
 });
+// Function to fetch and display news headlines by country
+
+/**
+ * Fetches and displays news headlines for a given country.
+ * @param {string} countryName - The name of the country to fetch news headlines for.
+ */
+
+// Lightweight country info for relevance scoring
+const countryInfo = {
+  "United States": { aliases: ["USA", "America", "US"], capital: "Washington, D.C.", language: "English" },
+  "Canada": { aliases: ["CA"], capital: "Ottawa", language: "English" },
+  "United Kingdom": { aliases: ["UK", "Britain", "Great Britain"], capital: "London", language: "English" },
+  "Australia": { aliases: ["AU"], capital: "Canberra", language: "English" },
+  "New Zealand": { aliases: ["NZ"], capital: "Wellington", language: "English" },
+  "France": { aliases: ["French Republic"], capital: "Paris", language: "French" },
+  "Germany": { aliases: ["Deutschland"], capital: "Berlin", language: "German" },
+  "Italy": { aliases: ["Italia"], capital: "Rome", language: "Italian" },
+  "Spain": { aliases: ["España"], capital: "Madrid", language: "Spanish" },
+  "Netherlands": { aliases: ["Holland"], capital: "Amsterdam", language: "Dutch" },
+  "Sweden": { aliases: ["Sverige"], capital: "Stockholm", language: "Swedish" },
+  "Norway": { aliases: ["Norge"], capital: "Oslo", language: "Norwegian" },
+  "Switzerland": { aliases: ["Schweiz", "Suisse"], capital: "Bern", language: "German/French/Italian" },
+  "Ireland": { aliases: [], capital: "Dublin", language: "English" },
+  "Belgium": { aliases: [], capital: "Brussels", language: "Dutch/French/German" },
+  "Austria": { aliases: [], capital: "Vienna", language: "German" },
+  "Denmark": { aliases: [], capital: "Copenhagen", language: "Danish" },
+  "Finland": { aliases: [], capital: "Helsinki", language: "Finnish" },
+  "Portugal": { aliases: [], capital: "Lisbon", language: "Portuguese" }
+  // Add more if needed
+};
 
 /**
  * Fetch and display news headlines for a given country using the worker.
@@ -1747,7 +1777,6 @@ function renderArticles(articles, container) {
     scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
   }
 }
-
 
 // Scroll functionality
 
@@ -2678,6 +2707,7 @@ async function fetchCityData() {
 
 
 // ====== Weather Code Map ======
+
 const weatherCodeMap = {
   0: { icon: "☀️", desc: "Clear sky" },
   1: { icon: "🌤️", desc: "Mainly clear" },
