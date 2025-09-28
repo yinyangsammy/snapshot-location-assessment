@@ -2675,6 +2675,8 @@ async function fetchCityData() {
 	fetchNearbyAmenities(lat, lon);  // Amenities table
 	fadeInContainers();              // Animate containers
 }
+
+
 // ====== Weather Code Map ======
 const weatherCodeMap = {
   0: { icon: "☀️", desc: "Clear sky" },
@@ -2809,6 +2811,64 @@ function displayWeatherData(data) {
 
   showWeatherContainer();
 }
+
+
+
+// Add scrolling functionality to the 16-day forecast
+document
+  .getElementById("long-term-scroll-left")
+  .addEventListener("click", () => {
+    document.getElementById("long-term-forecast").scrollBy({
+      left: -150,
+      behavior: "smooth",
+    });
+  });
+
+document
+  .getElementById("long-term-scroll-right")
+  .addEventListener("click", () => {
+    document.getElementById("long-term-forecast").scrollBy({
+      left: 150,
+      behavior: "smooth",
+    });
+  });
+
+// Add scrolling functionality for the 5-day forecast
+/**
+ * Scrolls the 5-day forecast cards to the left when the left arrow is clicked.
+ */
+
+document.getElementById("scroll-left").addEventListener("click", () => {
+  const forecastCards = document.getElementById("forecast-cards");
+  forecastCards.scrollBy({
+    left: -150,
+    behavior: "smooth",
+  });
+});
+
+/**
+ * Scrolls the 5-day forecast cards to the right when the right arrow is clicked.
+ */
+
+document.getElementById("scroll-right").addEventListener("click", () => {
+  const forecastCards = document.getElementById("forecast-cards");
+  forecastCards.scrollBy({
+    left: 150,
+    behavior: "smooth",
+  });
+});
+
+/**
+ * Displays the weather icon by making the image element visible once it's loaded.
+ */
+
+function showImage() {
+  const weatherIcon = document.getElementById("weather-icon");
+  weatherIcon.style.display = "block"; // Make the image visible once it's loaded
+}
+
+
+
 
 // ====== Hook into your city search ======
 // after your fetchCityData(cityName) or map click resolves:
