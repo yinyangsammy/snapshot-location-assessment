@@ -6057,28 +6057,3 @@ footer {
   margin: 8px auto 12px;
 }
 
-/* Forecast scroll arrows - unified style */
-.forecast-arrow {
-  background: black;
-  color: white;
-  border: none;
-  border-radius: 50%;
-  width: 36px;
-  height: 36px;
-  cursor: pointer;
-  font-size: 1.2rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: background 0.3s, color 0.3s;
-}
-
-.forecast-arrow:hover {
-  background: orange;
-  color: white;
-}
-
-.forecast-arrow:disabled {
-  opacity: 0.4;
-  cursor: default;
-}
