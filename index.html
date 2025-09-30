@@ -1716,19 +1716,19 @@
       </div>
     </div>
     <!--  Place Container End -->
-    <!--  Weather Container -->
+     <!--  Weather Container -->
     <div id="weather-container" class="snapshot-box float-right fade-in">
       <h2>Weather Forecast</h2>
       <img id="weather-icon" alt="Weather Icon" src="#">
       <div id="temp-div"></div>
       <div id="weather-info"></div>
-      <div id="hourly-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
+      <div id="hourly-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth; color: black;">
         <!-- Hourly forecast cards will be dynamically inserted here -->
       </div>
       <div style="text-align: center; margin-top: 10px;">
-        <button id="hourly-scroll-left"
+        <button id="hourly-scroll-left" class="scroll-btn"
           style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
-        <button id="hourly-scroll-right"
+        <button id="hourly-scroll-right" class="scroll-btn"
           style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
       </div>
       <div id="forecast-container">
@@ -1737,26 +1737,26 @@
           <!-- Forecast cards will be dynamically inserted here -->
         </div>
         <div style="text-align: center; margin-top: 10px;">
-          <button id="scroll-left" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
-          <button id="scroll-right"
+          <button id="scroll-left" class="scroll-btn" style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
+          <button id="scroll-right"class="scroll-btn"
             style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
         </div>
       </div>
       <div id="long-term-forecast-container">
-        <h2>16 Day Forecast</h2>
+        <h2>15 Day Forecast</h2>
         <div id="long-term-forecast" style="display: flex; overflow-x: auto; gap: 10px; scroll-behavior: smooth;">
-          <!-- 16-day forecast dynamically inserted here -->
+          <!-- 15-day forecast dynamically inserted here -->
         </div>
         <div style="text-align: center; margin-top: 10px;">
-          <button id="long-term-scroll-left"
+          <button id="long-term-scroll-left" class="scroll-btn"
             style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟸</button>
-          <button id="long-term-scroll-right"
+          <button id="long-term-scroll-right" class="scroll-btn"
             style="background: none; border: none; font-size: 1.5em; cursor: pointer;">⟹</button>
         </div>
       </div>
     </div>
   </section>
-  <!--  Weather Container -->
+  <!-- End Weather Container -->
   <!-- Searched Address / City Information End -->
   <!-- Leaflet + MarkerCluster JS -->
   <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
