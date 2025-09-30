@@ -3216,64 +3216,6 @@ function showImage() {
   weatherIcon.style.display = "block"; // Make the image visible once it's loaded
 }
 
-// ====== Weather Scroll Setup ======
-function setupScrollButtons(containerId, leftBtnId, rightBtnId, isVertical = false) {
-  const container = document.getElementById(containerId);
-  const leftBtn = document.getElementById(leftBtnId);
-  const rightBtn = document.getElementById(rightBtnId);
-
-  if (!container || !leftBtn || !rightBtn) return;
-
-  const scrollAmount = 200;
-
-  // Scroll function depending on orientation
-  const scrollOptions = (direction) =>
-    isVertical
-      ? { top: direction * scrollAmount, behavior: "smooth" }
-      : { left: direction * scrollAmount, behavior: "smooth" };
-
-  leftBtn.addEventListener("click", () => container.scrollBy(scrollOptions(-1)));
-  rightBtn.addEventListener("click", () => container.scrollBy(scrollOptions(1)));
-
-  // Hide/show buttons based on scroll position
-  function toggleScrollButtons() {
-    if (isVertical) {
-      leftBtn.style.visibility = container.scrollTop > 0 ? "visible" : "hidden";
-      rightBtn.style.visibility =
-        container.scrollTop + container.clientHeight < container.scrollHeight
-          ? "visible"
-          : "hidden";
-    } else {
-      leftBtn.style.visibility = container.scrollLeft > 0 ? "visible" : "hidden";
-      rightBtn.style.visibility =
-        container.scrollLeft + container.clientWidth < container.scrollWidth
-          ? "visible"
-          : "hidden";
-    }
-  }
-
-  container.addEventListener("scroll", toggleScrollButtons);
-  toggleScrollButtons(); // Initial check
-}
-
-// ====== Activate Scroll for All Forecasts ======
-document.addEventListener("DOMContentLoaded", () => {
-  // Hourly forecast (horizontal)
-  setupScrollButtons("hourly-forecast", "hourly-scroll-left", "hourly-scroll-right");
-
-  // 5-day forecast (horizontal)
-  setupScrollButtons("forecast-cards", "scroll-left", "scroll-right");
-
-  // 16-day long-term forecast (horizontal)
-  setupScrollButtons("long-term-forecast", "long-term-scroll-left", "long-term-scroll-right");
-
-  // Optional: If you want 5-day vertical per-day scroll (like inner-scroll in daily groups)
-  document.querySelectorAll(".inner-scroll").forEach((scrollWrapper, i) => {
-    const upBtn = scrollWrapper.parentElement.querySelector(".scroll-up");
-    const downBtn = scrollWrapper.parentElement.querySelector(".scroll-down");
-    if (upBtn && downBtn) setupScrollButtons(scrollWrapper.id, upBtn.id, downBtn.id, true);
-  });
-});
 
 
 
