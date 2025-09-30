@@ -2800,37 +2800,78 @@ function displayWeatherData(data) {
   const currentCode = data.current_weather?.weathercode ?? codesHourly[0];
   const currentMeta = weatherCodeMap[currentCode] || { icon: "❓", desc: "Unknown" };
 
-  // hourly (24h)
-  let hourlyHtml = "";
-  for (let i = 0; i < Math.min(24, timesHourly.length); i++) {
-    const t = new Date(timesHourly[i]);
-    const hourLabel = t.getHours().toString().padStart(2, "0") + ":00";
-    const temp = tempsHourly[i] != null ? Math.round(tempsHourly[i]) : "N/A";
-    const icon = weatherCodeMap[codesHourly[i]]?.icon || "❓";
-    hourlyHtml += `<div class="hourly-item"><p>${icon}</p><p>${temp}°C</p><p>${hourLabel}</p></div>`;
+  // Big main weather icon (emoji rendered as SVG for scaling)
+  const weatherIconEl = $id("weather-icon");
+  if (weatherIconEl) {
+    const emoji = currentMeta.icon || "❓";
+    const svg = `<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'>
+                   <text x='50%' y='50%' font-size='110'
+                         dominant-baseline='middle'
+                         text-anchor='middle'>${emoji}</text>
+                 </svg>`;
+    weatherIconEl.src = `data:image/svg+xml;charset=utf-8,${encodeURIComponent(svg)}`;
+    weatherIconEl.alt = currentMeta.desc || "Weather";
+    weatherIconEl.style.display = "block";
   }
+
+  // hourly (24h)
+let hourlyHtml = "";
+for (let i = 0; i < Math.min(24, timesHourly.length); i++) {
+  const t = new Date(timesHourly[i]);
+  const hourLabel = t.getHours().toString().padStart(2, "0") + ":00";
+  const temp = tempsHourly[i] != null ? Math.round(tempsHourly[i]) : "N/A";
+  const icon = weatherCodeMap[codesHourly[i]]?.icon || "❓";
+
+  hourlyHtml += `
+    <div class="forecast-card">
+      <p class="forecast-icon">${icon}</p>
+      <p class="forecast-temp">${temp}°C</p>
+      <p class="forecast-time">${hourLabel}</p>
+    </div>`;
+}
+
 
   // 5-day
-  let fiveDayHtml = "";
-  for (let i = 0; i < Math.min(5, timesDaily.length); i++) {
-    const dt = new Date(timesDaily[i]);
-    const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
-    const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
-    const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
-    const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
-    fiveDayHtml += `<div class="forecast-card"><p>${dt.toDateString()}</p><p>${icon}</p><p>Max: ${max}°C</p><p>Min: ${min}°C</p><p>${desc}</p></div>`;
-  }
+let fiveDayHtml = "";
+for (let i = 0; i < Math.min(5, timesDaily.length); i++) {
+  const dt = new Date(timesDaily[i]);
+  const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
+  const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
+  const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
+  const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
 
-  // 16-day
-  let longHtml = "";
-  for (let i = 0; i < Math.min(16, timesDaily.length); i++) {
+  fiveDayHtml += `
+    <div class="forecast-card">
+      <p class="forecast-date">${dt.toDateString()}</p>
+      <p class="forecast-icon">${icon}</p>
+      <p class="forecast-temp">Max: ${max}°C</p>
+      <p class="forecast-min">Min: ${min}°C</p>
+      <p class="forecast-desc">${desc}</p>
+    </div>`;
+}
+
+// 15-day
+let longHtml = "";
+if (timesDaily && timesDaily.length > 0) {
+  for (let i = 0; i < Math.min(15, timesDaily.length); i++) {
     const dt = new Date(timesDaily[i]);
     const max = maxDaily[i] != null ? Math.round(maxDaily[i]) : "N/A";
     const min = minDaily[i] != null ? Math.round(minDaily[i]) : "N/A";
     const icon = weatherCodeMap[codesDaily[i]]?.icon || "❓";
     const desc = weatherCodeMap[codesDaily[i]]?.desc || "Unknown";
-    longHtml += `<div class="forecast-card"><p>${dt.toDateString()}</p><p>${icon}</p><p>Max: ${max}°C</p><p>Min: ${min}°C</p><p>${desc}</p></div>`;
+
+    longHtml += `
+      <div class="forecast-card">
+        <p class="forecast-date">${dt.toDateString()}</p>
+        <p class="forecast-icon">${icon}</p>
+        <p class="forecast-temp">Max: ${max}°C</p>
+        <p class="forecast-min">Min: ${min}°C</p>
+        <p>${desc}</p>
+      </div>`;
   }
+}
+
+
 
   // Inject
   if ($id("temp-div")) $id("temp-div").innerHTML = `<p>${currentTemp}°C</p>`;
@@ -2840,6 +2881,65 @@ function displayWeatherData(data) {
   if ($id("long-term-forecast")) $id("long-term-forecast").innerHTML = longHtml;
 
   showWeatherContainer();
+}
+
+
+
+// ====== Hook into your city search ======
+// after your fetchCityData(cityName) or map click resolves:
+document.addEventListener("citySelected", (e) => {
+  const city = e.detail?.city;
+  if (city) getWeather(city);
+});
+
+// Expose
+window.getWeather = getWeather;
+window.fetchWeather = fetchWeather;
+
+// ================================
+// Forecast Scroll Button Setup
+// ================================
+function setupScrollButtons(containerId, leftBtnId, rightBtnId) {
+  const container = document.getElementById(containerId);
+  const leftBtn = document.getElementById(leftBtnId);
+  const rightBtn = document.getElementById(rightBtnId);
+
+  if (!container || !leftBtn || !rightBtn) return;
+
+  // ensure arrows have consistent style
+  leftBtn.classList.add("forecast-arrow");
+  rightBtn.classList.add("forecast-arrow");
+
+  const scrollAmount = 200;
+
+  leftBtn.addEventListener("click", () => {
+    container.scrollBy({ left: -scrollAmount, behavior: "smooth" });
+  });
+  rightBtn.addEventListener("click", () => {
+    container.scrollBy({ left: scrollAmount, behavior: "smooth" });
+  });
+
+  function toggle() {
+    const canScrollLeft = container.scrollLeft > 0;
+    const canScrollRight =
+      container.scrollWidth > container.clientWidth + 1 &&
+      container.scrollLeft + container.clientWidth < container.scrollWidth - 1;
+
+    leftBtn.style.visibility = canScrollLeft ? "visible" : "hidden";
+    rightBtn.style.visibility = canScrollRight ? "visible" : "hidden";
+  }
+
+  // Expose toggle for manual triggers
+  window.__forecastScrollControllers = window.__forecastScrollControllers || {};
+  window.__forecastScrollControllers[containerId] = toggle;
+
+  container.addEventListener("scroll", toggle);
+  window.addEventListener("resize", toggle);
+
+  const mo = new MutationObserver(() => setTimeout(toggle, 40));
+  mo.observe(container, { childList: true, subtree: true });
+
+  setTimeout(toggle, 100);
 }
 
 
