@@ -6066,3 +6066,16 @@ footer {
   color: orange;
 }
 
+.forecast-arrow {
+    color: black !important;
+    border: none;
+    cursor: pointer;
+    padding: 6px 10px;
+    margin: 0 4px;
+    font-size: 16px;
+    transition: background-color 0.25s, color 0.25s;
+}
+
+.forecast-arrow:hover {
+  color: orange !important;
+}
