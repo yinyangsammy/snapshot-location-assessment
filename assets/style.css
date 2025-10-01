@@ -6057,9 +6057,12 @@ footer {
   margin: 8px auto 12px;
 }
 
+.scroll-btn {
+  color: black;
+}
 
-.forecast-arrow:hover {
-  background: orange;
-  color: white;
+
+.scroll-btn:hover {
+  color: orange;
 }
 
