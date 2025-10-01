@@ -6057,12 +6057,6 @@ footer {
   margin: 8px auto 12px;
 }
 
-/* Forecast scroll arrows - unified style */
-.forecast-arrow {
-  background: black;
-  color: white;
-  border: none;
-}
 
 .forecast-arrow:hover {
   background: orange;
