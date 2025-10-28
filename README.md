@@ -925,16 +925,45 @@ This should be fixed in an upcoming version.
 
 # Deployment
 
-## Cloudfare Pages
+## Reasons for Privacy
 
-As I wanted to keep my repository private, I decided to deploy with Cloudfare Pages, as Github wouldn't allow me to keep me repository private when deploying to Github Pages, unless I purchased a pro subscription.
+Early into my use of APIs, I learnt the hard way about unpredictable pricing and hidden charges by accidentally racking up a bill for over £1000 with Google Cloud Services. The Google representatives kindly waived it on account of my being a confused student, but it was only the first of many issues I have encountered using APIs.
 
-The project was deployed to Cloudfare Pages using the following steps...
+This is no complaint. I'm hugely grateful to the open-source community and all the API providers for giving me access to such fantastic tools and such a vast array of information. I still marvel at the workmanship involved and I love delving into all they have to offer.
+
+Rather, it is background to the explanation below for keeping my repository private and for the additional commits I have had to make post hand-in:
+
+### Privacy
+
+1) I felt the need to keep this repository private because I only have a limited amount of hits per day/month on the free tier of these APIs. I feared keeping it open would leave room for random visitors to click away and leave no credits / hits left for my tutor, Rachel Furlong, nor the external examiners, to assess this project.
+
+2) I also wish to use all of this free code respectfully, as the creators have asked of me.
+
+### Extra Commits
+
+3) The global safety API I was using stopped functioning, so I had to replace it with one provided by [Safeture Riskline](https://safeture.com/riskline-launch-apis-improvements/).
+
+4) My openweather API student subscription ended over the weekend I was asked to make amendments. I presumed I would automatically go back to using the free tier, but that wasn't the case and my weather-forecast container broke.
+
+5) That same weekend, NewsAPI changed its pricing model, meaning I would be entitled to less hits - this resulted in my news-headlines container crashing due to 403 errors, i.e. limits being reached. I had to incorporate other news APIS along with NewsAPI.
+
+6) I came to realize I would have to implement caching for some of my containers, so that the site would be able to display results, even when I had gone over my free tier allotment and API providers were throttling me or returning unauthorized errors.
+
+7) I had to introduce a proxy worker page with Cloudflare to deal with 401 and CORS errors slowing or crashing elements of my site because I wasn't properly acknowledging the API providers' request for a detailed header with my site name and email address.
+
+There were other issues I faced, which I am happy to discuss, but I think this a long enough summation for the README.
+
+
+## Cloudflare Pages
+
+As I wanted to keep my repository private, I decided to deploy with Cloudflare Pages, as Github wouldn't allow me to keep me repository private when deploying to Github Pages, unless I purchased a pro subscription.
+
+The project was deployed to Cloudflare Pages using the following steps...
 
 Log into Cloudflare Pages
 
 Go to: 
-1.	Log in to [Cloudfare Pages](https://pages.cloudflare.com/)
+1.	Log in to [Cloudflare Pages](https://pages.cloudflare.com/)
 2.	Authorize Cloudflare to access your GitHub account.
 3.	Select the snapshot-location repository.
 4.	Choose the main branch.
@@ -1034,6 +1063,8 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 -   All Weather forecasts were kindly provided by [OpenWeather](https://openweathermap.org/api).
 
 -   The address map in my contact section postcode modal was kindly provided by [Google Maps](https://www.google.co.uk/maps).
+
+-   The global safety map was kindly provided by [Safeture Riskline](https://safeture.com/riskline-launch-apis-improvements/).
 
 
 ## Acknowledgements
