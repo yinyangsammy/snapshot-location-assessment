@@ -1066,6 +1066,8 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -   The global safety map was kindly provided by [Safeture Riskline](https://safeture.com/riskline-launch-apis-improvements/).
 
+-   The global weather map was kindly provided by [World Weather Online](https://map.worldweatheronline.com/).
+
 
 ## Acknowledgements
 
