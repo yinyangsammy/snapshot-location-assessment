@@ -943,7 +943,7 @@ Rather, it is background to the explanation below for keeping my repository priv
 
 3) The global safety API I was using stopped functioning, so I had to replace it with one provided by [Safeture Riskline](https://safeture.com/riskline-launch-apis-improvements/).
 
-4) My openweather API student subscription ended over the weekend I was asked to make amendments. I presumed I would automatically go back to using the free tier, but that wasn't the case and my weather-forecast container broke.
+4) My OpenWeather API student subscription ended over the weekend I was asked to make amendments. I presumed I would automatically go back to using the free tier, but that wasn't the case and my weather-forecast container broke.
 
 5) That same weekend, NewsAPI changed its pricing model, meaning I would be entitled to less hits - this resulted in my news-headlines container crashing due to 403 errors, i.e. limits being reached. I had to incorporate other news APIS along with NewsAPI.
 
@@ -956,7 +956,7 @@ Rather, it is background to the explanation below for keeping my repository priv
 maps.googleapis.com/maps/api/mapsjs/gen_204?csp_test=true:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
 gtm.wise.com/wisetag?id=GTM-M7V2XH:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
 
-They are most likely caused by Browser extensions that block analytics, ad, or tracking-related requests.
+They are most likely caused by browser extensions that block analytics, ad, or tracking-related requests.
 
 
 There were other API-related issues I faced, which I am happy to discuss, but I think this a long enough summation for the README.
