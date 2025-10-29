@@ -1529,6 +1529,14 @@ document.querySelectorAll(".allPaths").forEach(e => {
  * @param {string} countryName - The name of the country to fetch news headlines for.
  */
 
+
+// Function to fetch and display news headlines by country
+
+/**
+ * Fetches and displays news headlines for a given country.
+ * @param {string} countryName - The name of the country to fetch news headlines for.
+ */
+
 // Lightweight country info for relevance scoring
 const countryInfo = {
   "United States": { aliases: ["USA", "America", "US"], capital: "Washington, D.C.", language: "English" },
@@ -1552,231 +1560,203 @@ const countryInfo = {
   "Portugal": { aliases: [], capital: "Lisbon", language: "Portuguese" }
   // Add more if needed
 };
-
 /**
  * Fetch and display news headlines for a given country using the worker.
  * @param {string} countryName - Country or topic to fetch news for
  */
-/**
- * Fetch and display news headlines for a given country
- * Combines worker API + free RSS feeds
- */
+
+/****************************************************** 
+ * Progressive News Loader (Optimized + Progressive Shimmer)
+ * - Skeleton shimmer fills #headlines
+ * - Cache in localStorage (12h)
+ * - Worker aggregates APIs + RSS already
+ * - Skeletons fade out one by one into real headlines
+ ******************************************************/
 async function fetchTopHeadlinesByCountry(countryName) {
   const headlinesContainer = document.getElementById("headlines");
   const nameqContainer = document.getElementById("nameq");
-
-  if (!headlinesContainer) {
-    console.warn("No #headlines container in DOM");
-    return;
-  }
+  if (!headlinesContainer) return;
 
   if (nameqContainer) nameqContainer.innerText = countryName;
-  headlinesContainer.innerHTML = "<p>Loading latest headlines...</p>";
 
-  const workerUrl = `https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`;
+  // ===== Skeleton loader =====
+  headlinesContainer.innerHTML = "";
+  for (let i = 0; i < 5; i++) {
+    const skeleton = document.createElement("div");
+    skeleton.className = "skeleton-card shimmer";
+    headlinesContainer.appendChild(skeleton);
+  }
+
+  const shimmerStart = Date.now(); // record shimmer start
+
+  // ===== Cache check =====
+  const cacheKey = `news_${countryName.toLowerCase()}`;
+  const cacheTTL = 1000 * 60 * 60 * 12; // 12h cache
+  let cachedArticles = null;
 
   try {
-    // --- Fetch from Worker (multi-API) ---
-    const workerPromise = fetch(workerUrl).then(r => r.json());
-
-    // --- Extra RSS feeds (free, no key) ---
-    const rssFeeds = [
-      { name: "BBC", url: "https://feeds.bbci.co.uk/news/rss.xml" },
-      { name: "Reuters", url: "https://feeds.reuters.com/reuters/topNews" },
-      { name: "MSN", url: "https://www.msn.com/en-us/feed" },
-      { name: "Yahoo", url: "https://www.yahoo.com/news/rss" }
-    ];
-
-    const rssPromises = rssFeeds.map(feed =>
-      fetch(feed.url)
-        .then(r => r.text())
-        .then(xml => parseRSS(xml, feed.name))
-        .catch(() => [])
-    );
-
-    // Wait for worker + RSS in parallel
-    const [workerData, ...rssResults] = await Promise.all([workerPromise, ...rssPromises]);
-
-    // Worker articles
-    let articles = workerData.articles || [];
-
-    // Add RSS results
-    rssResults.forEach(list => {
-      articles = articles.concat(list);
-    });
-
-    if (!articles.length) {
-      headlinesContainer.innerHTML = `<p>No headlines found for ${countryName}.</p>`;
-      return;
+    const cacheStr = localStorage.getItem(cacheKey);
+    if (cacheStr) {
+      const parsed = JSON.parse(cacheStr);
+      if (Date.now() - parsed.timestamp < cacheTTL) {
+        cachedArticles = parsed.articles || [];
+      }
     }
+  } catch {}
 
-    // Boost relevance by country match
-    const sortedArticles = boostRelevance(countryName, articles);
-
-    // Render
-    renderArticles(sortedArticles, headlinesContainer);
-
-  } catch (err) {
-    console.error("Error fetching news:", err);
-    headlinesContainer.innerHTML = "<p>Failed to load news headlines.</p>";
+  if (cachedArticles?.length) {
+    console.log("Serving cached news for", countryName);
+    appendArticles(cachedArticles, "Cache");
   }
+
+  // ===== Single Worker call (Worker merges APIs + RSS) =====
+  const workerUrl = `https://nominatim-proxy.yinyangsammy.workers.dev/?news=${encodeURIComponent(countryName)}`;
+
+  fetch(workerUrl)
+    .then(r => r.json())
+    .then(d => {
+      const articles = Array.isArray(d.articles) ? d.articles : [];
+      if (articles.length) {
+        const elapsed = Date.now() - shimmerStart;
+        const minShimmer = 400; // ms
+        const wait = Math.max(0, minShimmer - elapsed);
+
+        setTimeout(() => {
+          appendArticles(articles, "Worker");
+
+          // Cache results
+          try {
+            localStorage.setItem(cacheKey, JSON.stringify({
+              timestamp: Date.now(),
+              articles
+            }));
+          } catch {}
+        }, wait);
+      }
+    })
+    .catch(err => console.warn("News fetch failed:", err));
+
+  // ===== Append helper (progressive replace) =====
+  function appendArticles(articles, source) {
+    if (!articles?.length) return;
+    const sorted = boostRelevance(countryName, articles);
+
+    const skeletons = [...headlinesContainer.querySelectorAll(".skeleton-card")];
+    let idx = 0;
+
+    sorted.forEach(article => {
+      const html = renderArticles([article], source);
+      const wrapper = document.createElement("div");
+      wrapper.innerHTML = html;
+      const articleEl = wrapper.firstElementChild;
+
+      articleEl.style.opacity = "0";
+
+      if (idx < skeletons.length) {
+        const skeleton = skeletons[idx];
+        skeleton.replaceWith(articleEl);
+      } else {
+        headlinesContainer.appendChild(articleEl);
+      }
+
+      requestAnimationFrame(() => {
+        articleEl.style.transition = "opacity 0.4s ease";
+        articleEl.style.opacity = "1";
+      });
+
+      idx++;
+    });
+  }
+  
 }
 
-/**
- * Parse RSS feed into {title, description, url, source}
- */
+/******************************************************
+ * Helpers
+ ******************************************************/
 function parseRSS(xmlText, sourceName) {
-  const items = [...xmlText.matchAll(/<item>[\s\S]*?<title>(.*?)<\/title>[\s\S]*?<link>(.*?)<\/link>[\s\S]*?(?:<description>(.*?)<\/description>)?/g)];
-  return items.map(m => ({
-    title: decodeHTMLEntities(m[1]),
-    url: m[2],
-    description: m[3] ? decodeHTMLEntities(m[3].replace(/<[^>]+>/g, "")) : "",
-    source: sourceName,
-    content: ""
-  }));
+  if (!xmlText || typeof xmlText !== "string") return [];
+  const items = [...xmlText.matchAll(/<item[\s\S]*?<\/item>/gi)];
+  return items.map(match => {
+    const item = match[0];
+    const title = (item.match(/<title>([\s\S]*?)<\/title>/i) || [,""])[1];
+    const link = (item.match(/<link>([\s\S]*?)<\/link>/i) || [,""])[1];
+    const description = (item.match(/<description>([\s\S]*?)<\/description>/i) || [,""])[1] || "";
+    return {
+      title: decodeHTMLEntities(title).trim(),
+      url: (link || "").trim(),
+      description: decodeHTMLEntities(description.replace(/<[^>]+>/g, "")).trim(),
+      source: sourceName,
+      content: ""
+    };
+  }).filter(i => i.title || i.url);
 }
 
-/**
- * Decode HTML entities in RSS text
- */
 function decodeHTMLEntities(str) {
+  if (!str) return "";
   const txt = document.createElement("textarea");
   txt.innerHTML = str;
   return txt.value;
 }
 
-/**
- * Boost relevance (same as before)
- */
 function boostRelevance(countryName, articles) {
-  const info = countryInfo[countryName] || { aliases: [], capital: "", language: "" };
-  const aliases = [countryName, ...info.aliases].map(a => a.toLowerCase());
-  const capital = info.capital?.toLowerCase() || "";
-  const language = info.language?.toLowerCase() || "";
+  const info = (typeof countryInfo !== "undefined" && countryInfo[countryName])
+    ? countryInfo[countryName]
+    : { aliases: [], capital: "", language: "" };
 
-  articles.forEach(article => {
+  const aliases = [countryName, ...(info.aliases || [])].map(a => a.toLowerCase());
+  const capital = (info.capital || "").toLowerCase();
+  const language = (info.language || "").toLowerCase();
+
+  return articles.map(a => {
+    const text = `${a.title || ""} ${a.description || ""} ${a.content || ""}`.toLowerCase();
     let score = 0;
-    const text = (article.title + " " + article.description + " " + article.content).toLowerCase();
-
-    if (article.title.toLowerCase().includes(countryName.toLowerCase())) score += 3;
+    if ((a.title || "").toLowerCase().includes(countryName.toLowerCase())) score += 3;
     aliases.forEach(alias => { if (text.includes(alias)) score += 1; });
     if (capital && text.includes(capital)) score += 1;
     if (language && text.includes(language)) score += 1;
-
-    article.relevanceScore = score;
-  });
-
-  return articles.sort((a, b) => b.relevanceScore - a.relevanceScore);
+    return { ...a, relevanceScore: score };
+  }).sort((x, y) => y.relevanceScore - x.relevanceScore);
 }
 
-/**
- * Render articles
- */
-function renderArticles(articles, container) {
+function renderArticles(articles, source) {
   function trimToFiveLines(text) {
     if (!text) return "No description available";
-    const lines = text.split(". ").slice(0, 5).join(". ") + ".";
+    const lines = text.split(". ").slice(0, 5).join(". ");
     return lines.length < text.length ? lines + "..." : lines;
   }
 
-  // Deduplicate
-  const uniqueArticles = [];
-  const seenUrls = new Set();
-  articles.forEach(a => {
-    if (!seenUrls.has(a.url)) {
-      seenUrls.add(a.url);
-      uniqueArticles.push(a);
-    }
-  });
-
-  container.innerHTML = `
-    ${uniqueArticles
-      .map(a => `
-        <div class="headline">
-          <h4>${a.title}</h4>
-          <p class="description">${trimToFiveLines(a.description || a.content)}</p>
-          <a href="${a.url}" target="_blank">Read more</a>
-          <small class="source">(${a.source})</small>
-        </div>`).join("")}
-    <div id="attribution">
-      <p>Powered by Worker APIs + RSS (BBC, Reuters, MSN, Yahoo)</p>
+  const articlesHtml = articles.map(a => `
+    <div class="headline">
+      <h4>${escapeHtml(a.title || "Untitled")}</h4>
+      <p class="description">${escapeHtml(trimToFiveLines(a.description || a.content || ""))}</p>
+      <a href="${escapeAttr(a.url || "#")}" target="_blank" rel="noopener noreferrer">Read more</a>
+      <small class="source">(${escapeHtml(a.source || source || "Unknown")})</small>
     </div>
-  `;
+  `).join("");
 
-  const attributionDiv = document.getElementById("attribution");
-  const scrollButtonsContainer = document.getElementById("scroll-buttons");
-  if (attributionDiv && scrollButtonsContainer) {
-    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-  }
-}
-
-
-/**
- * Boost relevance by checking title, description, content against country name, aliases, capital, and language
- */
-function boostRelevance(countryName, articles) {
-  const info = countryInfo[countryName] || { aliases: [], capital: "", language: "" };
-  const aliases = [countryName, ...info.aliases].map(a => a.toLowerCase());
-  const capital = info.capital?.toLowerCase() || "";
-  const language = info.language?.toLowerCase() || "";
-
-  articles.forEach(article => {
-    let score = 0;
-    const text = (article.title + " " + article.description + " " + article.content).toLowerCase();
-
-    // Full points for countryName in title
-    if (article.title.toLowerCase().includes(countryName.toLowerCase())) score += 3;
-
-    // Partial points for aliases anywhere
-    aliases.forEach(alias => { if (text.includes(alias)) score += 1; });
-
-    if (capital && text.includes(capital)) score += 1;
-    if (language && text.includes(language)) score += 1;
-
-    article.relevanceScore = score;
-  });
-
-  return articles.sort((a, b) => b.relevanceScore - a.relevanceScore);
-}
-
-/**
- * Render articles inside the container
- */
-function renderArticles(articles, container) {
-  function trimToFiveLines(text) {
-    if (!text) return "No description available";
-    const lines = text.split(". ").slice(0, 5).join(". ") + ".";
-    return lines.length < text.length ? lines + "..." : lines;
-  }
-
-  const uniqueArticles = [];
-  const seenUrls = new Set();
-  articles.forEach(a => {
-    if (!seenUrls.has(a.url)) {
-      seenUrls.add(a.url);
-      uniqueArticles.push(a);
-    }
-  });
-
-  container.innerHTML = `
-    ${uniqueArticles
-      .map(a => `
-        <div class="headline">
-          <h4>${a.title}</h4>
-          <p class="description">${trimToFiveLines(a.description || a.content)}</p>
-          <a href="${a.url}" target="_blank">Read more</a>
-        </div>`).join("")}
+  // Attribution footer
+  const attributionHtml = `
     <div id="attribution">
       <p>Powered by GNews, NewsData, NewsAPI, TheNewsAPI, WorldNewsAPI, Currents, Mediastack, BBC, Guardian, Reuters</p>
     </div>
   `;
 
-  const attributionDiv = document.getElementById("attribution");
-  const scrollButtonsContainer = document.getElementById("scroll-buttons");
-  if (attributionDiv && scrollButtonsContainer) {
-    scrollButtonsContainer.insertAdjacentElement("beforebegin", attributionDiv);
-  }
+  return articlesHtml + attributionHtml;
 }
+
+
+function escapeHtml(s) {
+  if (!s) return "";
+  return s.replaceAll("&","&amp;")
+          .replaceAll("<","&lt;")
+          .replaceAll(">","&gt;")
+          .replaceAll('"',"&quot;")
+          .replaceAll("'","&#39;");
+}
+function escapeAttr(s) {
+  return escapeHtml(String(s || "#"));
+}
+
 
 // Scroll functionality
 
