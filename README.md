@@ -951,7 +951,15 @@ Rather, it is background to the explanation below for keeping my repository priv
 
 7) I had to introduce a proxy worker page with Cloudflare to deal with 401 and CORS errors slowing or crashing elements of my site because I wasn't properly acknowledging the API providers' request for a detailed header with my site name and email address.
 
-There were other issues I faced, which I am happy to discuss, but I think this a long enough summation for the README.
+8) If you receive either of the below errors:
+
+maps.googleapis.com/maps/api/mapsjs/gen_204?csp_test=true:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+gtm.wise.com/wisetag?id=GTM-M7V2XH:1   Failed to load resource: net::ERR_BLOCKED_BY_CLIENT
+
+They are most likely caused by Browser extensions that block analytics, ad, or tracking-related requests.
+
+
+There were other API-related issues I faced, which I am happy to discuss, but I think this a long enough summation for the README.
 
 
 ## Cloudflare Pages
