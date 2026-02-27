@@ -958,6 +958,8 @@ Rather, it is background to the explanation below for keeping my repository priv
 
     They are most likely caused by browser extensions that block analytics, ad, or tracking-related requests.
 
+9) The embedded weather map I was using stopped functioning, so I had to replace it with one provided by [Windy](https://www.windy.com/).
+
 
 There were other API-related issues I faced, which I am happy to discuss, but I think this a long enough summation for the README.
 
