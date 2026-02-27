@@ -37,8 +37,10 @@
   <!-- Header -->
   <header class="text-center page-header" id="header">
     <img src="assets/img/map_banner_4k.avif" alt="Hero map banner" id="hero-img" fetchpriority="high"/>
-    <div class="vertical-center">
-      <h1 id="brand">Snapshot Location</h1>
+   <div class="vertical-center">
+      <h1 id="brand">
+      <span class="brand-left">Snapshot</span>
+  <span class="brand-right">Location</span></h1>
       <p id="tagline">A snapshot of locations worldwide!</p>
     </div>
   </header>
@@ -46,15 +48,41 @@
   <!-- Nav Bar -->
   <nav class="black-background text-center text-uppercase">
     <a href="safety.html#safety" aria-label="See the safety of the location">Safety</a>
+    <a href="deals.html#deals" aria-label="See deals & discounts for the location">Deals</a>
     <a href="index.html#location" aria-label="See the name of the location">Location</a>
+    <a href="ideas.html#ideas" aria-label="See ideas & itineraries for the location">Ideas</a>
     <a href="weather.html#weather" aria-label="See the weather of all locations">Weather</a>
   </nav>
   <!-- Nav Bar End -->
     <!-- Weather Map -->
-    <iframe title="weather-map" id="weather-map" src="https://map.worldweatheronline.com/"  referrerpolicy="no-referrer"
+     <div class="weather-map-wrapper">
+    <iframe title="weather-map" id="weather-map" src="https://embed.windy.com/embed2.html?lat=26.5099&lon=26.10352&detailLat=26.5099&detailLon=26.10352&width=650&height=450&zoom=3&level=surface&overlay=wind&product=ecmwf&menu=&message=&marker=&calendar=now&pressure=&type=map&location=coordinates&detail=&metricWind=kt&metricTemp=%C2%B0C&metricRain=mm" scrolling="no" webkitallowfullscreen="true" mozallowfullscreen="true" allowfullscreen="true" referrerpolicy="no-referrer" overflow="hidden"
   sandbox="allow-scripts allow-same-origin"
   loading="lazy"></iframe>
+  </div>
     <!-- Weather Map End -->
+        <!-- ==== Credits Section ==== -->
+     <section id="credits-update" class="frosted-panel text-center">
+        <p class="credits-text">
+   Weather Data by <a href="https://www.windy.com/" title="Free Weather API" target="_blank" rel="noopener noreferrer">Windy</a>
+  
+  
+   <!-- If Using TuTiempo API Instead 
+   <br>
+
+       <br>
+      & Map Data by:
+    <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener noreferrer">
+      OpenStreetMap</a> 
+  </p>
+
+  -->
+
+  <p id="weather-fallback-note" class="weather-note" hidden>
+    🌦 Windy unavailable — showing Satellites.Pro instead.
+  </p>
+</section>
+<!-- ==== Credits Section End ==== -->
     <!-- Contact Details -->
     <section id="contact">
       <h2 class="text-center">Contact</h2>
@@ -67,7 +95,7 @@
             <br>
             <br>
             <div class="contact-link">
-              <a href="mailto:advert@snapshotlocation.com">advert@snapshotlocation.com</a>
+              <a href="mailto:advert@snapshotlocation.com">advert@snapshotsaas.com</a>
             </div>
           </div>
         </div>
@@ -94,20 +122,37 @@
           </p>
           <br>
           <h3>Phone</h3>
-          <div>UK Dial Code: +44</div>
+          <div>Dial Code: +44</div>
           <br>
           <div id="contact-number" class="contact-link">
-            <a href="tel:+442012345678">02012345678</a>
+            <a href="tel:+442035671980">020700000000</a>
           </div>
           <br>
+          <div class="support-links">
+  <div class="support-item">
+    <h3>Donate</h3>
+    <a href="https://your-donation-link.example" class="donation-subtle" target="_blank" rel="noopener noreferrer">
+      ☕ Support Snapshot
+    </a>
+  </div>
+   
+      
+ 
+         <div class="support-item">
+    <h3>Affiliate</h3>
+    <a href="https://your-affiliate-link.example" class="donation-subtle" target="_blank" rel="noopener noreferrer">
+      🔗 Partner Snapshot
+    </a>
+  </div>
+</div> 
         </div>
       </div>
     </section>
-    <!-- Postcode Modal -->
+    <!-- Modal -->
     <div id="map-modal" class="mapmodal">
       <div class="mapmodal-content">
         <div class="close" id="close-map-modal">&times;</div>
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border: 0.5rem solid black;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4965.976592967477!2d-0.14963110845439473!3d51.5134307101453!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x4876052b1f098d4f%3A0xa658fa600cfcf3e3!2s1%20Brook%20St%2C%20London%20W1S%201JD!5e0!3m2!1sen!2suk!4v1737496194749!5m2!1sen!2suk" width="400" height="400" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
       </div>
     </div>
     <script>
@@ -151,7 +196,10 @@
       </a>
       <p class="footer-text">Copyright © Snapshot Location 2025</p>
     </footer>
-    <!-- Footer End -->
+  <!-- Footer End -->
+
+
+  <script src="assets/weather.js"></script>
   </body>
   <!-- Body End -->
 </html>
