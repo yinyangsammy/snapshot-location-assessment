@@ -249,11 +249,11 @@ The OpenStreetMaps Map of the world features a search bar just above, where the 
 
 ## 2) *Safety Page*
 
-The safety page features a safety map as provided by [International SOS](https://www.internationalsos.com/risk-outlook).
+The safety page features a safety map as provided by [Safeture](https://www.safeture.com/).
 
 ## 3) *Weather Page*
 
-The weather page features a weather map as provided by [World Weather Online](https://map.worldweatheronline.com/).
+The weather page features a weather map as provided by [Windy](https://www.windy.com/).
 
 # Irregular Structure
 
@@ -1074,7 +1074,7 @@ By forking the GitHub Repository we make a copy of the original repository on ou
 
 -   The global safety map was kindly provided by [Safeture Riskline](https://safeture.com/riskline-launch-apis-improvements/).
 
--   The global weather map was kindly provided by [World Weather Online](https://map.worldweatheronline.com/).
+-   The global weather map was kindly provided by [Windy](https://www.windy.com/).
 
 
 ## Acknowledgements
