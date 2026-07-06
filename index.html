@@ -1502,7 +1502,7 @@
     </div>
   </section>
   <script>
-    const PEXELS_API_KEY = "Ul0hvhgdeEs6ZpA9Z33AK39I8pMibQiFDNQy2oRHJWu6vuGz8eMUsnRY"; // Replace with actual API key
+    const SNAPSHOT_WORKER_URL = "https://nominatim-proxy.yinyangsammy.workers.dev/";
     /**
      * Fetches images from Pexels for a given country and updates the slideshow.
      * Fetches images from Pexels based on the exact width & height of `.image-container`
@@ -1518,11 +1518,9 @@
     // **Fetch Images from Pexels & Populate Carousel**
     async function fetchCountryImages(countryName) {
       try {
-        const response = await fetch(`https://api.pexels.com/v1/search?query=${encodeURIComponent(countryName)}&per_page=${totalSlides}`, {
-          headers: {
-            Authorization: PEXELS_API_KEY
-          }
-        });
+        const response = await fetch(
+          `${SNAPSHOT_WORKER_URL}?pexels=${encodeURIComponent(countryName)}&per_page=${totalSlides}`
+        );
         const data = await response.json();
         if (!data.photos || data.photos.length === 0) {
           console.warn("No images found for", countryName);

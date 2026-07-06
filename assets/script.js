@@ -1044,7 +1044,7 @@ async function getCountryData(countryName) {
 	}
 
 	try {
-		const api_url = `https://restcountries.com/v3.1/name/${encodeURIComponent(countryName)}?fullText=true`;
+		const api_url = `https://nominatim-proxy.yinyangsammy.workers.dev/?restcountriesName=${encodeURIComponent(countryName)}&fullText=true`;
 		const response = await fetch(api_url);
 
 		if (!response.ok) {
@@ -1390,7 +1390,7 @@ async function getCountryData(countryName) {
 	result.innerHTML = "<p>Loading country data...</p>";
 
 	try {
-		const api_url = `https://restcountries.com/v3.1/name/${countryName}`;
+		const api_url = `https://nominatim-proxy.yinyangsammy.workers.dev/?restcountriesName=${encodeURIComponent(countryName)}`;
 		const response = await fetch(api_url);
 
 		if (!response.ok) throw new Error("Country data not available");
@@ -1452,7 +1452,7 @@ async function getCountryData(countryName) {
 	result.innerHTML = "<p>Loading country data...</p>";
 
 	try {
-		const api_url = `https://restcountries.com/v3.1/name/${countryName}`;
+		const api_url = `https://nominatim-proxy.yinyangsammy.workers.dev/?restcountriesName=${encodeURIComponent(countryName)}`;
 		const response = await fetch(api_url);
 
 		if (!response.ok) throw new Error("Country data not available");
@@ -2060,7 +2060,7 @@ document.querySelectorAll(".window-controls button").forEach(button => {
 async function fetchPublicHolidays(countryName) {
 	try {
 		// Step 1: Get ISO country code using REST Countries API
-		const countryResponse = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+		const countryResponse = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?restcountriesName=${encodeURIComponent(countryName)}`);
 		const countryData = await countryResponse.json();
 		const countryCode = countryData[0].cca2; // Extract ISO alpha-2 code (e.g., "GB" for UK)
 
@@ -2071,11 +2071,7 @@ async function fetchPublicHolidays(countryName) {
 
 		// Step 2: Fetch public holidays from API Ninjas using the country code
 		const currentYear = new Date().getFullYear();
-		const holidaysResponse = await fetch(`https://api.api-ninjas.com/v1/holidays?country=${countryCode}&year=${currentYear}`, {
-			headers: {
-				'X-Api-Key': 'oynQZsr3dpVh2dKnjXNvLg==GgPfFc4Od4Sycuuy'
-			}
-		});
+		const holidaysResponse = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?holidaysCountry=${encodeURIComponent(countryName)}&year=${currentYear}`);
 
 		const holidays = await holidaysResponse.json();
 
@@ -2174,7 +2170,7 @@ async function fetchPublicHolidays(countryName) {
 	try {
 		console.log(`Fetching ISO code for: ${countryName}`);
 
-		const countryResponse = await fetch(`https://restcountries.com/v3.1/name/${countryName}`);
+		const countryResponse = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?restcountriesName=${encodeURIComponent(countryName)}`);
 		const countryData = await countryResponse.json();
 
 		console.log("Full REST Countries Response:", countryData);
@@ -2193,11 +2189,7 @@ async function fetchPublicHolidays(countryName) {
 		}
 
 		// Fetch public holidays without specifying the year
-		const holidaysResponse = await fetch(`https://api.api-ninjas.com/v1/holidays?country=${countryCode}`, {
-			headers: {
-				'X-Api-Key': 'oynQZsr3dpVh2dKnjXNvLg==GgPfFc4Od4Sycuuy'
-			}
-		});
+		const holidaysResponse = await fetch(`https://nominatim-proxy.yinyangsammy.workers.dev/?holidaysCountry=${encodeURIComponent(countryName)}`);
 
 		const holidays = await holidaysResponse.json();
 		console.log("🗓️ Public Holidays Data:", holidays);
